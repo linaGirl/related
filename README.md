@@ -64,18 +64,18 @@ The ORM will load the structure of all databases, tables and the relations betwe
 	// containing the language data are joined using a left join, so there will be a result even 
 	// without data available for this query.
 
+	// the fetch and get methods have the same effect, but the get method will return a reference to 
+	// the object adressed by the get method. the fetch method will remain on the source object.
+
 	db.events.user.findOne( { username: "eventEmitter" } )
-				  .getAddresses( 				{ type: "private" }, [ "lastname", "firstname", "company companyName", "street", "no" ] )
-				  .getCity( 					[ "zip", "city" ] )
-				  .tryFetchCityLocale(			{ language_id: "user.language_id" } )
-				  .getMunicipality( 			[] )
-				  .tryFetchMunicipalityLocale(	{ language_id: "user.language_id" } )
-				  .getDistrict( 				[] )
-				  .tryFetchDistrictLocale(		{ language_id: "user.language_id" } )
-				  .getCounty( 					[] )
-				  .tryFetchCountyLocale(		{ language_id: "user.language_id" } )
-				  .getCountry( 					[ "country", "iso2 countryCode" ] )
-				  .tryFetchCountryLocale(		{ language_id: "user.language_id" }, function( err, data ){
+				  .getAddresses( { type: "private" }, [ "lastname", "firstname", "company companyName", "street", "no" ] )
+				  .getCity( [ "zip", "city" ] )
+				  .tryFetchCityLocale( { language_id: "user.language_id" } )
+				  .getMunicipality( [] )
+				  .getDistrict( [] )
+				  .getCounty( [] )
+				  .getCountry( [ "country", "iso2 countryCode" ] )
+				  .tryFetchCountryLocale( { language_id: "user.language_id" }, function( err, data ){
 		//  if the user has two private addresses this will return the following object
 		{
 			  id: 		4
@@ -107,4 +107,51 @@ The ORM will load the structure of all databases, tables and the relations betwe
 			]
 		}
 	
+	} );
+
+
+example of a little more complex query, we're fetching events, their categories and their venues. the language used for the multi language resources is the language from the request. this is implemented via support for subqueries.
+
+
+	// prepare language subquery
+	var languageQuery = { language_id: db.events.lanaguage.findOne( { iso2: request.language }, [ id ] ) };
+
+	// base query
+	var query = db.events.event.find( { startdate: db.gt( new Date() ) }, { order: db.desc, limit: 10 }, [ "id", "startdate", "name" ] );
+
+	// get categories
+	query.tryGetCategories( [ "id" ] )
+		 .tryGetCategoryLocale( languageQuery, [ "name" ] );
+
+	// get venue
+	query.tryGetVenues( [ "id", "name", "street", "no", "lat", "lon" ] )
+		 .tryFetchVenueLocale( languageQuery, [ "teaser", "description" ] )
+		 .tryGetCity( [ "zip", "city" ] )
+		 .tryFetchCityLocale( languageQuery )
+		 .getMunicipality( [] )
+		 .tryFetchMunicipalityLocale( languageQuery )
+		 .getDistrict( [] )
+		 .tryFetchDistrictLocale( languageQuery )
+		 .getCounty( [] )
+		 .tryFetchCountyLocale( languageQuery )
+		 .getCountry( [ "country", "iso2 countryCode" ] )
+		 .tryFetchCountryLocale( languageQuery );
+
+
+	query.execute( function( err, events ){
+
+
+		[ 
+			{
+				  id: 			4
+				, startdate: 	"..."
+				, name: 		"Gramatik - Muy Tranquilo"
+				, categories: 	[ {
+					  id: 		5
+					, name: 	"good coder sound!"
+				} ]
+				, venues: []
+			} 
+		, ...
+		]
 	} );
