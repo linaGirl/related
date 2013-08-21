@@ -45,11 +45,15 @@ The ORM will load the structure of all databases, tables and the relations betwe
 
 
 	// add a new user to the «user» table of the «events» db
-	new db.events.user( { name: "michael" } ).save( function( err ){} );
+	var michael = new db.events.user( { name: "michael" } ).save( function( err ){} );
 
+	// add address, we need to get the city id for the address
+	michael.addAddress( { firstname: "Michael", lastname: "van der Weg", street. "Aarbergergasse", no: 41, city: db.events.city.getOne( [ "id" ] ).getOneCityLocale( { name: "bern" }, [] ) }, function( err ){
+
+	} );
 
 	// retreive a user with the id «4» from the «events» database
-	db.events.user.findOne( 4, function( err, user ){} );
+	db.events.user.getOne( 4, function( err, user ){} );
 
 
 
@@ -67,7 +71,7 @@ The ORM will load the structure of all databases, tables and the relations betwe
 	// the fetch and get methods have the same effect, but the get method will return a reference to 
 	// the object adressed by the get method. the fetch method will remain on the source object.
 
-	db.events.user.findOne( { username: "eventEmitter" } )
+	db.events.user.getOne( { username: "eventEmitter" } )
 				  .getAddresses( { type: "private" }, [ "lastname", "firstname", "company companyName", "street", "no" ] )
 				  .getCity( [ "zip", "city" ] )
 				  .tryFetchCityLocale( { language_id: "user.language_id" } )
@@ -114,10 +118,10 @@ example of a little more complex query, we're fetching events, their categories 
 
 
 	// prepare language subquery
-	var languageQuery = { language_id: db.events.lanaguage.findOne( { iso2: request.language }, [ id ] ) };
+	var languageQuery = { language_id: db.events.lanaguage.getOne( { iso2: request.language }, [ id ] ) };
 
 	// base query
-	var query = db.events.event.find( { startdate: db.gt( new Date() ) }, { order: db.desc, limit: 10 }, [ "id", "startdate", "name" ] );
+	var query = db.events.event.get( { startdate: db.gt( new Date() ) }, { order: db.desc, limit: 10 }, [ "id", "startdate", "name" ] );
 
 	// get categories
 	query.tryGetCategories( [ "id" ] )
