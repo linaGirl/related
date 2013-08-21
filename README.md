@@ -22,12 +22,14 @@ object relationale mapper for node.js. reads the model directly from the databas
 	} );
 
 
-	// the load event is fire when a connection could be established or when no connection could be established. in the latter case an error object will be passed as paremter 1
+	// the load event is fire when a connection could be established or when no connection could 
+	// be established. in the latter case an error object will be passed as paremter 1
 	// this event is only called on initial loading
 	db.on( "load", 		function( err ){ console.log( "db loaded" ) } );
 
 	// is fired when the db works in read only mode ( connected to slaves but not to the master )
-	// this event is called always when the connection to the master is dropped or it cannot be established at startup
+	// this event is called always when the connection to the master is dropped or it cannot be 
+	// established at startup
 	db.on( "readOnly", 	function( err ){ console.log( "db loaded in read only mode" ) } );
 
 	// is fired when no connection can be established
@@ -51,12 +53,16 @@ The ORM will load the structure of all databases, tables and the relations betwe
 
 
 
-	// retreive a user with the id «4» from the «events» database including his private address data. Users can have multiple address sets which are stored in the
-	// «address» table, that table references a table «city», which references the table «municipality», which references the table «district», 
-	// «municipality» which references the table «county», which references the table «country». The user has stored his prefererd language on his profile 
-	// and the «city», «district», «county» and «country» tables have data in all languages stored on separate tables.
-	// The statement below will create one query for the complete transaction, so it should be fast!. It will create joins for the 12 tables which will be used
-	// in this query. the tables containing the language data are joined using a left join, so there will be a result even without data available for this query.
+	// retreive a user with the id «4» from the «events» database including his private address data.
+	// Users can have multiple address sets which are stored in the «address» table, that table 
+	// references a table «city», which references the table «municipality», which references the 
+	// table «district», «municipality» which references the table «county», which references the 
+	// table «country». The user has stored his prefererd language on his profile and the «city», 
+	// «district», «county» and «country» tables have data in all languages stored on separate 
+	// tables. The statement below will create one query for the complete transaction, so it should
+	// be fast!. It will create joins for the 12 tables which will be used in this query. the tables 
+	// containing the language data are joined using a left join, so there will be a result even 
+	// without data available for this query.
 
 	db.events.user.findOne( { username: "eventEmitter" } )
 				  .getAddresses( 				{ type: "private" }, [ "lastname", "firstname", "company companyName", "street", "no" ] )
