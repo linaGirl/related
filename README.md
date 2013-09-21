@@ -9,7 +9,8 @@ mysql object relationale mapper for node.js. reads the model directly from the d
 
 	var MySQLORM = require( "ee-mysql-orm" );
 
-	// the ORM will make us of the «ee-mysql-cluster» module. see «https://github.com/eventEmitter/ee-mysql-cluster» for the hosts options
+	// the ORM makes use of the «ee-mysql-cluster» module. 
+	// see «https://github.com/eventEmitter/ee-mysql-cluster» for the hosts options
 	var db = new MySQLORM( {
 		hosts: [
 			{
