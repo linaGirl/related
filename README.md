@@ -5,7 +5,12 @@
 mysql object relationale mapper for node.js. reads the model directly from the database.
 
 
-# API
+## installation
+
+	npm install ee-mysql-orm
+
+
+## API
 
 	var MySQLORM = require( "ee-mysql-orm" );
 
