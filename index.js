@@ -1,6 +1,4 @@
-	
-
-	require( "ee-error" );
 
 
-	module.exports = require( "./lib/ORM" );
+
+	module.exports = require('./lib/ORM');
