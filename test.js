@@ -10,7 +10,12 @@
 
 	orm.on('load', function(err){
 		log('orm loaded');
-		orm.eventbooster.user({id:1}).tenant({id:1}).find(function(err, users){
-			log(err, users, users.first(), users.getIds());
+
+		var start = Date.now();
+		orm.autogantt.skill().getRoles({id:1}, '*').find(function(err, users){
+			log.info('query took ' +( Date.now()-start) + ' ms ...');
+			log(err);
+			log(users, users.first(), users.getIds());
+			users[0].loadAll();
 		});
 	});
