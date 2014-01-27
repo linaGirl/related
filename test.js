@@ -2,6 +2,7 @@
 
 	var Class 		= require('ee-class')
 		, log 		= require('ee-log')
+		, async 	= require('ee-async')
 		, ORM 		= require('./')
 		, project 	= require('ee-project');
 
@@ -9,26 +10,48 @@
 	var orm = new ORM(project.config);
 
 	orm.on('load', function(err){
-		var role5;
 		log('orm loaded');
-		var start = Date.now();
-/*
+		var   role5
+			, arr = []
+		 	, start
+		 	, i = 10000;
+
+		while(i--) arr.push(1);
+//log(orm);
+
+		start = Date.now();
+/**
+		// insert 1000 roles
+		async.each(arr, function(input, next){
+			new orm.autogantt.role({
+				name: Math.random()
+			}).save(false, function(err){
+				if (err) log(err);
+				next();
+			});
+		}
+
+		, function(){
+			log.info('query took ' +( Date.now()-start) + ' ms ...');
+		});
+*/
 		
-		orm.autogantt.skill().fetchRoles({id:1}, '*').find(function(err, users){
+
+
+		orm.autogantt.skill().fetchRoles(['*']).find(function(err, skills){
 			log.info('query took ' +( Date.now()-start) + ' ms ...');
 			log(err);
-			log(users, users.first(), users.getIds());
-			users[0].loadAll();
+			log(skills);
 
-			var first = users.first();
-			first.name = Math.random();
-			first.save();
-		});*/
-
+			skills.forEach(function(skill){
+				//skill.roles.push(new orm.autogantt.role({name: 'pereg'+Math.random()}));
+			});
+		});
+/*
 		role5 = new orm.autogantt.role({
 			name: Math.random()
 		}).save(function(err, newRole){
 			log.info('query took ' +( Date.now()-start) + ' ms ...');
-			log(err, role5);
-		});
+			log(err, role5, newRole);
+		});*/
 	});
