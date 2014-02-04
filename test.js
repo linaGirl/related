@@ -39,11 +39,13 @@
 			});
 	*/
 
+
+
 			var query = orm.eventbox.event().limit(10).offset(6800);
-			log(query.getCategories(['id']));
+
 			query.fetchVenues(['name', 'address']);
 			query.fetchPerformers(['*']);
-			query.getCategories(['id']).getCategoryLocales(['name']).getLanguages().filter({language: 'de'});
+			query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'de'});
 			query.fetchSales(['*']);
 
 			query.fetchHighlightType(['name']);
@@ -54,6 +56,7 @@
 				log(err);
 				//log(events);
 			});		
+			
 	/*
 
 			orm.autogantt.skill().fetchRoles(['*']).find(function(err, skills){

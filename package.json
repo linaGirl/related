@@ -25,6 +25,7 @@
         , "ee-arguments"            : "*"
         , "clone"                   : "0.1.11"
         , "pluralize"               : "0.0.6"
+        , "merge"                   : "1.1.2"
     }
     , "devDependencies": {
           "mocha"                   : "*"
