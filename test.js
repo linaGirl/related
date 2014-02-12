@@ -41,15 +41,13 @@
 
 
 
-			var query = orm.eventbox.event().limit(10).offset(6800);
+			var query = orm.eventbox.event().limit(2).offset(6800);
 			
-			
-
-			/*query.fetchVenues(['name', 'address']);
+			query.fetchVenues(['name', 'address']);
 			query.fetchPerformers(['*']);
-			query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'de'});
+			query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'en'});
 			query.fetchSales(['*']);
-*/
+
 			query.fetchHighlightType(['name'], {id: ORM.notNull()});
 		
 
@@ -58,19 +56,25 @@
 				log(err);
 
 				start = Date.now();
-
-				var hui = orm.eventbox.event().limit(10).offset(6800);
-				hui.fetchHighlightType(['name'], {id: ORM.notNull()});
-
-
-				//log(events);
-				hui.find(function(err, events){
-					log.info('query took ' +( Date.now()-start) + ' ms ...');
-					log(err);
-					//log(events);
-				});	
+				log(events);
 			});		
-			
+
+/*
+			 SELECT 
+			 `categoryLocale`.`name`
+			 , `categoryLocale`.`id_category`
+			 , `categoryLocale`.`id_language`
+			 , `categoryLocale`.`id_category`
+			 , `categoryLocale`.`id_language`
+			 , `category`.`id` as ____id____ 
+			 FROM `eventbox`.`categoryLocale` 
+			 INNER JOIN `eventbox`.`event_category` as `event_category` ON `category`.`id`=`event_category`.`id_category` 
+			 INNER JOIN `eventbox`.`event` as `event` ON `event_category`.`id_event`=`event`.`id` 
+			 INNER JOIN `eventbox`.`category` as `category` ON `categoryLocale`.`id_category`=`category`.`id` 
+			 WHERE `event`.`id`  in (131480, 131481);
+
+
+			*/
 	/*
 
 			orm.autogantt.skill().fetchRoles(['*']).find(function(err, skills){
