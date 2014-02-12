@@ -42,19 +42,33 @@
 
 
 			var query = orm.eventbox.event().limit(10).offset(6800);
+			
+			
 
-			query.fetchVenues(['name', 'address']);
+			/*query.fetchVenues(['name', 'address']);
 			query.fetchPerformers(['*']);
 			query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'de'});
 			query.fetchSales(['*']);
-
-			query.fetchHighlightType(['name']);
+*/
+			query.fetchHighlightType(['name'], {id: ORM.notNull()});
 		
 
 			query.find(function(err, events){
 				log.info('query took ' +( Date.now()-start) + ' ms ...');
 				log(err);
+
+				start = Date.now();
+
+				var hui = orm.eventbox.event().limit(10).offset(6800);
+				hui.fetchHighlightType(['name'], {id: ORM.notNull()});
+
+
 				//log(events);
+				hui.find(function(err, events){
+					log.info('query took ' +( Date.now()-start) + ' ms ...');
+					log(err);
+					//log(events);
+				});	
 			});		
 			
 	/*
