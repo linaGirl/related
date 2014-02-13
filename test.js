@@ -7,6 +7,7 @@
 		, project 	= require('ee-project');
 
 
+	console.time("query")
 	var orm = new ORM(project.config);
 
 	orm.on('load', function(err){
@@ -22,7 +23,7 @@
 			while(i--) arr.push(1);
 	//log(orm);
 
-			start = Date.now();
+			
 	/**
 			// insert 1000 roles
 			async.each(arr, function(input, next){
@@ -38,27 +39,36 @@
 				log.info('query took ' +( Date.now()-start) + ' ms ...');
 			});
 	*/
+			var counter = 0;
+
+			var exec = function(){
+				console.time("query")
+
+				var query = orm.eventbox.event(['*'], {startdate: ORM.gt(new Date())}).limit(10).offset(100);
+
+				query.getEventLocales(['subtitle', 'description']).getLanguage().filter({language: 'de'});
+				query.fetchVenues(['name', 'address']);
+				query.fetchPerformers(['*']);
+				query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'de'});
+				query.getSales(['*']).getTicketClasses({active:1}).getTickets({sold:0});
+				query.fetchMedia(['*']);
 
 
+				query.fetchHighlightType(['name'], {id: ORM.notNull()});
 
-			var query = orm.eventbox.event().limit(2).offset(6800);
+
+				query.find(function(err, events){
+					console.timeEnd("query")
+					log(err);
+					//console.log(++counter);
+					setTimeout(exec, 2000);
+
+					//log(events);
+				});	
+			}
+
 			
-			query.fetchVenues(['name', 'address']);
-			query.fetchPerformers(['*']);
-			query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'en'});
-			query.fetchSales(['*']);
-
-			query.fetchHighlightType(['name'], {id: ORM.notNull()});
-		
-
-			query.find(function(err, events){
-				log.info('query took ' +( Date.now()-start) + ' ms ...');
-				log(err);
-
-				start = Date.now();
-				log(events);
-			});		
-
+			exec();
 /*
 			 SELECT 
 			 `categoryLocale`.`name`
