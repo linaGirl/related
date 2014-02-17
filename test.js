@@ -47,14 +47,14 @@
 				var query = orm.eventbox.event(['*'], {startdate: ORM.gt(new Date())}).limit(10).offset(100);
 
 				query.getEventLocales(['subtitle', 'description']).getLanguage().filter({language: 'de'});
-				query.fetchVenues(['name', 'address']);
-				query.fetchPerformers(['*']);
+				query.fetchVenues(['name', 'address']).getMedia(['*']);
+				query.fetchPerformers(['*']).getMedia(['*']);
 				query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'de'});
-				query.getSales(['*']).getTicketClasses({active:1}).getTickets({sold:0});
+				query.getSales(['*']);
 				query.fetchMedia(['*']);
 
 
-				query.fetchHighlightType(['name'], {id: ORM.notNull()});
+				//query.fetchHighlightType(['name'], {id: ORM.notNull()});
 
 
 				query.find(function(err, events){
@@ -63,7 +63,7 @@
 					//console.log(++counter);
 					setTimeout(exec, 2000);
 
-					//log(events);
+					log(events);
 				});	
 			}
 
