@@ -12,9 +12,6 @@
 
 	orm.on('load', function(err){
 		log('orm loaded');
-		setTimeout(function(){
-			log('executing');
-
 			var   role5
 				, arr = []
 			 	, start
@@ -44,13 +41,24 @@
 			var exec = function(){
 				console.time("query")
 
-				var query = orm.eventbox.event(['*'], {startdate: ORM.gt(new Date())}).limit(10).offset(100);
+
+				var   transaction = orm.transaction()
+				 	, query = transaction.eventbox.event(['*'], {
+				 		startdate: ORM.gt(new Date())
+				 	}).limit(10).offset(100);
+
+				
 
 				query.getEventLocales(['subtitle', 'description']).getLanguage().filter({language: 'de'});
-				query.fetchVenues(['name', 'address']).getMedia(['*']);
-				query.fetchPerformers(['*']).getMedia(['*']);
+
+				query.getVenues(['name', 'address']).getMedia(['*']);
+
+				query.getPerformers(['*']).getMedia(['*']);
+
 				query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'de'});
+
 				query.getSales(['*']);
+
 				query.fetchMedia(['*']);
 
 
@@ -63,7 +71,9 @@
 					//console.log(++counter);
 					setTimeout(exec, 2000);
 
-					log(events);
+					events.first().prepare().reload();
+					//log(events);
+					transaction.commit();
 				});	
 			}
 
@@ -104,8 +114,7 @@
 			}).save(function(err, newRole){
 				log.info('query took ' +( Date.now()-start) + ' ms ...');
 				log(err, role5, newRole);
-			});*/
-
-		}, 200);
+			});
+*/
 		
 	});
