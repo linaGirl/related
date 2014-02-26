@@ -1,6 +1,6 @@
 {
       "name"                        : "ee-orm"
-    , "description"                 : "package description"
+    , "description"                 : "a simple yet powerful javascript orm for node.js"
     , "version"                     : "0.1.0"
     , "homepage"                    : "https://github.com/eventEmitter/ee-orm"
     , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)" 
@@ -26,6 +26,7 @@
         , "clone"                   : "0.1.11"
         , "pluralize"               : "0.0.6"
         , "merge"                   : "1.1.2"
+        , "ee-db-cluster"           : "*"
     }
     , "devDependencies": {
           "mocha"                   : "*"
@@ -33,7 +34,6 @@
     }
     , "optionalDependencies": {}
     , "keywords"                    : []
-    , "private"                     : true
     , "scripts": {
         "test"                      : "./node_modules/mocha/bin/mocha --reporter spec"
     }
