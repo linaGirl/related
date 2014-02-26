@@ -36,9 +36,8 @@
 				log.info('query took ' +( Date.now()-start) + ' ms ...');
 			});
 	*/
-
-
-			
+			orm.eventbox.venue.setMappingAccessorName('venue_media', 'media');
+			orm.eventbox.venue.setReferenceAccessorName('id_media', 'logo');
 
 			var counter = 0;
 
@@ -47,14 +46,13 @@
 
 
 				var   transaction = orm//.transaction()
-				 	, query = transaction.eventbox.event(['*'], {
-				 		startdate: ORM.gt(new Date())
-				 	}).limit(10).offset(100);
+				 	, query = transaction.eventbox.event(['*']).limit(10).offset(100);
 
 				
+				query.getMapping('event_media')
 
 				query.getEventLocales(['subtitle', 'description']).getLanguage().filter({language: 'de'});
-				query.getVenues(['name', 'address']).getMedia(['*']);
+				query.getVenues(['name', 'address'], {id: 82358}).fetchMapping('venue_media', ['*']).fetchReference('id_media', ['*']);
 				query.getPerformers(['*']).getMedia(['*']);
 				query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'de'});
 				query.getSales(['*']);
@@ -70,14 +68,47 @@
 					//console.log(++counter);
 					setTimeout(exec, 2000);
 
-					events.first().prepare().reload();
+					//events.first().reload();
 					//log(events);
+					/*events.forEach(function(event){
+						event.venues.forEach(function(venue){
+							log(venue.getMapping('venue_media'));
+						});
+					});*/
 					//transaction.commit();
 				});	
 			}
 
 			
 			exec();
+
+
+			var insert = function(){
+				var e = new orm.eventbox.event({
+
+				});
+
+				e.venues.push(orm.eventbox.venue({id:555287}));
+
+				e.save(function(err, evt){
+
+				});
+			}
+
+
+			//insert();
+
+
+
+			var update = function() {
+				orm.eventbox.event({id:634534}).update({
+					title: 'hui'
+				}, function(err, info){
+
+				})
+			}
+
+
 /*
 			 SELECT 
 			 `categoryLocale`.`name`
