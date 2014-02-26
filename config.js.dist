@@ -1,0 +1,15 @@
+
+
+	module.exports = {
+		db: {
+			  type: 'mysql'
+			, hosts: [
+				{
+					  host: 	'10.0.100.1'
+					, username: ''
+					, password: ''
+					, mode: 	'readwrite'
+				}
+			]
+		}
+	};
