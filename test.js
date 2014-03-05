@@ -20,7 +20,7 @@
 			while(i--) arr.push(1);
 	//log(orm);
 
-			
+			log.wtf('hui');
 	/**
 			// insert 1000 roles
 			async.each(arr, function(input, next){
