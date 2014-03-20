@@ -35,17 +35,43 @@
 			, function(){
 				log.info('query took ' +( Date.now()-start) + ' ms ...');
 			});
+
+
 	*/
+
 			orm.eventbox.venue.setMappingAccessorName('venue_media', 'media');
 			orm.eventbox.venue.setReferenceAccessorName('id_media', 'logo');
+
+			
+			log(orm.eventbox.venue.getDefinition());
 
 			var counter = 0;
 
 			var exec = function(){
 				console.time("query")
+/*
+
+				var query = orm.eventbox.event(['*'], {
+					startdate: ORM.gt(new Date())
+				}).limit(3).offset(0);
+
+				var venue = query.getVenues(['*']);
+
+				venue.getCity(['*'],{
+					municipality: 'Bern'
+				});
 
 
-				var   transaction = orm//.transaction()
+
+
+				query.find(function(err, events){
+					log(err, events);
+				});
+
+*/
+
+
+				var   transaction = orm.transaction()
 				 	, query = transaction.eventbox.event(['*']).limit(10).offset(100);
 
 				
@@ -69,7 +95,7 @@
 					setTimeout(exec, 2000);
 
 					//events.first().reload();
-					//log(events);
+					log(events);
 					/*events.forEach(function(event){
 						event.venues.forEach(function(venue){
 							log(venue.getMapping('venue_media'));
@@ -80,23 +106,41 @@
 			}
 
 			
-			exec();
+			//exec();
 
 
 			var insert = function(){
 				var e = new orm.eventbox.event({
-
+					title: 'test event'
 				});
 
 				e.venues.push(orm.eventbox.venue({id:555287}));
 
 				e.save(function(err, evt){
-
+					log(err, evt);
 				});
 			}
 
 
-			//insert();
+			insert();
+
+
+			var remove = function(){
+				orm.eventbox.event({
+					id: 243569
+				}).findOne(function(err, event){
+					if (err) log(err);
+					else if (!event) log('event not found');
+					else {
+						event.delete(function(err){
+							log(err);
+						});
+					}
+				});
+			}
+
+
+			//remove();
 
 
 
