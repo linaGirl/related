@@ -42,8 +42,8 @@
 			orm.eventbox.venue.setMappingAccessorName('venue_media', 'media');
 			orm.eventbox.venue.setReferenceAccessorName('id_media', 'logo');
 
-			
-			log(orm.eventbox.venue.getDefinition());
+
+			//log(orm.eventbox.venue.getDefinition());
 
 			var counter = 0;
 
@@ -69,6 +69,11 @@
 				});
 
 */
+
+
+
+
+
 
 
 				var   transaction = orm.transaction()
@@ -122,7 +127,7 @@
 			}
 
 
-			insert();
+			//insert();
 
 
 			var remove = function(){
@@ -142,6 +147,16 @@
 
 			//remove();
 
+			var removeDirect = function(){
+				orm.eventbox.event({
+					id: 243580
+				}).limit(1).delete(function(err){
+					log(err);
+				});
+			}
+
+
+			//removeDirect();
 
 
 			var update = function() {
