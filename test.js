@@ -69,10 +69,13 @@
 				});
 
 */
-
-
-
-
+	//log(orm.eventbox.cityName(["*"]));
+		/*
+				orm.eventbox.city(["*"]).limit(10).get('cityName', ["*"]).find(function(err, list){
+					log(err, list);
+				})
+return;
+*/
 
 
 				var   transaction = orm.transaction()
@@ -82,7 +85,7 @@
 				query.getMapping('event_media')
 
 				query.getEventLocale(['subtitle', 'description']).getLanguage().filter({language: 'de'});
-				query.getVenue(['name', 'address'], {id: 82358}).fetchMapping('venue_media', ['*']).fetchReference('id_media', ['*']);
+				query.getVenue(['name', 'address'], {id: 82358}).fetchMapping('venue_media', ['*']).fetchReference('id_media', ['*']).getCity(["*"])
 				query.getPerformer(['*']).getMedia(['*']);
 				query.getCategory(['id']).getCategoryLocale(['name']).getLanguage().filter({language: 'de'});
 				query.getSale(['*']);
@@ -99,7 +102,7 @@
 					setTimeout(exec, 2000);
 
 					//events.first().reload();
-					//log(events);
+					log(events);
 					/*events.forEach(function(event){
 						event.venues.forEach(function(venue){
 							log(venue.getMapping('venue_media'));
