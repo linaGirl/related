@@ -75,18 +75,17 @@
 
 
 
-
 				var   transaction = orm.transaction()
 				 	, query = transaction.eventbox.event(['*']).limit(10).offset(100);
 
 				
 				query.getMapping('event_media')
 
-				query.getEventLocales(['subtitle', 'description']).getLanguage().filter({language: 'de'});
-				query.getVenues(['name', 'address'], {id: 82358}).fetchMapping('venue_media', ['*']).fetchReference('id_media', ['*']);
-				query.getPerformers(['*']).getMedia(['*']);
-				query.getCategories(['id']).getCategoryLocales(['name']).getLanguage().filter({language: 'de'});
-				query.getSales(['*']);
+				query.getEventLocale(['subtitle', 'description']).getLanguage().filter({language: 'de'});
+				query.getVenue(['name', 'address'], {id: 82358}).fetchMapping('venue_media', ['*']).fetchReference('id_media', ['*']);
+				query.getPerformer(['*']).getMedia(['*']);
+				query.getCategory(['id']).getCategoryLocale(['name']).getLanguage().filter({language: 'de'});
+				query.getSale(['*']);
 				query.fetchMedia(['*']);
 
 
@@ -100,7 +99,7 @@
 					setTimeout(exec, 2000);
 
 					//events.first().reload();
-					log(events);
+					//log(events);
 					/*events.forEach(function(event){
 						event.venues.forEach(function(venue){
 							log(venue.getMapping('venue_media'));
@@ -111,7 +110,7 @@
 			}
 
 			
-			//exec();
+			exec();
 
 
 			var insert = function(){

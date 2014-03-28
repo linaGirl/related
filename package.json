@@ -1,11 +1,10 @@
 {
       "name"                        : "ee-orm"
     , "description"                 : "a simple yet powerful javascript orm for node.js"
-    , "version"                     : "0.1.3"
+    , "version"                     : "0.1.4"
     , "homepage"                    : "https://github.com/eventEmitter/ee-orm"
     , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)" 
     , "licence"                     : "mit"
-    , "os"                          : "!win"
     , "repository": {
           "url"                     : "https://github.com/eventEmitter/ee-orm.git"
         , "type"                    : "git"
@@ -21,7 +20,7 @@
         , "ee-event-emitter"        : "0.1.x"
         , "ee-types"                : "0.1.x"
         , "ee-log"                  : "0.2.x"
-        , "ee-async"                : "0.1.x"
+        , "ee-async"                : "0.2.x"
         , "ee-arguments"            : "0.1.x"
         , "clone"                   : "0.1.x"
         , "pluralize"               : "0.0.x"
