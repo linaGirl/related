@@ -82,7 +82,7 @@ return;
 				 	, query = transaction.eventbox.event(['*']).limit(10).offset(100);
 
 				
-				query.getMapping('event_media')
+				query.getMapping('event_media').describeMethods();
 
 				query.getEventLocale(['subtitle', 'description']).getLanguage().filter({language: 'de'});
 				query.getVenue(['name', 'address'], {id: 82358}).fetchMapping('venue_media', ['*']).fetchReference('id_media', ['*']).getCity(["*"])
