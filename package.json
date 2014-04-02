@@ -1,9 +1,9 @@
 {
       "name"                        : "ee-orm"
     , "description"                 : "a simple yet powerful javascript orm for node.js"
-    , "version"                     : "0.1.5"
+    , "version"                     : "0.1.6"
     , "homepage"                    : "https://github.com/eventEmitter/ee-orm"
-    , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)" 
+    , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
     , "licence"                     : "mit"
     , "repository": {
           "url"                     : "https://github.com/eventEmitter/ee-orm.git"
