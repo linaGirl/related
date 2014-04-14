@@ -18,9 +18,9 @@
 			 	, i = 10000;
 
 			while(i--) arr.push(1);
-	log(orm);
+	//log(orm);
 
-			log.wtf('hui');
+			log.wtf('hajo jüfe');
 	/**
 			// insert 1000 roles
 			async.each(arr, function(input, next){
@@ -38,10 +38,10 @@
 
 
 	*/
-/*
+
 			orm.eventbox.venue.setMappingAccessorName('venue_media', 'media');
 			orm.eventbox.venue.setReferenceAccessorName('id_media', 'logo');
-*/
+
 
 			//log(orm.eventbox.venue.getDefinition());
 
@@ -80,18 +80,18 @@ return;
 				//orm.eventbox.event().describeMethods();
 
 
-				var   transaction = orm.eventbooster.createTransaction()
-				 	, query = transaction.user(['*']).limit(10).offset(0);
+				var   transaction = orm.eventbox.createTransaction()
+				 	, query = transaction.event(['*']).limit(10).offset(0);
 
 				
-				/*query.getMapping('event_media');
+				query.getMapping('event_media');
 
 				query.getEventLocale(['subtitle', 'description']).getLanguage().filter({language: 'de'});
 				query.getVenue(['name', 'address'], {id: 82358}).fetchMapping('venue_media', ['*']).fetchReference('id_media', ['*']).getCity(["*"])
 				query.getPerformer(['*']).getMedia(['*']);
 				query.getCategory(['id']).getCategoryLocale(['name']).getLanguage().filter({language: 'de'});
 				query.getSale(['*']);
-				query.fetchMedia(['*']);*/
+				query.fetchMedia(['*']);
 
 
 				//query.fetchHighlightType(['name'], {id: ORM.notNull()});
@@ -104,7 +104,7 @@ return;
 					setTimeout(exec, 2000);
 
 					//events.first().reload();
-					log(events);
+					log(JSON.stringify(events));
 					/*events.forEach(function(event){
 						event.venues.forEach(function(venue){
 							log(venue.getMapping('venue_media'));
