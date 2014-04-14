@@ -18,7 +18,7 @@
 			 	, i = 10000;
 
 			while(i--) arr.push(1);
-	//log(orm);
+	log(orm);
 
 			log.wtf('hui');
 	/**
@@ -38,10 +38,10 @@
 
 
 	*/
-
+/*
 			orm.eventbox.venue.setMappingAccessorName('venue_media', 'media');
 			orm.eventbox.venue.setReferenceAccessorName('id_media', 'logo');
-
+*/
 
 			//log(orm.eventbox.venue.getDefinition());
 
@@ -77,21 +77,21 @@
 return;
 */
 
-				orm.eventbox.event().describeMethods();
+				//orm.eventbox.event().describeMethods();
 
 
-				var   transaction = orm.transaction()
-				 	, query = transaction.eventbox.event(['*']).limit(10).offset(100);
+				var   transaction = orm.eventbooster.createTransaction()
+				 	, query = transaction.user(['*']).limit(10).offset(0);
 
 				
-				query.getMapping('event_media');
+				/*query.getMapping('event_media');
 
 				query.getEventLocale(['subtitle', 'description']).getLanguage().filter({language: 'de'});
 				query.getVenue(['name', 'address'], {id: 82358}).fetchMapping('venue_media', ['*']).fetchReference('id_media', ['*']).getCity(["*"])
 				query.getPerformer(['*']).getMedia(['*']);
 				query.getCategory(['id']).getCategoryLocale(['name']).getLanguage().filter({language: 'de'});
 				query.getSale(['*']);
-				query.fetchMedia(['*']);
+				query.fetchMedia(['*']);*/
 
 
 				//query.fetchHighlightType(['name'], {id: ORM.notNull()});
