@@ -18,12 +18,14 @@
 			 	, i = 10000;
 
 			while(i--) arr.push(1);
-	log(orm);
 
-	log(orm.eventbooster.resource().describeMethods());
+			log(orm);
 
-			log.wtf('hajo jüfe');
-			return;
+			//log(orm.eventbooster.resource().describeMethods());
+
+			//new orm.eventbooster.resource({key: 'email.test.1'+Math.random(), id_tenant: 0}).save(log);
+
+			
 	/**
 			// insert 1000 roles
 			async.each(arr, function(input, next){
@@ -42,8 +44,8 @@
 
 	*/
 
-			orm.eventbox.venue.setMappingAccessorName('venue_media', 'media');
-			orm.eventbox.venue.setReferenceAccessorName('id_media', 'logo');
+			/*orm.eventbox.venue.setMappingAccessorName('venue_media', 'media');
+			orm.eventbox.venue.setReferenceAccessorName('id_media', 'logo');*/
 
 
 			//log(orm.eventbox.venue.getDefinition());
@@ -82,7 +84,7 @@ return;
 
 				//orm.eventbox.event().describeMethods();
 
-
+				/*
 				var   transaction = orm.eventbox.createTransaction()
 				 	, query = transaction.event(['*'], {_:[{id:3},{id:2}]}).limit(10).offset(0);
 
@@ -95,19 +97,20 @@ return;
 				query.getCategory(['id']).getCategoryLocale(['name']).getLanguage().filter({language: 'de'});
 				query.getSale(['*']);
 				query.fetchMedia(['*']);
-
+*/
 
 				//query.fetchHighlightType(['name'], {id: ORM.notNull()});
 
 
-				query.find(function(err, events){
+				orm.eventbooster.resource(['key']).find(function(err, resources){
 					console.timeEnd("query")
 					log(err);
 					//console.log(++counter);
 					setTimeout(exec, 2000);
 
+					log(resources);
 					//events.first().reload();
-					log(JSON.stringify(events));
+					//log(JSON.stringify(resources));
 					/*events.forEach(function(event){
 						event.venues.forEach(function(venue){
 							log(venue.getMapping('venue_media'));

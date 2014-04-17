@@ -334,6 +334,13 @@ Now lets do a complex query:
     });
 
 
+##### Advanced Filtering
+
+The filter object which can be used by the queryuilder and the filter mehotd can contain the following structure
+
+- tbd
+
+
 
 #### Reserved Keywords
 
@@ -360,7 +367,7 @@ On the ORM itself the following keywords are reserved (your database should not 
 
 
 
-On the Database level the following keywords are reserved (your database should not contain any tables using on of the names listed below):
+On the Database level the following keywords are reserved (your database should not contain any tables using one of the names listed below):
 
 - $$$$_events
 - __proto__
