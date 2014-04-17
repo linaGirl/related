@@ -18,9 +18,12 @@
 			 	, i = 10000;
 
 			while(i--) arr.push(1);
-	//log(orm);
+	log(orm);
+
+	log(orm.eventbooster.resource().describeMethods());
 
 			log.wtf('hajo jüfe');
+			return;
 	/**
 			// insert 1000 roles
 			async.each(arr, function(input, next){
@@ -81,7 +84,7 @@ return;
 
 
 				var   transaction = orm.eventbox.createTransaction()
-				 	, query = transaction.event(['*']).limit(10).offset(0);
+				 	, query = transaction.event(['*'], {_:[{id:3},{id:2}]}).limit(10).offset(0);
 
 				
 				query.getMapping('event_media');
