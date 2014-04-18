@@ -8,7 +8,7 @@
 
 
 	console.time("query")
-	var orm = new ORM(project.config);
+	var orm = new ORM(project.config.db);
 
 	orm.on('load', function(err){
 		log('orm loaded');
@@ -23,8 +23,15 @@
 
 			//log(orm.eventbooster.resource().describeMethods());
 
-			//new orm.eventbooster.resource({key: 'email.test.1'+Math.random(), id_tenant: 0}).save(log);
-
+			new orm.eventbooster.resource({
+				key: 'email.test.1'+Math.random()
+				, id_tenant: 0
+				, resourceLocale: new orm.eventbooster.resourceLocale({
+					  id_language: 1
+					, text: 'hi'
+				})
+			}).save(log);
+return;
 			
 	/**
 			// insert 1000 roles

@@ -1,6 +1,6 @@
 # ee-orm
 
-An easy to use ORM for node.js. This ORM works only with proper designed relational databases. It gets al information needed from the DB itself, you don't have to manually create models. It supports advanced eager loading, complex queries, joins, transactions, complex database clusters & connection pooling.
+An easy to use ORM for node.js. Supports advanced eager loading, complex queries, joins, transactions, complex database clusters & connection pooling. The ORM automatically generates models from the tables & relations stored in your database. 
 
 -- alpha software --, expect a stable release in june 2014.
 
@@ -95,7 +95,7 @@ The consturctor expects the complete configuration used for accessing a database
 
     var ormInstance = new ORM(config);
 
-For every Database used by the ORM you have to provide a complete configuration stored on the the key which must be the name of the database. When using the postgres driver the schema has to have the same name as the database itself.
+For every Database used by the ORM you have to provide a complete configuration stored on the the key which must be the name of the database.
     
     // database names «eventdata» and «shopping». the «eventdata» database 
     // is a single mysql server, the «shopping» database consists of a 
@@ -125,6 +125,8 @@ For every Database used by the ORM you have to provide a complete configuration 
                     , port              : 5432
                     , mode              : 'readwrite'
                     , maxConenctions    : 20 
+                    , database          : 'myDatabase'  // optional, the name of the database (not the schema) to 
+                                                        // connect to (defaults to the database name, «shopping» in this case)
                 }
                 , {
                       host              : 'mydbcuster.mycompyny.mytld'
@@ -133,6 +135,8 @@ For every Database used by the ORM you have to provide a complete configuration 
                     , port              : 5432
                     , mode              : 'readonly'
                     , maxConenctions    : 200
+                    , database          : 'myDatabase'  // optional, the name of the database (not the schema) to 
+                                                        // connect to (defaults to the database name, «shopping» in this case)
                 }
             ] 
         }
