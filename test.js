@@ -30,7 +30,9 @@
 					  id_language: 1
 					, text: 'hi'
 				})
-			}).save(log);
+			}).save(function(err, model){
+				log(err, model);
+			});
 return;
 			
 	/**
