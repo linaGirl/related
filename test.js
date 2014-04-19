@@ -30,8 +30,15 @@
 					  id_language: 1
 					, text: 'hi'
 				})
-			}).save(function(err, model){
-				log(err, model);
+				, language: [
+					  orm.eventbooster.language({code: 'fr'})
+					, orm.eventbooster.language({code: 'de'})
+				]
+			}).save(function(err, resource){ log(err);
+				resource.language.push(orm.eventbooster.language({code:'it'}));
+				resource.save(function(err){
+					log(err, resource);
+				});				
 			});
 return;
 			
