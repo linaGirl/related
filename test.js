@@ -23,7 +23,7 @@
 
 			//log(orm.eventbooster.resource().describeMethods());
 
-			new orm.eventbooster.resource({
+			/*new orm.eventbooster.resource({
 				key: 'email.test.1'+Math.random()
 				, id_tenant: 0
 				, resourceLocale: new orm.eventbooster.resourceLocale({
@@ -35,11 +35,10 @@
 					, orm.eventbooster.language({code: 'de'})
 				]
 			}).save(function(err, resource){ log(err);
-				resource.language.push(orm.eventbooster.language({code:'it'}));
-				resource.save(function(err){
-					log(err, resource);
-				});				
-			});
+							
+			});*/
+
+			orm.eventbooster.resource(['*']).getResourceLocale(['*']).find(log)
 return;
 			
 	/**
