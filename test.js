@@ -23,11 +23,30 @@
 
 			//log(orm.eventbooster.resource().describeMethods());
 
-			/*new orm.eventbooster.resource({
+			var db = orm.ee_orm_test;
+
+			db.venue.setReferenceAccessorName('id_image', 'logo');
+			db.venue.setMappingAccessorName('venue_image', 'images');
+
+			/*
+			new db.venue({
+				  name: 'Dachstock Reitschule'
+				, municipality: db.municipality({
+					name: 'Bern'
+				})
+				, id_image: 1
+			}).save(function(err, image){
+				log(err, image);
+			});
+
+*/
+/*
+			console.time("insert")
+			new orm.eventbooster.resource({
 				key: 'email.test.1'+Math.random()
 				, id_tenant: 0
 				, resourceLocale: new orm.eventbooster.resourceLocale({
-					  id_language: 1
+					  id_language: 5
 					, text: 'hi'
 				})
 				, language: [
@@ -35,10 +54,10 @@
 					, orm.eventbooster.language({code: 'de'})
 				]
 			}).save(function(err, resource){ log(err);
-							
-			});*/
-
-			orm.eventbooster.resource(['*']).getResourceLocale(['*']).find(log)
+				console.timeEnd("insert")	
+			});
+*/
+			//orm.eventbooster.resourceLocale(['*'], {id_resource:63}).getResource(['*']).find(log)
 return;
 			
 	/**

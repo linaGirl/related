@@ -21,6 +21,7 @@
         , "ee-types"                : "0.1.x"
         , "ee-log"                  : "0.2.x"
         , "ee-async"                : "0.2.x"
+        , "ee-argv"                 : "0.1.x"
         , "ee-arguments"            : "0.1.x"
         , "clone"                   : "0.1.x"
         , "ee-db-cluster"           : "0.1.x"
@@ -30,11 +31,11 @@
         , "ee-travis"               : "0.1.x"
         , "ee-mysql-connection"     : "0.1.x"
         , "ee-postgres-connection"  : "0.1.x"
-	, "ee-project" 		    : "0.2.x"
+	   , "ee-project" 		        : "0.2.x"
     }
     , "optionalDependencies": {}
     , "keywords"                    : ["orm", "mysql", "postgres", "object relationale mapper", "eager loading", "connection pooling", "cluster"]
     , "scripts": {
-        "test"                      : "./node_modules/mocha/bin/mocha --reporter spec"
+        "test"                      : "./node_modules/mocha/bin/mocha --reporter spec --bail"
     }
 }
