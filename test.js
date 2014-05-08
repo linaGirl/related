@@ -25,7 +25,8 @@
 			db.event({id:1}, ['*']).getVenue(['*']).find(function(err, result){
 				log(err);
 				log(JSON.stringify(result))
-				log(result);
+				//log(result);
+				result.dir();
 			});
 
 
