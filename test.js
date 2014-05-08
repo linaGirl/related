@@ -22,11 +22,12 @@
 
 			log(orm);
 
-			db.venue.setReferenceAccessorName('id_image', 'logo');
-			new db.venue({
-				  name: 'Dachstock Reitschule'
-				, logo: new db.image({url:'http://i.imgur.com/oP9R0pq.gif'})
-			}).save(log);	
+			new db.event({
+				  title: 'Mapping Test'
+				, startdate: new Date(0)
+				, image: [db.image({id: 1})]
+				, venue: db.venue({id:1})
+			}).save(log);
 
 
 			/*

@@ -196,6 +196,20 @@
 			});
 
 
+			it('with a mapped entity fetched using a query', function(done){
+				new db.event({
+					  title: 'Mapping Test'
+					, startdate: new Date(0)
+					, image: [db.image({id: 1})]
+					, venue: db.venue({id:1})
+				}).save(function(err, event){
+					if (err) done(err);
+					else {
+						assert.equal(JSON.stringify(event), '{"image":[{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif"}],"id":1,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}');
+						done();
+					}
+				});
+			});
 
 		});
 	});
