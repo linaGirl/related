@@ -74,23 +74,51 @@
 			});
 
 			it('into the county table', function(done){
-				async.each([
+				var   index = 0
+					, items
+					, insert;
+
+				insert = function(){
+					if (index < items.length) {
+						new db.county(items[index]).save(function(err){
+							if (err) done(err);
+							else insert();
+						});
+						index++;
+					} else done();
+				};
+
+				items = [
 					  {code: 'be', name: 'Bern', id_country: 1}
 					, {code: 'zh', name: 'Zürich', id_country: 1}
 					, {code: 'ge', name: 'Genf', id_country: 1}
-				], function(county, next){
-					new db.county(county).save(next);
-				}, done);
+				];
+
+				insert();
 			});
 
 			it('into the municipality table', function(done){
-				async.each([
+				var   index = 0
+					, items
+					, insert;
+
+				insert = function(){
+					if (index < items.length) {
+						new db.municipality(items[index]).save(function(err){
+							if (err) done(err);
+							else insert();
+						});
+						index++;
+					} else done();
+				};
+
+				items = [
 					  {name: 'Bern', id_county: 1}
 					, {name: 'Ittigen', id_county: 1}
 					, {name: 'Solothurn', id_county: 1}
-				], function(municipality, next){
-					new db.municipality(municipality).save(next);
-				}, done);
+				];
+
+				insert();
 			});
 		});
 
@@ -243,10 +271,10 @@
 			});
 
 			it('From an entitiy including a reference', function(done){
-				db.event({id:1}).getVenue().find(function(err, events){
+				db.event({id:1}, ['*']).getVenue(['*']).find(function(err, events){
 					if (err) done(err);
 					else {
-						assert.equal(JSON.stringify(events), '[{"id":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]');
+						assert.equal(JSON.stringify(events), '[{"id":1,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]');
 						done();
 					}
 				});

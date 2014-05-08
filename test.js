@@ -22,9 +22,13 @@
 
 			log(orm);
 
-			db.event({id:1}).getVenue().find(log);
+			db.event({id:1}, ['*']).getVenue(['*']).find(function(err, result){
+				log(err);
+				log(JSON.stringify(result))
+				log(result);
+			});
 
-			
+
 			/*
 			orm.ee_orm_test.venue.setMappingAccessorName('venue_image', 'image');*/
 
