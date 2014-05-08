@@ -11,7 +11,7 @@
 
 
 
-	['POSTGRES'].forEach(function(db){
+	['POSTGRES'].forEach(function(db){ log(travis.get(db));
 		var   config = JSON.parse(travis.get(db))
 			, sqlStatments
 			, key
