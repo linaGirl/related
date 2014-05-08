@@ -34,7 +34,7 @@
 	    , "ee-project" 		        : "0.2.x"
     }
     , "optionalDependencies": {}
-    , "keywords"                    : ["orm", "mysql", "postgres", "object relationale mapper", "eager loading", "connection pooling", "cluster"]
+    , "keywords"                    : ["orm", "mysql", "postgres", "object relational mapper", "eager loading", "connection pooling", "cluster"]
     , "scripts": {
         "test"                      : "./node_modules/mocha/bin/mocha --reporter spec --bail"
     }
