@@ -211,6 +211,46 @@
 				});
 			});
 
+
+			it('with a new mapped entity', function(done){
+				new db.event({
+					  title: 'Mapping Test'
+					, startdate: new Date(0)
+					, image: [new db.image({url: 'http://imgur.com/gallery/laxsJHr'})]
+					, venue: db.venue({id:1})
+				}).save(function(err, event){
+					if (err) done(err);
+					else {
+						assert.equal(JSON.stringify(event), '{"image":[{"id":6,"url":"http://imgur.com/gallery/laxsJHr"}],"id":2,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}');
+						done();
+					}
+				});
+			});
+		});
+
+		
+
+		// insert tests
+		describe('Querying Data', function(){
+			it('From an entitiy', function(done){
+				db.event({id:1}).find(function(err, events){
+					if (err) done(err);
+					else {
+						assert.equal(JSON.stringify(events), '[{"id":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]');
+						done();
+					}
+				});
+			});
+
+			it('From an entitiy including a reference', function(done){
+				db.event({id:1}).getVenue().find(function(err, events){
+					if (err) done(err);
+					else {
+						assert.equal(JSON.stringify(events), '[{"id":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]');
+						done();
+					}
+				});
+			});
 		});
 	});
 

@@ -22,14 +22,9 @@
 
 			log(orm);
 
-			new db.event({
-				  title: 'Mapping Test'
-				, startdate: new Date(0)
-				, image: [db.image({id: 1})]
-				, venue: db.venue({id:1})
-			}).save(log);
+			db.event({id:1}).getVenue().find(log);
 
-
+			
 			/*
 			orm.ee_orm_test.venue.setMappingAccessorName('venue_image', 'image');*/
 
