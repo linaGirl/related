@@ -169,21 +169,29 @@
 			});
 
 
-			it('with a newly created reference which has an ambiguous name should fail', function(){
-				assert.throws(function(){
+			it('with a newly created reference which has an ambiguous name should fail', function(done){
+				try {
 					new db.venue({
 						  name: 'Dachstock Reitschule'
 						, image: new db.image({url:'http://i.imgur.com/oP9R0pq.gif'})
+						, municipality: db.municipality({
+							name: 'Bern'
+						})
 					}).save();	
-				});				
+				} catch (err) {
+					assert.ok(err instanceof Error);
+					done();
+				}
 			});
 
 
 			it('with a newly created reference on a redefined accessor', function(done){
-				log(db.venue().describeMethods())
 				new db.venue({
 					  name: 'Dachstock Reitschule'
 					, logo: new db.image({url:'http://i.imgur.com/oP9R0pq.gif'})
+					, municipality: db.municipality({
+						name: 'Bern'
+					})
 				}).save(done);	
 			});
 
