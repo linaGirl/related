@@ -13,6 +13,7 @@
 	orm.on('load', function(err){
 		log('orm loaded');
 			var   role5
+				, db = orm.ee_orm_test
 				, arr = []
 			 	, start
 			 	, i = 10000;
@@ -21,12 +22,22 @@
 
 			log(orm);
 
+			db.venue.setReferenceAccessorName('id_image', 'logo');
+			new db.venue({
+				  name: 'Dachstock Reitschule'
+				, logo: new db.image({url:'http://i.imgur.com/oP9R0pq.gif'})
+			}).save(log);	
+
+
+			/*
+			orm.ee_orm_test.venue.setMappingAccessorName('venue_image', 'image');*/
+
 			//log(orm.eventbooster.resource().describeMethods());
 
-			var db = orm.ee_orm_test;
+			/*var db = orm.ee_orm_test;
 
 			db.venue.setReferenceAccessorName('id_image', 'logo');
-			db.venue.setMappingAccessorName('venue_image', 'images');
+			db.venue.setMappingAccessorName('venue_image', 'images');*/
 
 			/*
 			new db.venue({

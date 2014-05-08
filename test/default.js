@@ -11,8 +11,6 @@
 
 
 
-
-
 	['POSTGRES'].forEach(function(db){
 		var   config = JSON.parse(travis.get(db))
 			, sqlStatments
@@ -116,7 +114,7 @@
 				db.venue.setReferenceAccessorName('id_image', 'logo');
 			});
 			it('the «image» mapping on the «venue model»', function(){
-				db.venue.setMappingAccessorName('venue_image', 'image');
+				db.venue.setMappingAccessorName('venue_image', 'images');
 			});
 		});
 
@@ -182,11 +180,15 @@
 
 
 			it('with a newly created reference on a redefined accessor', function(done){
+				log(db.venue().describeMethods())
 				new db.venue({
 					  name: 'Dachstock Reitschule'
 					, logo: new db.image({url:'http://i.imgur.com/oP9R0pq.gif'})
 				}).save(done);	
 			});
+
+
+
 		});
 	});
 
