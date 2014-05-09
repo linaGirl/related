@@ -56,8 +56,19 @@
 				orm.on('load', done);
 			});
 
+			it ('should make sure the test db exists', function(done){
+				orm.getDatabase('ee_orm_test').getConnection(function(err, connection){
+					if (err) done(err);
+					else {
+						connection.queryRaw('CREATE DATABASE test;', function(){
+							done();
+						});
+					}
+				});	
+			});
+
 			it('should be able to drop & create the testing schema ('+sqlStatments.length+' raw SQL queries)', function(done){
-				var db = orm.getDatabase('ee_orm_test').getConnection(function(err, connection){
+				orm.getDatabase('ee_orm_test').getConnection(function(err, connection){
 					if (err) done(err);
 					else {
 						async.each(sqlStatments, connection.queryRaw.bind(connection), done);
