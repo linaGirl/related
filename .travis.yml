@@ -8,4 +8,5 @@ addons:
     postgresql: "9.3"
 
 before_script:
+  - psql -f test/createdb.sql -U postgres
   - psql -f test/postgres.sql -U postgres
