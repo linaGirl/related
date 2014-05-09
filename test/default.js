@@ -27,7 +27,7 @@
 					, hosts: [
 						{
 							  host 		: 'localhost'
-							, username 	: 'root'
+							, username 	: 'postgres'
 							, password 	: ''
 							, port 		: 5432
 							, mode 		: 'readwrite'
