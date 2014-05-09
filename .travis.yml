@@ -4,9 +4,6 @@ node_js :
     - "0.10"
     - "0.11"
 
-env: 
-    - 'POSTGRES="{\"ee_orm_test\":{\"type\":\"postgres\",\"hosts\":[{\"host\":\"127.0.0.1\",\"username\":\"root\",\"password\":\"\",\"port\":5432,\"mode\":\"readwrite\",\"database\":\"test\"}]}}"'
-
 addons:
     postgresql: "9.3"
 

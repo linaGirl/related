@@ -3,7 +3,6 @@
 	var   Class 		= require('ee-class')
 		, log 			= require('ee-log')
 		, assert 		= require('assert')
-		, travis 		= require('ee-travis')
 		, async 		= require('ee-async')
 		, fs 			= require('fs')
 		, ORM 			= require('../');
@@ -11,12 +10,34 @@
 
 
 
-	['POSTGRES'].forEach(function(db){ log(travis.get(db));
-		var   config = JSON.parse(travis.get(db))
+	['POSTGRES'].forEach(function(db){
+		var   config
 			, sqlStatments
 			, key
 			, orm
 			, db;
+
+
+		try {
+			config = require('../config.js').db
+		} catch(e) {
+			config = {
+				ee_orm_test: {
+					  type: 'postgres'
+					, hosts: [
+						{
+							  host 		: 'localhost'
+							, username 	: 'root'
+							, password 	: ''
+							, port 		: 5432
+							, mode 		: 'readwrite'
+							, database 	: 'test'
+						}
+					]
+				}
+			};
+		}
+
 
 		// sql for test db
 		sqlStatments = fs.readFileSync(__dirname+'/postgres.sql').toString().split(';').map(function(input){
