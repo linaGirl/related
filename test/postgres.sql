@@ -84,7 +84,7 @@ CREATE TABLE ee_orm_test.event (
 	, CONSTRAINT "fk_event_venue" FOREIGN KEY (id_venue) REFERENCES ee_orm_test.venue (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE RESTRICT
 );
 
-CREATE TABLE ee_orm_test.eventLocale (
+CREATE TABLE ee_orm_test."eventLocale" (
 	  id_event  		integer NOT NULL
 	, id_language  		integer NOT NULL
 	, description  		text NOT NULL

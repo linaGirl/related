@@ -22,11 +22,15 @@
 
 			log(orm);
 
-			db.event({id:1}, ['*']).getVenue(['*']).find(function(err, result){
+			/*return new db.eventLocale({
+				  description 	: 'some text'
+				, language 		: db.language({id:1})
+				, event 		: db.event({id:1})
+			}).save(log);*/
+		
+			db.event({id:1}, ['*']).getImage(['*']).find(function(err, events){
 				log(err);
-				log(JSON.stringify(result))
-				//log(result);
-				result.dir();
+				if (events) events.dir();
 			});
 
 

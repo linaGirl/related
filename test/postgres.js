@@ -81,10 +81,25 @@
 		// inserting data into test database
 		describe('Inserting Test Data', function(){
 			it('into the language table', function(done){
-				async.each(['en', 'de', 'nl', 'fr', 'it'], function(language, next){
-					new db.language({code: language}).save(next);
-				}, done);
+				var   index = 0
+					, items
+					, insert;
+
+				insert = function(){
+					if (index < items.length) {
+						new db.language({code: items[index]}).save(function(err){
+							if (err) done(err);
+							else insert();
+						});
+						index++;
+					} else done();
+				};
+
+				items = ['en', 'de', 'nl', 'fr', 'it'];
+
+				insert();
 			});
+
 
 			it('into the country table', function(done){
 				async.each([
@@ -93,6 +108,7 @@
 					new db.country(country).save(next);
 				}, done);
 			});
+
 
 			it('into the county table', function(done){
 				var   index = 0
@@ -261,6 +277,22 @@
 			});
 
 
+			it('with a new belongsto entity', function(done){
+				new db.event({
+					  title: 'Mapping Test'
+					, startdate: new Date(0)
+					, venue: db.venue({id:1})
+					, eventLocale: [new db.eventLocale({description: 'some text', language: db.language({id:1})})]
+				}).save(function(err, event){
+					if (err) done(err);
+					else {
+						assert.equal(JSON.stringify(event), '{"eventLocale":[{"language":{"id":1,"code":"en"},"description":"some text"}],"id":2,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}');
+						done();
+					}
+				});
+			});
+
+
 			it('with a new mapped entity', function(done){
 				new db.event({
 					  title: 'Mapping Test'
@@ -270,7 +302,7 @@
 				}).save(function(err, event){
 					if (err) done(err);
 					else {
-						assert.equal(JSON.stringify(event), '{"image":[{"id":6,"url":"http://imgur.com/gallery/laxsJHr"}],"id":2,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}');
+						assert.equal(JSON.stringify(event), '{"image":[{"id":6,"url":"http://imgur.com/gallery/laxsJHr"}],"id":3,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}');
 						done();
 					}
 				});
@@ -279,9 +311,9 @@
 
 		
 
-		// insert tests
+		// query tests
 		describe('Querying Data', function(){
-			it('From an entitiy', function(done){
+			it('from an entitiy', function(done){
 				db.event({id:1}).find(function(err, events){
 					if (err) done(err);
 					else {
@@ -291,11 +323,46 @@
 				});
 			});
 
-			it('From an entitiy including a reference', function(done){
+			it('from an entitiy including a reference', function(done){
 				db.event({id:1}, ['*']).getVenue(['*']).find(function(err, events){
 					if (err) done(err);
 					else {
 						assert.equal(JSON.stringify(events), '[{"id":1,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]');
+						done();
+					}
+				});
+			});
+
+			it('from an entitiy including a mapping', function(done){
+				db.event({id:1}, ['*']).getImage(['*']).find(function(err, events){
+					if (err) done(err);
+					else {
+						assert.equal(JSON.stringify(events), '[{"image":[{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif"}],"id":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]');
+						done();
+					}
+				});
+			});
+
+			it('from an entitiy including an entity belonging to the current entity', function(done){
+				db.event({id:2}, ['*']).getEventLocale(['*']).find(function(err, events){
+					if (err) done(err);
+					else {
+						assert.equal(JSON.stringify(events), '[{"eventLocale":[{"description":"some text"}],"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]');
+						done();
+					}
+				});
+			});
+		});
+
+		
+
+		// complex query tests
+		describe('Querying Data with advanced eager loading', function(){
+			it('from an entitiy', function(done){
+				db.event({id:1}).find(function(err, events){
+					if (err) done(err);
+					else {
+						assert.equal(JSON.stringify(events), '[{"id":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]');
 						done();
 					}
 				});
