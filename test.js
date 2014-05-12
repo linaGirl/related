@@ -12,27 +12,22 @@
 
 	orm.on('load', function(err){
 		log('orm loaded');
-			var   role5
-				, db = orm.ee_orm_test
-				, arr = []
-			 	, start
-			 	, i = 10000;
+			var   db = orm.ee_orm_test
+			 	, start;
 
-			while(i--) arr.push(1);
 
 			log(orm);
 
+			var cb = function(err, data){
+				if (err) log(err);
+				if (data) data.dir();
+			}
 			/*return new db.eventLocale({
 				  description 	: 'some text'
 				, language 		: db.language({id:1})
 				, event 		: db.event({id:1})
 			}).save(log);*/
-		
-			db.event({id:1}, ['*']).getImage(['*']).find(function(err, events){
-				log(err);
-				if (events) events.dir();
-			});
-
+			db.event({id:2}).getEventLocale(['*']).fetchLanguage(['*']).find(cb);
 
 			/*
 			orm.ee_orm_test.venue.setMappingAccessorName('venue_image', 'image');*/

@@ -358,11 +358,11 @@
 
 		// complex query tests
 		describe('Querying Data with advanced eager loading', function(){
-			it('from an entitiy', function(done){
-				db.event({id:1}).find(function(err, events){
+			it('through a mapping table', function(done){
+				db.event({id:2}).getEventLocale(['*']).fetchLanguage(['*']).find(function(err, events){
 					if (err) done(err);
 					else {
-						assert.equal(JSON.stringify(events), '[{"id":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]');
+						assert.equal(JSON.stringify(events), '[{"eventLocale":[{"language":{"id":1,"code":"en"},"description":"some text"}],"id":2}]');
 						done();
 					}
 				});
