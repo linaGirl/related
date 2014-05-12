@@ -9,6 +9,18 @@
 
 
 
+	var expect = function(val, cb){
+		return function(err, result){
+			try {
+				assert.equal(JSON.stringify(result), val);
+			} catch (err) {
+				return cb(err);
+			}
+			cb();
+		}
+	};
+
+
 
 	['POSTGRES'].forEach(function(db){
 		var   config
@@ -284,13 +296,7 @@
 					, startdate: new Date(0)
 					, venue: db.venue({id:1})
 					, eventLocale: [new db.eventLocale({description: 'some text', language: db.language({id:1})})]
-				}).save(function(err, event){
-					if (err) done(err);
-					else {
-						assert.equal(JSON.stringify(event), '{"eventLocale":[{"language":{"id":1,"code":"en"},"description":"some text"}],"id":2,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}');
-						done();
-					}
-				});
+				}).save(expect('{"eventLocale":[{"language":{"id":1,"code":"en"},"description":"some text"}],"id":2,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
 			});
 
 
@@ -300,13 +306,8 @@
 					, startdate: new Date(0)
 					, image: [new db.image({url: 'http://imgur.com/gallery/laxsJHr'})]
 					, venue: db.venue({id:1})
-				}).save(function(err, event){
-					if (err) done(err);
-					else {
-						assert.equal(JSON.stringify(event), '{"image":[{"id":6,"url":"http://imgur.com/gallery/laxsJHr"}],"id":3,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}');
-						done();
-					}
-				});
+					, canceled: true
+				}).save(expect('{"image":[{"id":6,"url":"http://imgur.com/gallery/laxsJHr"}],"id":3,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}', done));
 			});
 		});
 
@@ -372,13 +373,64 @@
 			it('with two mapepd entities', function(done){
 				db.image.setMappingAccessorName('venue_image', 'venue');
 
-				db.event({id:1}).getImage(['*']).getVenue(['*']).find(function(err, events){
+				db.event({id:1}).getImage(['*']).getVenue(['*']).find(expect('[{"image":[{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif","venue":[{"id":2,"name":"Dachstock Reitschule"}]}],"id":1}]', done));
+			});
+		});
+
+
+
+
+		describe('Updating existing Data', function(){
+			it('for a simple entity using the loaded model should work', function(done){
+				db.event({id:1}).findOne(function(err, event){
 					if (err) done(err);
 					else {
-						assert.equal(JSON.stringify(events), '[{"image":[{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif","venue":[{"id":2,"name":"Dachstock Reitschule"}]}],"id":1}]');
-						done();
+						event.title = 'Changed title';
+						event.save(expect('{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
 					}
 				});
+			});
+		});
+
+
+
+
+
+		describe('[Filtering]', function(){
+			it('Filter by a value', function(done){
+				db.event({id: 1}).findOne(expect('{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
+			});
+
+			it('Filter using null', function(done){
+				db.event({canceled: null}).find(expect('[{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+			});
+
+			it('Filter using notNull', function(done){
+				db.event({canceled: ORM.notNull()}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}]', done));
+			});
+
+			it('Using multiple values', function(done){
+				db.event({id: 1, title:'Changed title'}).findOne(expect('{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
+			});
+
+			it('Using multiple values on the same column', function(done){
+				db.event({id: ORM.in([1, 2])}).find(expect('[{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+			});
+
+			it('Records with the > operator', function(done){
+				db.event({id: ORM.gt(2)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}]', done));
+			});
+
+			it('Records with the < operator', function(done){
+				db.event({id: ORM.lt(2)}).find(expect('[{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+			});			
+
+			it('Records with the >= operator', function(done){
+				db.event({id: ORM.gte(2)}).find(expect('[{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}]', done));
+			});
+
+			it('Records with the <= operator', function(done){
+				db.event({id: ORM.lte(2)}).find(expect('[{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
 		});
 	});
