@@ -60,7 +60,7 @@ If the api changes the minor version number will change. So if you use the versi
                 if (err) log(err);
                 else {
                     // get first event
-                    log(events.first()); // {id:1, title: "prodigy", startdate: "2012-07-08 22:00:00", venues: [{id: 45, name: "via felsenau"}]};
+                    events.first().dir() // {id:1, title: "prodigy", startdate: "2012-07-08 22:00:00", venues: [{id: 45, name: "via felsenau"}]};
 
                     // add new venue to the second event. the events list is an array with advanced functions
                     // the relation to the venues table was automatically on the events model.
@@ -74,11 +74,11 @@ If the api changes the minor version number will change. So if you use the versi
 
             // lets say you want to get all events for a specific venue. you have two possiblitie to do this.
             orm.eventdata.events(['id']).fetchVenues({id: 56}).find(function(err, events){
-                log(events); // [{id:1}, {id:2}]
+                events.dir(); // [{id:1}, {id:2}]
             });
 
             orm.eventdata.venues({id: 56}).events(['id']).find(function(err, venues){
-                log(venues); // [{id:56, events: [{id:1}, {id:2}]}]
+                venues.dir(); // [{id:56, events: [{id:1}, {id:2}]}]
             });
         }
     });

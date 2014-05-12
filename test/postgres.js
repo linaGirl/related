@@ -254,6 +254,7 @@
 				new db.venue({
 					  name: 'Dachstock Reitschule'
 					, logo: new db.image({url:'http://i.imgur.com/oP9R0pq.gif'})
+					, images: [db.image({id:1})]
 					, municipality: db.municipality({
 						name: 'Bern'
 					})
@@ -369,10 +370,12 @@
 			});
 
 			it('with two mapepd entities', function(done){
-				db.event({id:2}).getImage(['*']).getVenue(['*']).find(function(err, events){
+				db.image.setMappingAccessorName('venue_image', 'venue');
+
+				db.event({id:1}).getImage(['*']).getVenue(['*']).find(function(err, events){
 					if (err) done(err);
 					else {
-						assert.equal(JSON.stringify(events), '[{"eventLocale":[{"language":{"id":1,"code":"en"},"description":"some text"}],"id":2}]');
+						assert.equal(JSON.stringify(events), '[{"image":[{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif","venue":[{"id":2,"name":"Dachstock Reitschule"}]}],"id":1}]');
 						done();
 					}
 				});
