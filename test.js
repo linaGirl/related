@@ -27,7 +27,7 @@
 				, language 		: db.language({id:1})
 				, event 		: db.event({id:1})
 			}).save(log);*/
-			db.event({id:2}).getEventLocale(['*']).fetchLanguage(['*']).find(cb);
+			db.event({id:2}).getImage(['*']).getVenue(['*']).find(cb);
 
 			/*
 			orm.ee_orm_test.venue.setMappingAccessorName('venue_image', 'image');*/

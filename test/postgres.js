@@ -367,6 +367,16 @@
 					}
 				});
 			});
+
+			it('with two mapepd entities', function(done){
+				db.event({id:2}).getImage(['*']).getVenue(['*']).find(function(err, events){
+					if (err) done(err);
+					else {
+						assert.equal(JSON.stringify(events), '[{"eventLocale":[{"language":{"id":1,"code":"en"},"description":"some text"}],"id":2}]');
+						done();
+					}
+				});
+			});
 		});
 	});
 
