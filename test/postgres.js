@@ -390,6 +390,83 @@
 					}
 				});
 			});
+
+			it('with a reference fetched using a query', function(done){
+				db.event({id:1}).findOne(function(err, event){
+					if (err) done(err);
+					else {
+						event.venue = db.venue({id:2});
+						event.save(function(err){
+							if (err) done(err);
+							else db.event({id:1},['*']).getVenue(['*']).findOne(expect('{"id":1,"venue":{"id":2,"name":"Dachstock Reitschule"},"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
+						});
+					}
+				});
+			});
+
+			it('with a new reference', function(done){
+				db.event({id:1}).findOne(function(err, event){
+					if (err) done(err);
+					else {
+						event.venue = new db.venue({
+							  name:  		'another venue'
+							, logo:  		db.image({id:1})
+							, municipality: db.municipality({id:1})
+						});
+
+						event.save(function(err){
+							if (err) done(err);
+							else db.event({id:1},['*']).getVenue(['*']).findOne(expect('{"id":1,"venue":{"id":3,"name":"another venue"},"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
+						});
+					}
+				});
+			});
+
+
+			it('with a mapping fetched using a query', function(done){
+				db.event({id:1}).findOne(function(err, event){
+					if (err) done(err);
+					else {
+						event.venue = db.venue({id:2});
+						event.image.push(db.image({id:3}));
+
+						event.save(function(err){
+							if (err) done(err);
+							else db.event({id:1},['*']).getImage(['*']).findOne(expect('{"image":[{"id":3,"url":"http://i.imgur.com/fYaV6tK.gif"},{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif"}],"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
+						});
+					}
+				});
+			});
+
+			it('with a new mapping record', function(done){
+				db.event({id:2}).findOne(function(err, event){
+					if (err) done(err);
+					else {
+						event.venue = db.venue({id:2});
+						event.image.push(new db.image({url:'http://i.imgur.com/1vjB9yu.gif'}));
+
+						event.save(function(err){
+							if (err) done(err);
+							else db.event({id:2},['*']).getImage(['*']).findOne(expect('{"image":[{"id":7,"url":"http://i.imgur.com/1vjB9yu.gif"}],"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
+						});
+					}
+				});
+			});
+
+			/*it('with a belonging record fetched using a query', function(done){
+				db.event({id:1}).findOne(function(err, event){
+					if (err) done(err);
+					else {
+						event.venue = db.venue({id:2});
+						event.eventLocale.push(db.eventLocale().getLanguage({id:1}).limit(1));
+
+						event.save(function(err){
+							if (err) done(err);
+							else db.event({id:1},['*']).getEventLocale(['*']).findOne(expect('{"image":[{"id":3,"url":"http://i.imgur.com/fYaV6tK.gif"},{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif"}],"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
+						});
+					}
+				});
+			});*/
 		});
 
 
@@ -402,7 +479,7 @@
 			});
 
 			it('Filter using null', function(done){
-				db.event({canceled: null}).find(expect('[{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+				db.event({canceled: null}).find(expect('[{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
 
 			it('Filter using notNull', function(done){
@@ -414,7 +491,7 @@
 			});
 
 			it('Using multiple values on the same column', function(done){
-				db.event({id: ORM.in([1, 2])}).find(expect('[{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+				db.event({id: ORM.in([1, 2])}).find(expect('[{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
 
 			it('Records with the > operator', function(done){
@@ -426,12 +503,45 @@
 			});			
 
 			it('Records with the >= operator', function(done){
-				db.event({id: ORM.gte(2)}).find(expect('[{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}]', done));
+				db.event({id: ORM.gte(2)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
 
 			it('Records with the <= operator', function(done){
-				db.event({id: ORM.lte(2)}).find(expect('[{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+				db.event({id: ORM.lte(2)}).find(expect('[{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
+
+			it('Filtering for two values using OR', function(done){
+				db.event({id: ORM.or(2,3)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+			});
+
+			it('Filtering for two values using AND', function(done){
+				db.event({id: ORM.and(2,3)}).find(expect('[]', done));
+			});
+
+			it('Filtering for two values using OR and differet operators', function(done){
+				db.event({id: ORM.and(ORM.gt(2),3)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}]', done));
+			});
+		});
+
+
+
+		describe('Connection Pooling', function(){
+			/*it('should be able to insert 1000 items at once', function(done){
+				var   i = 1000
+					, items = [];
+
+				this.timeout(30000);
+
+				while(i--) items.push(i);
+
+				async.each(items, function(nope, cb){
+					new db.event({
+						  title: Math.random()
+						, venue: db.venue({id:1})
+						, startdate: new Date()
+					}).save(cb);
+				}, done);
+			});*/
 		});
 	});
 

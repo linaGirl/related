@@ -20,14 +20,39 @@
 
 			var cb = function(err, data){
 				if (err) log(err);
-				if (data) data.dir();
+				if (data && data.dir) data.dir();
 			}
-			/*return new db.eventLocale({
-				  description 	: 'some text'
+
+			db.event({id:1}).findOne(function(err, event){
+				if (err) done(err);
+				else {
+					event.eventLocale.push(db.eventLocale().limit(1).offset(0).getLanguage({id:1}));
+					event.save(cb);
+				}
+			});
+
+			return;
+			/*return new db.eventLocasle({
+				  description 	: 'ssome text'
 				, language 		: db.language({id:1})
 				, event 		: db.event({id:1})
 			}).save(log);*/
-			db.event({canceled: ORM.notNull()}).find(cb);
+			var   i = 1
+				, items = [];
+
+			while(i--) items.push(i);
+
+			setTimeout(function(){
+				log.error('----------------');
+				async.each(items, function(nope, cb){
+					new db.event({
+						  title: Math.random()
+						, venue: db.venue()
+						, startdate: new Date()
+					}).save(cb);
+				}, cb);
+			}, 1500);
+			
 
 			/*
 			orm.ee_orm_test.venue.setMappingAccessorName('venue_image', 'image');*/
