@@ -23,13 +23,7 @@
 				if (data && data.dir) data.dir();
 			}
 
-			db.event({id:1}).findOne(function(err, event){
-				if (err) done(err);
-				else {
-					event.eventLocale.push(db.eventLocale().limit(1).offset(0).getLanguage({id:1}));
-					event.save(cb);
-				}
-			});
+			db.event({id: ORM.and(2,3)}).find(cb);
 
 			return;
 			/*return new db.eventLocasle({
