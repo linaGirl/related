@@ -358,6 +358,7 @@
 
 		
 
+
 		// complex query tests
 		describe('Querying Data with advanced eager loading', function(){
 			it('through a mapping table', function(done){
@@ -380,6 +381,7 @@
 
 
 
+
 		describe('Updating existing Data', function(){
 			it('for a simple entity using the loaded model should work', function(done){
 				db.event({id:1}).findOne(function(err, event){
@@ -387,6 +389,22 @@
 					else {
 						event.title = 'Changed title';
 						event.save(expect('{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));
+					}
+				});
+			});
+
+			it('for a simple entity with two updates using the loaded model should work', function(done){
+				new db.event({
+					  startdate: new Date()
+					, title: 'bender'
+					, venue: db.venue({id:1})
+				}).save(function(err, event){
+					if (err) done(err);
+					else {
+						event.title = 'Changed title';
+						event.enddate = new Date(1400000000000);
+						event.startdate = new Date(0);
+						event.save(expect('{"id":4,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null}', done));
 					}
 				});
 			});
@@ -479,7 +497,7 @@
 			});
 
 			it('Filter using null', function(done){
-				db.event({canceled: null}).find(expect('[{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+				db.event({canceled: null}).find(expect('[{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
 
 			it('Filter using notNull', function(done){
@@ -495,7 +513,7 @@
 			});
 
 			it('Records with the > operator', function(done){
-				db.event({id: ORM.gt(2)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}]', done));
+				db.event({id: ORM.gt(2)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null}]', done));
 			});
 
 			it('Records with the < operator', function(done){
@@ -503,7 +521,7 @@
 			});			
 
 			it('Records with the >= operator', function(done){
-				db.event({id: ORM.gte(2)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+				db.event({id: ORM.gte(2)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
 
 			it('Records with the <= operator', function(done){
@@ -526,11 +544,11 @@
 
 
 		describe('Connection Pooling', function(){
-			/*it('should be able to insert 1000 items at once', function(done){
+			it('should be able to insert 1000 items at once', function(done){
 				var   i = 1000
 					, items = [];
 
-				this.timeout(30000);
+				this.timeout(120000);
 
 				while(i--) items.push(i);
 
@@ -541,7 +559,7 @@
 						, startdate: new Date()
 					}).save(cb);
 				}, done);
-			});*/
+			});
 		});
 	});
 

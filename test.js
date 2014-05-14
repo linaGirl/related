@@ -23,15 +23,13 @@
 				if (data && data.dir) data.dir();
 			}
 
-			db.event({id: ORM.and(2,3)}).find(cb);
-
-			return;
 			/*return new db.eventLocasle({
 				  description 	: 'ssome text'
 				, language 		: db.language({id:1})
 				, event 		: db.event({id:1})
 			}).save(log);*/
-			var   i = 1
+			var   i = 1000
+				, ok = fail = 0
 				, items = [];
 
 			while(i--) items.push(i);
@@ -39,12 +37,22 @@
 			setTimeout(function(){
 				log.error('----------------');
 				async.each(items, function(nope, cb){
+					//db.event({id:1}).find(cb);
+					//return;
 					new db.event({
 						  title: Math.random()
 						, venue: db.venue()
 						, startdate: new Date()
-					}).save(cb);
-				}, cb);
+					}).save(function(err){
+						if (err) fail++;
+						else ok++;
+						cb(err);
+					});
+				}, function(err){
+					log.info(ok);
+					log.error(fail);
+					log(err);
+				});
 			}, 1500);
 			
 
