@@ -198,6 +198,7 @@
 
 
 
+
 		// insert tests
 		describe('Inserting Data', function(){
 			it('into an entity', function(done){
@@ -226,6 +227,14 @@
 				}
 				
 				insert(0);
+			});
+
+
+			it('with null as a column value should work', function(done){
+				new db.country({
+					  code: 'nl'
+					, name: null
+				}).save(done);
 			});
 
 

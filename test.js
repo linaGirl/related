@@ -23,6 +23,12 @@
 				if (data && data.dir) data.dir();
 			}
 
+			new db.country({
+				  code: 'nz'
+				, name: null
+			}).save(cb);
+			return;
+
 			/*return new db.eventLocasle({
 				  description 	: 'ssome text'
 				, language 		: db.language({id:1})
