@@ -23,10 +23,12 @@
 				if (data && data.dir) data.dir();
 			}
 
-			new db.country({
-				  code: 'nz'
-				, name: null
-			}).save(cb);
+
+			db.venue({id: ORM.gt(db.venue(['id'], {id:ORM.gt(0)}))}).find(cb);
+
+
+
+
 			return;
 
 			/*return new db.eventLocasle({
