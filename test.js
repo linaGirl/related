@@ -24,8 +24,7 @@
 			}
 
 
-			db.venue({id: ORM.gt(db.venue(['id'], {id:ORM.gt(0)}))}).find(cb);
-
+			db.event({id: ORM.and(2,3)}).find(cb);
 
 
 
