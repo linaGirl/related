@@ -548,6 +548,14 @@
 			it('Filtering for two values using OR and differet operators', function(done){
 				db.event({id: ORM.and(ORM.gt(2),3)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}]', done));
 			});
+
+			it('Filtering the like operator', function(done){
+				db.event({title: ORM.like('Mapp%')}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+			});
+
+			it('Filtering the notLike operator', function(done){
+				db.event({title: ORM.notLike('Mapp%')}).find(expect('-[{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+			});
 		});
 
 

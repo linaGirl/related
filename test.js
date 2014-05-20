@@ -24,7 +24,7 @@
 			}
 
 
-			db.event({id: ORM.and(2,3)}).find(cb);
+			db.event({title: ORM.like('Mapp%')}).find(cb);
 
 
 
