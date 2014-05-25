@@ -506,6 +506,13 @@
 
 
 
+		describe('[Grouping]', function(){
+			it('should work :)', function(done){
+				db.event(['id']).group('id').find(expect('[{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+			});
+		});
+
+
 		describe('[Filtering]', function(){
 			it('Filter by a value', function(done){
 				db.event({id: 1}).findOne(expect('{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}', done));

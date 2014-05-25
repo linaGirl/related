@@ -24,7 +24,7 @@
 			}
 
 
-			db.event().order('title', true).findOne(cb);
+			db.event(['id']).group('id').find(cb);
 
 
 
