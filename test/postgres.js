@@ -496,7 +496,7 @@
 			});*/
 		});
 
-		
+
 
 		describe('[Ordering]', function(){
 			it('should work :)', function(done){
@@ -589,7 +589,45 @@
 			});*/
 		});
 		
+	
 
+
+		describe('[Deleting]', function(){
+			it('A model should be deleted when the delete method is called on it', function(done){
+				db.event({id:1}).findOne(function(err, evt){
+					if (err) done(err);
+					else {
+						evt.delete(function(err){
+							if (err) done(err);
+							else {
+								db.event({id:1}).findOne(function(err, event){
+									if (err) done(err);
+									assert.equal(event, undefined);
+									done();
+								});
+							}
+						});
+					}
+				});
+			});
+
+			it('should remove items from a related set when they are delted', function(done){
+				db.event({id:2}, ['*']).fetchImage(['*']).findOne(function(err, evt){
+					if (err) done(err);
+					else {
+						evt.image[0].delete(function(err){
+							if (err) done(err);
+							else {
+								assert.equal(JSON.stringify(evt), '{"image":[],"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}');
+								done();
+							}
+						});
+					}
+				});
+			});
+		});
+
+		
 
 
 

@@ -24,7 +24,18 @@
 			}
 
 
-			db.event([ORM.count('id', 'eventCount')]).find(cb);
+			db.event({id:2}, ['*']).fetchImage(['*']).findOne(function(err, evt){
+					if (err) cb(err);
+					else {
+						evt.dir();
+						evt.image[0].delete(function(err){
+							if (err) cb(err);
+							else evt.dir();
+						});
+						
+
+					}
+				});
 
 
 
