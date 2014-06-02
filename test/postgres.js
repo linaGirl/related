@@ -510,6 +510,10 @@
 			it('should work :)', function(done){
 				db.event(['id']).group('id').find(expect('[{"id":4},{"id":1},{"id":3},{"id":2}]', done));
 			});
+
+			/*it('with aggregate function count', function(done){
+				db.event([ORM.count('id', 'eventCount')]).group('id').find(expect('[{"id":4},{"id":1},{"id":3},{"id":2}]', done));
+			});*/
 		});
 
 
@@ -562,18 +566,30 @@
 				db.event({id: ORM.and(ORM.gt(2),3)}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}]', done));
 			});
 
-			it('Filtering the like operator', function(done){
+			it('Filtering using the like operator', function(done){
 				db.event({title: ORM.like('Mapp%')}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
 
-			it('Filtering the notLike operator', function(done){
+			it('Filtering using the notLike operator', function(done){
 				db.event({title: ORM.notLike('Mapp%')}).find(expect('[{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
 
-			it('Filtering the notEqual operator', function(done){
+			it('Filtering using the notEqual operator', function(done){
 				db.event({title: ORM.notEqual('hui')}).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			}); 
+
+
+
+			/*it('Filtering using a subquery should work', function(done){
+				db.event().getVenue({
+					county: db.country({name: 'ch'}).get
+				}).find(function(err, result){
+					log(err, result);
+				});
+			});*/
 		});
+		
+
 
 
 

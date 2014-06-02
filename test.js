@@ -24,7 +24,7 @@
 			}
 
 
-			db.event(['id']).group('id').find(cb);
+			db.event([ORM.count('id', 'eventCount')]).find(cb);
 
 
 
