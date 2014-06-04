@@ -23,9 +23,9 @@
 				if (data && data.dir) data.dir();
 			}
 
-			
 
-			db.image(['*']).fetchEvent(['*']).find(cb);
+
+			db.event(['*'], {id: ORM.in([4,3])}).limit(10).fetchVenue(['*']).find(cb);
 			return;
 
 			/*return new db.eventLocasle({
