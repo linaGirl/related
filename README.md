@@ -346,7 +346,17 @@ The filter object which can be used by the queryuilder and the filter mehotd can
 
 
 
-#### Reserved Keywords
+##### QueryBuilder inner workings
+
+1. Collect all joins, filters for the query, apply them
+2. Collect all subqueries (eager loading) if it or any child is selected
+3. Join its parent resource, all resources down to the root resource
+4. filter with the «in» statement
+5. Enjoy
+
+
+
+#### Reserved Keywords (Outdated)
 
 On the ORM itself the following keywords are reserved (your database should not have a name which is listed below):
 

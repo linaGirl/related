@@ -23,22 +23,27 @@
 				if (data && data.dir) data.dir();
 			}
 
-
-			db.event({id:2}, ['*']).fetchImage(['*']).findOne(function(err, evt){
-					if (err) cb(err);
-					else {
-						evt.dir();
-						evt.image[0].delete(function(err){
-							if (err) cb(err);
-							else evt.dir();
-						});
-						
-
-					}
-				});
-
-
-
+			db.event(['*']).fetchImage(['*']).findOne(function(err, evt){ evt.dir();
+				if (err) cb(err);
+				else {
+					db.image(['*']).limit(2).find(function(err, images){ images.dir();
+						if (err) cb(err);
+						else {
+							evt.image.push(images[0]);
+							evt.save(function(err){
+								if (err) cb(err);
+								else {
+									evt.image.push(images[1]);
+									evt.save(function(err){
+										if (err) cb(err);
+										db.event({id:evt.id}).fetchImage(['*']).findOne(cb);
+									});
+								}
+							})
+						}
+					});
+				}
+			});
 			return;
 
 			/*return new db.eventLocasle({
