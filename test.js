@@ -25,10 +25,7 @@
 
 
 
-			db.event(['*']).limit(10).fetchVenue(['*']).fetchImage(['*']).find(function(err, data){
-				var a = data.toJSON();
-				log(a);
-			});
+			db.event().order('title', true).getVenue().orderRoot('id', true).find(cb);
 			return;
 
 			/*return new db.eventLocasle({
