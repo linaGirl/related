@@ -25,7 +25,9 @@
 
 
 
-			db.event(['*'], {id: ORM.in([4,3])}).limit(10).fetchVenue(['*']).find(cb);
+			db.event(['*']).limit(10).fetchVenue(['*']).fetchImage(['*']).find(function(err, data){
+				log(data.toJSON());
+			});
 			return;
 
 			/*return new db.eventLocasle({
