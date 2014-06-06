@@ -26,7 +26,8 @@
 
 
 			db.event(['*']).limit(10).fetchVenue(['*']).fetchImage(['*']).find(function(err, data){
-				log(data.toJSON());
+				var a = data.toJSON();
+				log(a);
 			});
 			return;
 
