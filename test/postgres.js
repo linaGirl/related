@@ -389,6 +389,18 @@
 
 
 
+		describe('Queriying mutliple times on the same querybuilder', function(){
+			it('should return the correct results', function(done){
+				var query = db.event(['*']);
+				query.getVenue(['*']);
+				query.getVenue(['*'], {id: ORM.or([1,2,3,4])});
+				query.getVenue(['*'], {name: ORM.like('Da%')});
+
+				query.find(expect('[{"id":1,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":2,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":3,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true}]', done));
+			});
+		});
+
+
 
 
 		describe('Updating existing Data', function(){
