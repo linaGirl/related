@@ -25,12 +25,7 @@
 
 
 
-			var query = db.event(['*']);
-				query.getVenue(['*']);
-				query.getVenue(['*'], {id: ORM.or([1,2,3,4])});
-				query.getVenue(['*'], {name: ORM.like('Da%')});
-
-				query.find(cb);
+			db.event(['*']).getVenue(['*']).orderRoot('id').find(cb);
 			return;
 
 			/*return new db.eventLocasle({

@@ -514,6 +514,10 @@
 			it('should work :)', function(done){
 				db.event().order('title', true).find(expect('[{"id":3,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
 			});
+
+			it('should order the rootquery using a child resource', function(done) {
+				db.event(['*']).getVenue(['*']).orderRoot('id').find(expect('[{"id":3,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true},{"id":4,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null},{"id":1,"venue":{"id":2,"name":"Dachstock Reitschule"},"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null},{"id":2,"venue":{"id":2,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null}]', done));
+			});
 		});
 
 
