@@ -25,7 +25,11 @@
 
 
 
-			db.event(['*']).getVenue(['*']).orderRoot('id').find(cb);
+			var q = db.event(['*']).limit(5)
+			q.order('id');
+			q.getVenue(['*']).orderRoot('id')
+
+			q.find(cb);
 			return;
 
 			/*return new db.eventLocasle({
