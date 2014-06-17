@@ -80,6 +80,9 @@ CREATE TABLE ee_orm_test.event (
 	, startdate 		timestamp without time zone NOT NULL
 	, enddate 			timestamp without time zone
 	, canceled 			boolean
+	, created 			timestamp without time zone
+	, updated 			timestamp without time zone
+	, deleted 			timestamp without time zone
 	, CONSTRAINT "pk_event" PRIMARY KEY (id)
 	, CONSTRAINT "fk_event_venue" FOREIGN KEY (id_venue) REFERENCES ee_orm_test.venue (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE RESTRICT
 );
