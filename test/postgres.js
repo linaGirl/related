@@ -525,7 +525,7 @@
 			});
 
 			it('should order the rootquery using a child resource', function(done) {
-				db.event(['*']).getVenue(['*']).orderRoot('id').find(expect('[{"id":4,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null},{"id":3,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null},{"id":2,"venue":{"id":2,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null},{"id":1,"venue":{"id":2,"name":"Dachstock Reitschule"},"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null}]', done));
+				db.event(['*']).getVenue(['*']).orderRoot('id').find(expect('[{"id":3,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null},{"id":4,"venue":{"id":1,"name":"Dachstock Reitschule"},"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null},{"id":1,"venue":{"id":2,"name":"Dachstock Reitschule"},"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null},{"id":2,"venue":{"id":2,"name":"Dachstock Reitschule"},"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null}]', done));
 			});
 		});
 
@@ -533,7 +533,7 @@
 
 		describe('[Grouping]', function(){
 			it('should work :)', function(done){
-				db.event(['id']).group('id').find(expect('[{"id":4},{"id":1},{"id":3},{"id":2}]', done));
+				db.event(['id']).group('id').find(expect('[{"id":1},{"id":2},{"id":3},{"id":4}]', done));
 			});
 
 			/*it('with aggregate function count', function(done){
@@ -637,13 +637,13 @@
 			});
 
 			it('A model should be hard deleted when the delete method is called using the true parameter', function(done){
-				db.event({id:1}).findOne(function(err, evt){ 
+				db.event({id:3}).findOne(function(err, evt){ 
 					if (err) done(err);
 					else {
 						evt.delete(true, function(err){
 							if (err) done(err);
 							else {
-								db.event({id:1}).ignoreSoftDelete().findOne(function(err, event) {
+								db.event({id:3}).ignoreSoftDelete().findOne(function(err, event) {
 									if (err) done(err);
 									assert.equal(event, undefined);
 									done();
@@ -668,10 +668,18 @@
 					}
 				});
 			});
+
+			it('soft deleted items should not be listed', function(done){
+				db.event(['*']).find(expect('[{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null}]', done));
+			});
+
+			it('soft deleted items should be listed if the ignoreSoftDelete method was called', function(done){
+				db.event(['*']).ignoreSoftDelete().find(expect('[{"id":4,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null},{"id":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null},{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":"2014-06-17T16:39:53.000Z"}]', done));
+			});
 		});
 
 		
-
+		
 
 
 		describe('Connection Pooling', function(){
