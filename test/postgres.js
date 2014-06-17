@@ -8,6 +8,9 @@
 		, ORM 			= require('../');
 
 
+    // set a fixed timestamp for the timestamps feature
+    process.env.ORM_TIMESTAMP_VALUE = new Date(2014, 05, 17, 16+(new Date().getTimezoneOffset()/60)+2, 39, 53);
+
 
 	var expect = function(val, cb){
 		return function(err, result){
@@ -610,16 +613,34 @@
 
 
 		describe('[Deleting]', function(){
-			it('A model should be deleted when the delete method is called on it', function(done){
+			it('A model should be soft deleted when the delete method is called on it', function(done){
 				db.event({id:1}).findOne(function(err, evt){ 
 					if (err) done(err);
 					else {
 						evt.delete(function(err){
 							if (err) done(err);
 							else {
-								db.event({id:1}).findOne(function(err, event) {
+								db.event({id:1}).ignoreSoftDelete().findOne(function(err, event) {
 									if (err) done(err);
-									//assert.equal(event, undefined);
+									assert.equal(JSON.stringify(event), '{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":"2014-06-17T14:39:53.000Z","updated":"2014-06-17T14:39:53.000Z","deleted":"2014-06-17T14:39:53.000Z"}');
+									done();
+								});
+							}
+						});
+					}
+				});
+			});
+
+			it('A model should be hard deleted when the delete method is called using the true parameter', function(done){
+				db.event({id:1}).findOne(function(err, evt){ 
+					if (err) done(err);
+					else {
+						evt.delete(true, function(err){
+							if (err) done(err);
+							else {
+								db.event({id:1}).ignoreSoftDelete().findOne(function(err, event) {
+									if (err) done(err);
+									assert.equal(event, undefined);
 									done();
 								});
 							}
