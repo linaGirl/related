@@ -12,7 +12,7 @@
 
 	orm.on('load', function(err){
 		log('orm loaded');
-			var   db = orm.ee_orm_test
+			var   db = orm.eventbooster
 			 	, start;
 
 
@@ -23,11 +23,8 @@
 				if (data && data.dir) data.dir();
 			}
 
-			db.venue.setMappingAccessorName('venue_image', 'image')
-
-			db.venue().describeMethods();
-
-			db.event({id:2}, ['*']).getEventLocale(['*']).find(cb);
+			
+			db.imageRendering(['url']).getBucket(['url']).find(cb);
 			return;
 
 			/*return new db.eventLocasle({
