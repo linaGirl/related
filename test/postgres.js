@@ -8,7 +8,7 @@
 		, ORM 			= require('../');
 
 
-	var referenceDate = new Date();
+	var referenceDate = new Date(2014, 5, 18);
 	referenceDate.setUTCHours(16);
 	referenceDate.setUTCMinutes(39);
 	referenceDate.setUTCSeconds(53);

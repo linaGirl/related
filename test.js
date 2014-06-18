@@ -23,11 +23,11 @@
 				if (data && data.dir) data.dir();
 			}
 
-			db.venue().setMappingAccessorName('venue_image', 'image')
+			db.venue.setMappingAccessorName('venue_image', 'image')
 
 			db.venue().describeMethods();
 
-			db.event(['*']).order('startdate').getVenue().getImage().find(cb);
+			db.event({id:2}, ['*']).getEventLocale(['*']).find(cb);
 			return;
 
 			/*return new db.eventLocasle({
