@@ -103,3 +103,11 @@ CREATE TABLE ee_orm_test.event_image (
 	, CONSTRAINT "fk_event_image_event" FOREIGN KEY (id_event) REFERENCES ee_orm_test.event (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE
 	, CONSTRAINT "fk_event_image_image" FOREIGN KEY (id_image) REFERENCES ee_orm_test.image (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+CREATE TABLE ee_orm_test.tree (
+	  id 				serial NOT NULL
+	, name 				varchar(100)
+	, "left" 			integer NOT NULL
+	, "right" 			integer NOT NULL
+	, CONSTRAINT "pk_tree" PRIMARY KEY (id)
+);

@@ -12,7 +12,7 @@
 
 	orm.on('load', function(err){
 		log('orm loaded');
-			var   db = orm.eventbooster
+			var   db = orm.ee_orm_test
 			 	, start;
 
 
@@ -23,8 +23,14 @@
 				if (data && data.dir) data.dir();
 			}
 
+			new db.tree({name: 'root'}).setParentNode().save(function(err, node){
+				new db.tree({name: 'child1'}).setParentNode(node, null).save(function(err, node2){
+					new db.tree({name: 'child1.2'}).setParentNode(node2).save(cb);
+					new db.tree({name: 'child1.1'}).setParentNode(node2).save(cb);
+				});
+				new db.tree({name: 'child2'}).setParentNode(node).save(cb);
+			});
 			
-			db.imageRendering(['url']).getBucket(['url']).find(cb);
 			return;
 
 			/*return new db.eventLocasle({
