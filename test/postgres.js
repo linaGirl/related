@@ -685,7 +685,8 @@
 
 		describe('Nested Sets', function(){
 			it('should be structured correctly when created', function(done) {
-				var completed = 0, cb = function() {
+				var completed = 0, cb = function(err) {
+					if (err) throw err;
 					if (++completed === 3) {
 						db.tree(['*']).order('left').find(expect('[{"id":1,"name":"root","left":1,"right":10},{"id":3,"name":"child2","left":2,"right":3},{"id":2,"name":"child1","left":4,"right":9},{"id":5,"name":"child1.1","left":5,"right":6},{"id":4,"name":"child1.1","left":7,"right":8}]', done));
 					}
