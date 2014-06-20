@@ -48,6 +48,7 @@
 				ee_orm_test: {
 					  type: 'postgres'
 					, timestamps: true
+					, nestedSet: true
 					, hosts: [
 						{
 							  host 		: 'localhost'
