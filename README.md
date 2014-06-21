@@ -346,6 +346,41 @@ The filter object which can be used by the queryuilder and the filter mehotd can
 
 
 
+##### Model Events
+
+All events receive the following parameters (except those which contain the word «commit»)
+- modelInstance: the model which emitted the event (this is passed to all models)
+- transaction: the transaction the current process is working on
+- callback: which must be called so the model can continue doing its actions. is the first parameter is set (err) then the model aborts the ucrrent process and rolls back the transaction. if the second parameter is set to true the model stops the curernt process and commits all changes.
+
+Eventlist
+
+- beforeSave: emitted before saving the model and all its references & mappings
+- afterSave: emitted when the model and all its references & mappings were saved, but the transaction was not yet commited
+- afterSaveCommit: emitted when the model and all its references & mappings were saved and the changes were commited
+
+- beforeUpdate: emitted before an upate
+- afterUpdate: emitted after the update without the transaction commited
+- afterUpdateCommit: emitted after the update with the changes were commited
+
+- beforeInsert: emitted before an insert
+- afterInsert: emitted after the insert without the transaction commited
+- afterInsertCommit: emitted after the insert with the changes were commited
+
+the delete event gets as last parameter a flag which indicates if the record was / is goint to be deleted using a softdelete
+- beforeDelete: emitted before a delete
+- afterDeleteCommit: emitted after the delete was commited
+
+- beforeSaveReference: emitted before the referrences of the current model are saved
+- aftereSaveReferences: emitted after the references of the current model were saved, before the changes are commited
+
+- beforeSaveMappings: emitted before the mappings of the current model are saved
+- aftereSaveMappings: emitted after the mappings of the current model were saved, before the changes are commited
+
+- beforeSaveBelongsTo: emitted before the belonging models of the current model are saved
+- aftereSaveBelongsTo: emitted after the belonging models of the current model were saved, before the changes are commited
+
+
 ##### QueryBuilder inner workings
 
 1. Collect all joins, filters for the query, apply them
@@ -353,133 +388,3 @@ The filter object which can be used by the queryuilder and the filter mehotd can
 3. Join its parent resource, all resources down to the root resource
 4. filter with the «in» statement
 5. Enjoy
-
-
-
-#### Reserved Keywords (Outdated)
-
-On the ORM itself the following keywords are reserved (your database should not have a name which is listed below):
-
-- $$$$_events
-- __proto__
-- _initializeDatabases
-- _initializeOrm
-- _manageAccessorNames
-- _setProperty
-- addListener
-- emit
-- getDatabase
-- init
-- listener
-- off
-- on
-- once
-- prototype
-- hasOwnProperty
-- toString
-- toJSON
-
-
-
-On the Database level the following keywords are reserved (your database should not contain any tables using one of the names listed below):
-
-- $$$$_events
-- __proto__
-- _delete
-- _getChangedValues
-- _getDatabase
-- _getFilters
-- _getOptions
-- _getSelect
-- _handleBelongsTo
-- _handleMapping
-- _handleReference
-- _initialize
-- _parseFilter
-- _parseSelect
-- _save
-- _saveBelongsTo
-- _saveChildren
-- _saveMappings
-- _saveReferences
-- _setChanged
-- _setProperty
-- _setValues
-- addListener
-- clone
-- createTransaction
-- delete
-- emit
-- executeQuery
-- filter
-- find
-- findOne
-- getDefinition
-- getEntityName
-- hasOwnProperty
-- init
-- isFromDatabase
-- isSaved
-- limit
-- listener
-- loadAll
-- off
-- offset
-- on
-- once
-- prototype
-- reload
-- save
-- toJSON
-- toString
-
-
-
-On the Model level the following keywords are reserved (your tables should not contain any columns using on of the names listed below):
-
-- $$$$_events
-- __proto__
-- _delete
-- _getChangedValues
-- _getFilters
-- _getOptions
-- _getSelect
-- _handleBelongsTo
-- _handleMapping
-- _handleReference
-- _parseFilter
-- _parseSelect
-- _save
-- _saveBelongsTo
-- _saveChildren
-- _saveMappings
-- _saveReferences
-- _setChanged
-- _setProperty
-- _setValues
-- addListener
-- clone
-- delete
-- emit
-- filter
-- find
-- findOne
-- getDefinition
-- getEntityName
-- hasOwnProperty
-- init
-- isFromDatabase
-- isQuery
-- isSaved
-- limit
-- listener
-- loadAll
-- off
-- offset
-- on
-- once
-- prototype
-- reload
-- save
-- toJSON
-- toString

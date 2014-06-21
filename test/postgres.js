@@ -546,6 +546,28 @@
 		});
 
 
+		describe('[Limits & Offsets]', function() {
+			it('the limit statement should work', function(done) {
+				db.event(['*']).limit(2).find(function(err, events) {
+					if (err) done(err);
+					else {
+						assert.equal(events.length, 2);
+						done();
+					}
+				});
+			});
+
+			it('the offset statement should work', function(done) {
+				db.event(['*']).offset(3).find(function(err, events) {
+					if (err) done(err);
+					else {
+						assert.equal(events.length, 1);
+						done();
+					}
+				});
+			});
+		});
+
 		describe('[Filtering]', function(){
 			it('Filter by a value', function(done){
 				db.event(['*'], {id: 1}).findOne(expect('{"id":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":"2014-06-17T16:39:53.000Z","updated":"2014-06-17T16:39:53.000Z","deleted":null}', done));
