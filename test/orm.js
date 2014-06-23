@@ -45,6 +45,7 @@
 							, port 		: 5432
 							, mode 		: 'readwrite'
 							, database 	: 'test'
+							, maxConnections: 500
 						}
 					]
 				}
@@ -679,11 +680,9 @@
 				while(i--) items.push(i);
 
 				async.each(items, function(nope, cb){
-					new db.event({
-						  title: Math.random()
-						, venue: db.venue({id:1})
-						, startdate: new Date()
-					}).save(cb);
+					new db.image({
+						  url: Math.random()+""
+					}).save(cb, true);
 				}, done);
 			});
 		});
