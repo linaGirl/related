@@ -15,7 +15,6 @@
 			var   db = orm.ee_orm_test
 			 	, start;
 
-
 			log(orm);
 
 			var cb = function(err, data){
@@ -23,30 +22,10 @@
 				if (data && data.dir) data.dir();
 			}
 
-
-			var completed = 0, done = function(err) { log.warn('complete motherfucker');
-				if (err) return cb(err);
-				if (++completed === 3){ log.wtf('starting to move, kiddy');
-					db.tree({name: 'child1.1'}).findOne(function(err, node){
-						if (err) cb(err);
-						else if (!node) log.error('bnode not found!');
-						else {
-							log.wtf('moving node');
-							node.setParentNode(db.tree({name: 'root'}));
-							node.save(db);
-						}
-					});
-				}
-			}
-
-			new db.tree({name: 'root'}).setParentNode().save(function(err, node){
-				new db.tree({name: 'child1'}).setParentNode(node, null).save(function(err, node2){
-					new db.tree({name: 'child1.2'}).setParentNode(node2).save(done);
-					new db.tree({name: 'child1.1'}).setParentNode(node2).save(done);
-				});
-				new db.tree({name: 'child2'}).setParentNode(node).save(done);
-			});
-			
+			db.country(['*'], {
+				county: db.county(['id'], {code:'be'})
+			}).find(cb)
+				
 			return;
 
 			/*return new db.eventLocasle({
