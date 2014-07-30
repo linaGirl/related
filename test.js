@@ -4,7 +4,9 @@
 		, log 		= require('ee-log')
 		, async 	= require('ee-async')
 		, ORM 		= require('./')
-		, project 	= require('ee-project');
+		, project 	= require('ee-project')
+        , memwatch  = require('memwatch')
+		, agent 	= require('webkit-devtools-agent');
 
 
 	console.time("query")
@@ -12,19 +14,20 @@
 
 	orm.on('load', function(err){
 		log('orm loaded');
-			var   db = orm.ee_orm_test
-			 	, start;
+			var   db = orm.eventbox
+			 	, start
+			 	, count = 0;
 
 			log(orm);
 
-			var cb = function(err, data){
+			var cb = function(err, item){
 				if (err) log(err);
-				if (data && data.dir) data.dir();
+				if (item) item.dir();
 			}
 
-			db.country(['*'], {
-				county: db.county(['id'], {code:'be'})
-			}).find(cb)
+		
+
+			db.media(['*']).limit(100).getVenue_media(['*']).getVenue(['*'], {id: ORM.notNull()}).find(cb)
 				
 			return;
 

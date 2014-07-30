@@ -1,7 +1,7 @@
 {
       "name"                        : "ee-orm"
     , "description"                 : "An easy to use ORM for node.js. Supports eager loading, complex queries, joins, transactions, complex database clusters & connection pooling."
-    , "version"                     : "0.5.16"
+    , "version"                     : "0.5.17"
     , "homepage"                    : "https://github.com/eventEmitter/ee-orm"
     , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
     , "licence"                     : "mit"
@@ -30,6 +30,8 @@
     , "devDependencies": {
           "mocha"                   : "1.18.x"
 	    , "ee-project" 		        : "0.2.x"
+        , "memwatch"                : "0.2.2"
+        , "webkit-devtools-agent"   : "*"
     }
     , "optionalDependencies": {}
     , "keywords"                    : ["orm", "mysql", "postgres", "object relational mapper", "eager loading", "connection pooling", "cluster"]
