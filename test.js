@@ -20,7 +20,7 @@
 
 			log(orm);
 
-			var cb = function(err, item) {
+			var cb = function(err, item){
 				if (err) log(err);
 				if (item) item.dir();
 			}
