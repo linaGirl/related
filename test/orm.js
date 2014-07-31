@@ -666,11 +666,37 @@
 				});
 			});
 		});
-
 		
 
 
-		describe('Connection Pooling', function(){
+		describe('[Forcing Joins]', function() {
+			it('should join tables when told to do so', function(done) {
+				db.event(['*']).joinEventLocale().find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+			});
+
+			it('should join multiple tables when told to do so', function(done) {
+				db.event(['*']).joinVenue(true).joinImages().find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+			});
+		});
+
+
+
+
+		describe('[Counting]', function() {
+			it('should return the correct number', function(done) {
+				db.event(['*']).joinVenue(true).joinImages().count(function(err, count) {
+					if (err) done(err);
+					else {
+						assert.equal(count, 1);
+						done();
+					}
+				}.bind(this));
+			});
+		});
+		
+
+
+		describe('[Connection Pooling]', function(){
 			it('should be able to insert 1000 items at once', function(done){
 				var   i = 1000
 					, items = [];

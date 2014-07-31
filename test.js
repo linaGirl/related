@@ -14,7 +14,7 @@
 
 	orm.on('load', function(err){
 		log('orm loaded');
-			var   db = orm.eventbox
+			var   db = orm.ee_orm_test
 			 	, start
 			 	, count = 0;
 
@@ -26,8 +26,10 @@
 			}
 
 		
-
-			db.media(['*']).limit(100).getVenue_media(['*']).getVenue(['*'], {id: ORM.notNull()}).find(cb)
+			db.venue.setMappingAccessorName('venue_image', 'image');
+			db.event(['*']).joinVenue(true).describeMethods().joinImage().count(function(err, nr){
+				log(err, nr);
+			});
 				
 			return;
 
