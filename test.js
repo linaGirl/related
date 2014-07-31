@@ -20,16 +20,14 @@
 
 			log(orm);
 
-			var cb = function(err, item){
+			var cb = function(err, item) {
 				if (err) log(err);
 				if (item) item.dir();
 			}
 
-		
-			db.venue.setMappingAccessorName('venue_image', 'image');
-			db.event(['*']).joinVenue(true).describeMethods().joinImage().count(function(err, nr){
-				log(err, nr);
-			});
+			db.venue().limit(3).delete(cb);
+
+
 				
 			return;
 
