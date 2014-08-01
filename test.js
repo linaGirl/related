@@ -4,9 +4,7 @@
 		, log 		= require('ee-log')
 		, async 	= require('ee-async')
 		, ORM 		= require('./')
-		, project 	= require('ee-project')
-        , memwatch  = require('memwatch')
-		, agent 	= require('webkit-devtools-agent');
+		, project 	= require('ee-project');
 
 
 	console.time("query")
@@ -24,10 +22,21 @@
 				if (err) log(err);
 				if (item) item.dir();
 			}
+/*
 
-			db.venue().limit(3).delete(cb);
+			db.articleInstance_cart({
+                id: ORM.gt(1)
+            }).getArticle_conditionTenant().getTos(['*'], {
+                id: ORM.gt(1)
+            }).find(cb);
+*/
+			
+			db.venue.setMappingAccessorName('venue_image', 'image');
 
+			db.venue({id:2}).getImage(['*']).getEvent(['*']).find(cb);
 
+			
+	
 				
 			return;
 
