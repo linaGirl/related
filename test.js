@@ -1,10 +1,10 @@
 
 
-	var Class 		= require('ee-class')
-		, log 		= require('ee-log')
-		, async 	= require('ee-async')
-		, ORM 		= require('./')
-		, project 	= require('ee-project');
+	var   Class 		= require('ee-class')
+		, log 			= require('ee-log')
+		, async 		= require('ee-async')
+		, ORM 			= require('./')
+		, project 		= require('ee-project');
 
 
 	console.time("query")
@@ -14,7 +14,8 @@
 		log('orm loaded');
 			var   db = orm.ee_orm_test
 			 	, start
-			 	, count = 0;
+			 	, count = 0
+			 	, completed = 0;
 
 			log(orm);
 
@@ -30,10 +31,22 @@
                 id: ORM.gt(1)
             }).find(cb);
 */
+
 			
 			db.venue.setMappingAccessorName('venue_image', 'image');
 
-			db.venue({id:2}).getImage(['*']).getEvent(['*']).find(cb);
+			var thread = function() {
+				setInterval(function(){				
+					var start = Date.now();
+					db.venue({id:2}).getImage(['*']).getEvent(['*']).find(function(err){
+						if (err) log.warn('query failed', err);
+						log.info('query %s took %s ms, completed count: %s ...', ++count, Date.now()-start, ++completed);
+					});
+				}, 1000);
+			}
+			
+			var i = 100;
+			while(i--) thread();
 
 			
 	
