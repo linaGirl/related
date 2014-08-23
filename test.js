@@ -23,45 +23,9 @@
 				if (err) log(err);
 				if (item) item.dir();
 			}
-/*
 
-			db.articleInstance_cart({
-                id: ORM.gt(1)
-            }).getArticle_conditionTenant().getTos(['*'], {
-                id: ORM.gt(1)
-            }).find(cb);
-*/
 
 			
-			db.venue.setMappingAccessorName('venue_image', 'image');
-			db.image.setMappingAccessorName('venue_image', 'venues');
-
-			var thread = function() {
-				setInterval(function(){				
-					var start = Date.now();
-
-
-					db.image(['*'], {id:completed+10}).findOne(function(err, image) {
-						if (err) throw err;
-						else {
-					count++;
-							image.venues.push(new db.venue({name: 'hui', id_image: 10, id_municipality: 1}));
-							image.venues.push(db.venue({id: count+500}));
-							image.save(function(err) {
-								if (err) log.warn('query failed', err);
-								if (++completed%1000 === 0) log.info('completed count: %s ...', completed);
-								//log.info('query %s took %s ms, completed count: %s ...', ++count, Date.now()-start, ++completed);
-							});
-						}
-					});
-				}, 1000);
-			}
-			
-			var i = 100;
-			while(i--) thread();
-
-			
-	
 				
 			return;
 
