@@ -1,6 +1,4 @@
 
-	require('heapdump');
-
 	var   Class 		= require('ee-class')
 		, log 			= require('ee-log')
 		, async 		= require('ee-async')
@@ -49,7 +47,7 @@
 				if (global.gc) global.gc();
 			}, 3000);
 
-			var i = 200;
+			var i = 350;
 			while(i--) thread();
 		});			
 	});
