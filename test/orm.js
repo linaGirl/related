@@ -693,6 +693,33 @@
 				}.bind(this));
 			});
 		});
+
+
+
+
+		describe('[Model Extending]', function() {
+			it('should work', function(done) {
+				var MyModel = new Class({
+					inherits: ORM.Model
+
+					, mutiply: function() {
+						return this.id * 2;
+					}
+				});
+
+
+				db.event.extend(MyModel);
+
+				db.event(['*'], {id:2}).findOne(function(err, event) {
+					if (err) done(err);
+					else {
+						assert.equal(event.id, 2);
+						assert.equal(event.mutiply(), 4);
+						done();
+					}
+				}.bind(this));
+			});
+		});
 		
 
 
