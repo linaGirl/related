@@ -9,7 +9,7 @@
 	var orm = new ORM(project.config.db);
 
 	orm.on('load', function(err) {	
-		var   db = orm.eventbooster
+		var   db = orm.ee_orm_test
 		 	, start
 		 	, count = 0
 		 	, failed = 0
@@ -22,32 +22,10 @@
 			if (item) item.dir();
 		}
 
-		var tagname = Math.random();
 
-		new db.tag({name: tagname}).save(function(){
-			var thread = function() {
-				var interval = setInterval(function() {
-					db.venue(['*'], {
-		                 id : ++count
-		            }).findOne(function(err, venue){
-		                if (!err && venue) {
-		                	//venue.tag.push(db.tag({name: tagname}));
-		                	venue.name = Math.random();
-							venue.save(function(err) {
-		                        if (err && ++failed%100 === 0) log.error(failed);
-		                        else if (++completed%100 === 0) log.warn(completed);
-		                        if (completed > 20000) clearInterval(interval);
-		                    });
-		                }
-		            });
-				}, 1000);
-			}
-			
-			setInterval(function() {
-				if (global.gc) global.gc();
-			}, 3000);
+		db.event(['*']).getVenue(['*']).findOne(function(err, item) {
+			log(err, item);
+		})
 
-			var i = 350;
-			while(i--) thread();
-		});			
+		
 	});
