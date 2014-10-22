@@ -23,9 +23,21 @@
 		}
 
 
-		db.event(['*']).getVenue(['*']).findOne(function(err, item) {
-			log(err, item);
-		})
 
+		var   query = db.event(['*'])
+			, qb  	= query.queryBuilder();
+
+
+		qb.and({
+			  id: ORM.gt(0)
+			}
+			, qb.or({
+				  'venue.name': ORM.like('re%')
+				, 'venue.id_image': 5
+			})
+		);
 		
+
+		query.find(log);
+
 	});
