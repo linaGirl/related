@@ -696,6 +696,31 @@
 
 
 
+		describe('[Advanced Filtering]', function() {
+			it('should work', function(done) {
+				var   query = db.event(['*'])
+					, qb  	= query.queryBuilder();
+
+
+				qb.and({
+					  id: ORM.gt(0)
+					}
+					, qb.or({
+							  'venue.name': ORM.like('re%')
+							, 'venue.id_image': 5
+						}
+						, qb.and({
+							  'venue.municipality.county.country.code': 'ch'
+							, 'venue.municipality.county.code': 'be'
+						})
+					)
+				);
+
+				query.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+			});
+		});
+
+
 
 		describe('[Model Extending]', function() {
 			it('should work', function(done) {

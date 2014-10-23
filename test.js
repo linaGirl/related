@@ -32,9 +32,14 @@
 			  id: ORM.gt(0)
 			}
 			, qb.or({
-				  'venue.name': ORM.like('re%')
-				, 'venue.id_image': 5
-			})
+					  'venue.name': ORM.like('re%')
+					, 'venue.id_image': 5
+				}
+				, qb.and({
+					  'venue.municipality.county.country.code': 'ch'
+					, 'venue.municipality.county.code': 'be'
+				})
+			)
 		);
 		
 

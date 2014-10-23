@@ -344,6 +344,29 @@ The filter object which can be used by the queryuilder and the filter mehotd can
 
 - tbd
 
+##### Advanced Query Builder
+
+    var   query = db.event(['*'])
+        , qb    = query.queryBuilder();
+
+
+    qb.and({
+          id: ORM.gt(0)
+        }
+        , qb.or({
+                  'venue.name': ORM.like('re%')
+                , 'venue.id_image': 5
+            }
+            , qb.and({
+                  'venue.municipality.county.country.code': 'ch'
+                , 'venue.municipality.county.code': 'be'
+            })
+        )
+    );
+    
+
+    query.find(log);
+
 
 
 ##### Model Events
