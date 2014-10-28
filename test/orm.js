@@ -745,7 +745,68 @@
 				}.bind(this));
 			});
 		});
+
+
+
+
+		describe('[Promises]', function() {
+			it ('should work on queries', function(done) {
+				db.event(['*']).joinVenue(true).joinImages().count().then(function(data){
+					assert.equal(data, 1);
+
+					return db.event(['id']).group('id').find();
+				}).then(function(data) {
+					assert.equal(JSON.stringify(data), '[{"id":4},{"id":3},{"id":2}]');
+					done();
+				}).catch(function(err){
+					done(err);
+				});
+			});
+
+
+			it ('should work when saving models', function(done) {
+				db.event(['*'], {id: 3}).findOne().then(function(event){
+					assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+
+					event.title = 'a changed one!';
+
+					return event.save();
+				}).then(function(event) {
+					assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+					
+					return db.event(['*'], {id: 3}).findOne();
+				}).then(function(evt) {
+					assert.equal(JSON.stringify(evt), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+					
+					done();
+				}).catch(function(err){
+					done(err);
+				});
+			});
+
+
+
+			it ('should work when deleting models', function(done) {
+				db.event(['*'], {id: 3}).findOne().then(function(event){
+					assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+
+					return event.delete();
+				}).then(function(event) {
+					assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+					
+					return db.event(['*'], {id: 3}).findOne();
+				}).then(function(evt) {
+					assert.equal(evt, undefined);
+					
+					done();
+				}).catch(function(err){
+					done(err);
+				});
+			});
+		});
 		
+
+
 
 
 		describe('[Connection Pooling]', function(){
