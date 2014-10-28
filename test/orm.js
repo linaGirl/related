@@ -66,8 +66,14 @@
 		describe('The ORM', function(){
 			it('should be able to connect to the database', function(done){
 				this.timeout(5000);
-				orm = new ORM(config);
-				orm.on('load', done);
+				new ORM(config).load(function(err, ormObject) {
+					if (err) done(err);
+					else {
+						orm = ormObject;
+						done();
+					}
+				});
+				//orm.on('load', done);
 			});
 
 			it('should be able to drop & create the testing schema ('+sqlStatments.length+' raw SQL queries)', function(done){
@@ -750,6 +756,15 @@
 
 
 		describe('[Promises]', function() {
+			it('should work for loading the ORM', function(done) { 
+				new ORM(config.ee_orm_test.hosts[0].username, config.ee_orm_test.hosts[0].password, config.ee_orm_test.hosts[0].host, 'ee_orm_test', 'test').load().then(function(orm2) {
+					assert.equal(JSON.stringify(orm2), '{"ee_orm_test":{}}');
+					done();
+				}).catch(function(err) {
+					done(err);
+				});
+			});
+
 			it ('should work on queries', function(done) {
 				db.event(['*']).joinVenue(true).joinImages().count().then(function(data){
 					assert.equal(data, 1);

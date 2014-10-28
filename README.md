@@ -13,7 +13,7 @@ Built in features for:
 - connection pooling
 - database clusters
 - plugins
-- promises
+- ES6 Promises
 
 Does not require:
 - JS Models (but does support them)
@@ -34,7 +34,7 @@ An example on a query loagin events an multiple subentites, using selects, filte
     var ORM = require('ee-orm');
 
     // generate the models from the db
-    new ORM(connectionConfig).on('load', function(err, orm) {
+    new ORM(user, pass, host, db, [schema], ['mysql']).load(function(err, orm) {
 
         // get 10 events, their images, their tags, their categories, their venues, 
         // the venues images, the venues types 
@@ -76,7 +76,8 @@ If the api changes the minor version number will change. So if you use the versi
 
     var ORM = require('ee-orm');
 
-    // load models from the «eventdata» db
+    // load models from the «eventdata» db, using adb config object instead of a
+    // simple string for conencting to the db 
     var orm = new ORM({
         eventdata: {
               type: 'postgres'
@@ -94,7 +95,7 @@ If the api changes the minor version number will change. So if you use the versi
 
 
     // you may not interact with the orm before it was laoded
-    orm.on('load', function(err){
+    orm.load(function(err){
         if (err) console.log('failed to load ORM!', err);
         else {
             // the orm creates dynamically models from your normalized relational database structure
