@@ -3,11 +3,12 @@
 ORM for relational databases.
 
 Built in features for:
-. supports postgres & mysql
+- supports postgres & mysql
 - easy & fast loading of referenced entities
-- generates on the fly models from the tables in the database
+- on the fly generated models (from the table definitions in the database)
 - transactions
-- complex queries
+- subqueries in filters & selects
+- complex queries (select, order, group, join, and, or, in, like, .....)
 - complex joins
 - connection pooling
 - database clusters
@@ -24,11 +25,35 @@ Has plugins for:
 - data stored in multiple languages
 
 
-The ORM is tested and in use on several high traffic websites.
+The ORM is tested and in use on several big websites. Extensive docs & paid support are coming soon.
 
 
-Extensive docs & paid support will be there soon.
+An example on a query loagin events an multiple subentites, using selects, filters, limits and promises:
 
+````
+    var ORM = require('ee-orm');
+
+    // generate the models from the db
+    new ORM(connectionConfig).on('load', function(err, orm) {
+
+        // get 10 events, their images, their tags, their categories, their venues, 
+        // the venues images, the venues types 
+        orm.event({id: ORM.lt(2000)}, ['*'])
+         .fetchImage(['url'])
+         .fetchTag(['name'])
+         .fetchCategory(['name'])
+         .getVenue(['*'])
+         .fetchImage(['url'])
+         .fetchVenueType(['name'])
+         .limit(10)
+         .find()
+         .then(function(events) {
+            log(events);
+        }).catch(function(err) {
+            log.error('something went wrong :(');
+        }); 
+    });
+````
 
 ## installation
 
