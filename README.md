@@ -1,8 +1,34 @@
 # ee-orm
 
-An easy to use ORM for node.js. Supports advanced eager loading, complex queries, joins, transactions, complex database clusters & connection pooling. The ORM automatically generates models from the tables & relations stored in your database. 
+ORM for relational databases.
 
--- alpha software --, expect a stable release in june 2014.
+Built in features for:
+. supports postgres & mysql
+- easy & fast loading of referenced entities
+- generates on the fly models from the tables in the database
+- transactions
+- complex queries
+- complex joins
+- connection pooling
+- database clusters
+- plugins
+- promises
+
+Does not require:
+- JS Models (but does support them)
+- Conventions (no special naming)
+
+Has plugins for:
+- timestamps
+- nested sets
+- data stored in multiple languages
+
+
+The ORM is tested and in use on several high traffic websites.
+
+
+Extensive docs & paid support will be there soon.
+
 
 ## installation
 
@@ -12,7 +38,7 @@ install via npm, you may only install the packages required for you rdbms. curre
 
 ## Versions
 
-If the api changes the minor version number will change. So if you use the version «0.2.x» you will have always the same stable api. 
+If the api changes the minor version number will change. So if you use the version «0.2.x» you will have always the same api. 
 
 ## build status
 
