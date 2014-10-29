@@ -9,8 +9,8 @@
 
 	var orm = new ORM(project.config.db);
 
-	orm.on('load', function(err) {	
-		var   db = orm.ee_orm_test
+	orm.load(function(err) {	
+		var   db = orm.eventbooster
 		 	, start
 		 	, count = 0
 		 	, failed = 0
@@ -18,22 +18,26 @@
 
 		log('orm loaded');
 
-		var cb = function(err, item){
-			if (err) log(err);
-			if (item) item.dir();
-		}
+		var   evt       = db.event(['*'])
+            , ed        = evt.getEventData(['*']);
 
+        //ed.setLocale('de');
 
-		db.event(['*']).findOne().then(function(event){ log(event);
-			
-			return event.delete();
-		}).then(function(event) { log(event);
-			
-			return db.event(['*']).findOne();
-		}).then(function(evt) {
-			log(evt);
-		}).catch(function(err){
-			log(err);
-		});
+        // get some data
+        ed.getImage(['id']);
+        ed.getCategory(['*']).fetchImage(['id']);
+        ed.getVenueFloor(['*']).fetchImage(['*']).getVenue(['*']).fetchImage(['id']);
+        ed.getTag(['*']);
+
+        // filter for events that are sold
+        ed.getArticle().getCondition_tenant().getCondition({identifier: 'datatrans'});
+
+        // filter for events that are curerntly sold and are free
+        ed.getArticle().fetchArticleConfig(['*'], {
+              amount 	: ORM.gt(0)
+            , price 	: 0
+        });
+
+        evt.find(log);
 
 	});

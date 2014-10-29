@@ -31,28 +31,28 @@ The ORM is tested and in use on several big websites. Extensive docs & paid supp
 An example on a query loagin events an multiple subentites, using selects, filters, limits and promises:
 
 ````
-    var ORM = require('ee-orm');
+var ORM = require('ee-orm');
 
-    // generate the models from the db
-    new ORM(user, pass, host, db, [schema], ['mysql']).load(function(err, orm) {
+// generate the models from the db
+new ORM(user, pass, host, db, [schema], ['mysql']).load(function(err, orm) {
 
-        // get 10 events, their images, their tags, their categories, their venues, 
-        // the venues images, the venues types 
-        orm.event({id: ORM.lt(2000)}, ['*'])
-         .fetchImage(['url'])
-         .fetchTag(['name'])
-         .fetchCategory(['name'])
-         .getVenue(['*'])
-         .fetchImage(['url'])
-         .fetchVenueType(['name'])
-         .limit(10)
-         .find()
-         .then(function(events) {
-            log(events);
-        }).catch(function(err) {
-            log.error('something went wrong :(');
-        }); 
-    });
+    // get 10 events, their images, their tags, their categories, their venues, 
+    // the venues images, the venues types 
+    orm.event({id: ORM.lt(2000)}, ['*'])
+     .fetchImage(['url'])
+     .fetchTag(['name'])
+     .fetchCategory(['name'])
+     .getVenue(['*'])
+     .fetchImage(['url'])
+     .fetchVenueType(['name'])
+     .limit(10)
+     .find()
+     .then(function(events) {
+        log(events);
+    }).catch(function(err) {
+        log.error('something went wrong :(');
+    }); 
+});
 ````
 
 ## installation
