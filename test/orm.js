@@ -825,18 +825,21 @@
 
 
 		describe('[Connection Pooling]', function(){
-			it('should be able to insert 1000 items at once', function(done){
-				var   i = 1000
-					, items = [];
-
+			it('should be able to insert 1000 items in parallel', function(done){
 				this.timeout(120000);
 
-				while(i--) items.push(i);
-
-				async.each(items, function(nope, cb){
+				async.each(Array.apply(null, {length: 1000}), function(nope, cb){
 					new db.image({
 						  url: Math.random()+""
 					}).save(cb, true);
+				}, done);
+			});
+
+			it('should be able to query 1000 items in parallel', function(done) {
+				this.timeout(120000);
+
+				async.each(Array.apply(null, {length: 1000}), function(nope, cb){
+					db.event(['*']).find(cb);
 				}, done);
 			});
 		});
