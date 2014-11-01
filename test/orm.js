@@ -563,6 +563,53 @@
 			});
 		});
 
+
+
+		describe('[Chunked Loading]', function() {
+			it('should work with classic callbacks', function(done) {
+				var counter = 0;
+
+				db.event(['*']).find(1, function(err, data, next, abort, last) {
+					if (err) done(err);
+					else if (!last) next(++counter);
+					else {
+						assert.equal(counter, 4);
+						done();
+					}
+				});
+			});
+
+			it('should work using promises', function(done) {
+				var counter = 0;
+
+				db.event(['*']).find(2, function(err, data, next, abort, last) {
+					if (err) done(err);
+					else next(++counter);
+				}).then(function() {
+					assert.equal(counter, 3);
+					done();
+				}).catch(function(err) {
+					done(err);
+				});
+			});
+
+			it('should work when an offset is set', function(done) {
+				var counter = 0;
+
+				db.event(['*']).offset(2).find(2, function(err, data, next, abort, last) {
+					if (err) done(err);
+					else next(++counter);
+				}).then(function() {
+					assert.equal(counter, 2);
+					done();
+				}).catch(function(err) {
+					done(err);
+				});
+			});
+		});
+
+
+
 		describe('[Filtering]', function(){
 			it('Filter by a value', function(done){
 				db.event(['*'], {id: 1}).findOne(expect('{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}', done));
