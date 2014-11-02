@@ -31,7 +31,7 @@
 
 
 		try {
-			config = require('../config.js').db.filter(function(config) {return config.schema === databaseName});
+			config = require('../config-test.js').db.filter(function(config) {return config.schema === databaseName});
 		} catch(e) {
 			config = [];
 

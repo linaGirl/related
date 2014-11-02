@@ -18,7 +18,9 @@
 
 		log('orm loaded');
 
-		db.event(['*']).find(log);
+        log(orm);
+
+		//db.event(['*']).find(log);
 
 		/*var   evt       = db.event(['*'])
             , ed        = evt.getEventData(['*']);

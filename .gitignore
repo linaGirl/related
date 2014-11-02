@@ -12,6 +12,7 @@ logs
 results
 
 config.js
+config-test.js
 
 npm-debug.log
 
