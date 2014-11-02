@@ -10,7 +10,7 @@
 	var orm = new ORM(project.config.db);
 
 	orm.load(function(err) {	
-		var   db = orm.eventbooster
+		var   db = orm.ee_orm_test
 		 	, start
 		 	, count = 0
 		 	, failed = 0
@@ -18,7 +18,9 @@
 
 		log('orm loaded');
 
-		var   evt       = db.event(['*'])
+		db.event(['*']).find(log);
+
+		/*var   evt       = db.event(['*'])
             , ed        = evt.getEventData(['*']);
 
         //ed.setLocale('de');
@@ -38,6 +40,6 @@
             , price 	: 0
         });
 
-        evt.find(log);
+        evt.find(log);*/
 
 	});
