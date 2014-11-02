@@ -31,39 +31,41 @@
 
 
 		try {
-			config = {};
-			config[databaseName] = require('../config.js').db[databaseName];
+			config = require('../config.js').db.filter(function(config) {return config.schema === databaseName});
 		} catch(e) {
-			config = {
-				ee_orm_test_postgres: {
-					  type: 'postgres'
-					, hosts: [
-						{
-							  host 		: 'localhost'
-							, username 	: 'postgres'
-							, password 	: ''
-							, port 		: 5432
-							, mode 		: 'readwrite'
-							, database 	: 'test'
-							, maxConnections: 500
-						}
-					]
-				}
-				, ee_orm_test_mysql: {
-					  type: 'mysql'
-					, hosts: [
-						{
-							  host 		: 'localhost'
-							, username 	: 'root'
-							, password 	: ''
-							, port 		: 3306
-							, mode 		: 'readwrite'
-							, maxConnections: 50
-						}
-					]
-				}
-			};
+			config = [];
+
+			if (dbType === 'postgres') {
+				config.push({
+					  schema 		: 'ee_orm_test_postgres'
+					, database 		: 'test'
+					, type 			: 'postgres'
+					, hosts: [{
+						  host 		: 'localhost'
+						, username 	: 'postgres'
+						, password 	: ''
+						, port 		: 5432
+						, mode 		: 'readwrite'
+						, maxConnections: 500
+					}]
+				});
+			}
+			else {
+				config.push({
+					  schema 		: 'ee_orm_test_mysql'
+					, type 			: 'mysql'
+					, hosts: [{
+						  host 		: 'localhost'
+						, username 	: 'root'
+						, password 	: ''
+						, port 		: 3306
+						, mode 		: 'readwrite'
+						, maxConnections: 20
+					}]
+				});
+			}
 		}
+
 
 
 		// sql for test db
@@ -818,7 +820,7 @@
 
 			describe('[Promises]', function() {
 				it('should work for loading the ORM', function(done) { 
-					var cfg = config[databaseName];
+					var cfg = config[0];
 
 					new ORM(cfg.hosts[0].username, cfg.hosts[0].password, cfg.hosts[0].host, databaseName, cfg.hosts[0].database, dbType).load().then(function(orm2) {
 						assert.equal(JSON.stringify(orm2), '{"'+databaseName+'":{}}');
