@@ -1,7 +1,7 @@
 {
       "name"                        : "ee-orm"
     , "description"                 : "ORM for postgres and mysql. Loads and saves referenced entites, executes complex queries, supports joins, transactions, complex database clusters, connection pooling and much more. No conventions."
-    , "version"                     : "0.9.2"
+    , "version"                     : "0.9.3"
     , "homepage"                    : "https://github.com/eventEmitter/ee-orm"
     , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
     , "licence"                     : "mit"
