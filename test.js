@@ -18,6 +18,12 @@
 
 		log('orm loaded');
 
-        log(orm);
+
+
+
+       db.event(['*', ORM.count('id', 'idCount')])
+		.joinVenue()
+		.group('id')
+		.find(log);
 
 	});

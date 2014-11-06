@@ -516,6 +516,21 @@
 					});
 				});
 
+
+				it('with a new mapping record', function(done){
+					db.event({id:2}).getImage(['*']).findOne(function(err, event){
+						if (err) done(err);
+						else {
+							log(event);
+
+							event.save(function(err){
+								if (err) done(err);
+								else db.event({id:2},['*']).getImage(['*']).findOne(expect('{"image":[{"id":7,"url":"http://i.imgur.com/1vjB9yu.gif"}],"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}', done));
+							});
+						}
+					});
+				});
+
 				/*it('with a belonging record fetched using a query', function(done){
 					db.event({id:1}).findOne(function(err, event){
 						if (err) done(err);
@@ -788,6 +803,20 @@
 					query.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 			});
+	
+
+	
+
+			describe('[Aggregate functions]', function() {
+				it('Counting should work', function(done) {
+					db.event(['*', ORM.count('id', 'idCount')])
+					.joinVenue()
+					.group('id')
+					.order('id')
+					.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null,"idCount":"1"},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null,"idCount":"1"},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null,"idCount":"1"}]', done));
+				});
+			});
+
 
 
 
