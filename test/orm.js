@@ -717,7 +717,7 @@
 
 
 			describe('[Deleting]', function(){
-				it('A model should be deleted when the delete method is called on it', function(done){
+				it('A model should be deleted when the delete method is called on it', function(done) {
 					db.event({id:1}).findOne(function(err, evt){ 
 						if (err) done(err);
 						else {
@@ -735,7 +735,8 @@
 					});
 				});
 
-				it('should remove items from a related set when they are delted', function(done){
+
+				it('should remove items from a related set when they are delted', function(done) {
 					db.event({id:2}, ['*']).fetchImage(['*']).findOne(function(err, evt){
 						if (err) done(err);
 						else {
@@ -748,6 +749,24 @@
 							});
 						}
 					});
+				});
+
+
+				it('should remove items from a related set which was explicitly loaded and items were removed', function(done) {
+					new db.image({
+						  url: 'mapping deletion test'
+						, event: db.event({id:2})
+					}).save().then(function() {
+						return db.event({id:2}, ['*']).getEvent_image('*').fetchImage(['*']).findOne();
+					}).then(function(evt) {
+						assert.equal(JSON.stringify(evt), '{"event_image":[{"id_event":2,"image":{"id":8,"url":"mapping deletion test"},"id_image":8}],"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}');
+						return evt.event_image[0].delete();
+					}).then(function() {
+						return db.event({id:2}, ['*']).getEvent_image('*').fetchImage(['*']).findOne();
+					}).then(function(evt) {
+						assert.equal(JSON.stringify(evt), '{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}');
+						done();
+					}).catch(done);
 				});
 			});
 			
