@@ -521,8 +521,6 @@
 					db.event({id:2}).getImage(['*']).findOne(function(err, event){
 						if (err) done(err);
 						else {
-							log(event);
-
 							event.save(function(err){
 								if (err) done(err);
 								else db.event({id:2},['*']).getImage(['*']).findOne(expect('{"image":[{"id":7,"url":"http://i.imgur.com/1vjB9yu.gif"}],"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}', done));
