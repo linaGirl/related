@@ -113,3 +113,11 @@ CREATE TABLE ee_orm_test_mysql.tree (
     ,` right`           integer NOT NULL
     , CONSTRAINT pk_tree PRIMARY KEY (id)
 );
+
+
+CREATE TABLE ee_orm_test_mysql.timeZoneTest (
+      id                        serial NOT NULL
+    , timstampWithTimezone      DATETIME
+    , timstampWithoutTimezone   TIMESTAMP
+    , CONSTRAINT pk_timeZoneTest PRIMARY KEY (id)
+);

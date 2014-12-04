@@ -111,3 +111,77 @@ CREATE TABLE ee_orm_test_postgres.tree (
 	, "right" 			integer NOT NULL
 	, CONSTRAINT "pk_tree" PRIMARY KEY (id)
 );
+
+CREATE TABLE ee_orm_test_postgres."timeZoneTest" (
+	  "id" 				 			serial NOT NULL
+	, "timstampWithTimezone"  		timestamp with time zone
+	, "timstampWithoutTimezone"  	timestamp without time zone
+	, CONSTRAINT "pk_timeZoneTest" PRIMARY KEY (id)
+);
+
+
+CREATE TABLE ee_orm_test_postgres."typeTest" (
+	  "serial" 						serial
+	, "bigserial" 					bigserial
+	, "serial8" 					serial8
+	, "bigint" 						bigint
+	, "bigint_default"				bigint DEFAULT 6
+	, "int8" 						int8
+	, "int8_default"				int8 DEFAULT 6
+	, "bit" 						bit
+	, "bit_len"						bit (69)
+	, "bit_varying" 				bit varying
+	, "bit_varying_len" 			bit varying (69)
+	, "varbit" 						varbit
+	, "boolean" 					boolean
+	, "boolean_default"				boolean DEFAULT TRUE
+	, "bool" 						bool
+	, "box" 						box
+	, "bytea" 						bytea
+	, "character" 					character
+	, "character_len" 				character (69)
+	, "character_varying" 		 	character varying
+	, "character_varying_len" 		character varying (69)
+	, "cidr" 						cidr
+	, "circle" 						circle
+	, "date" 						date
+	, "double_precision" 			double precision
+	, "float8" 						float8
+	, "inet" 						inet
+	, "integer" 					integer
+	, "int" 						int
+	, "int4" 						int4
+	, "interval" 					interval
+	, "json" 						json
+	, "line" 						line
+	, "lseg" 						lseg
+	, "macaddr" 					macaddr
+	, "money" 						money
+	, "numeric" 					numeric
+	, "numeric_len" 				numeric (10, 4)
+	, "path" 						path
+	, "point" 						point
+	, "polygon" 					polygon
+	, "real" 						real
+	, "float4" 						float4
+	, "smallint" 					smallint
+	, "int2" 						int2
+	, "smallserial" 				smallserial
+	, "serial2" 					serial2
+	, "text" 						text
+	, "time" 						time
+	, "timetz" 						timetz
+	, "time_without_time_zone" 		time without time zone
+	, "time_with_time_zone" 		time with time zone
+	, "timestamp" 					timestamp
+	, "timestamp_default"			timestamp DEFAULT now()
+	, "timestamptz" 				timestamptz
+	, "timestamp_with_time_zone"  	timestamp with time zone
+	, "timestamp_without_time_zone" timestamp without time zone
+	, "tsquery" 					tsquery
+	, "tsvector" 					tsvector
+	, "txid_snapshot" 				txid_snapshot
+	, "uuid" 						uuid
+	, "xml" 						xml
+	, CONSTRAINT "pf_typeTest" PRIMARY KEY ("serial")
+);

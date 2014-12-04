@@ -16,22 +16,24 @@
 		 	, failed = 0
 		 	, completed = 0;
 
+
 		log('orm loaded');
 
+		//return log(db.typeTest.getDefinition());
 
-		new db.image({
-			  url: 'mapping deletion test'
-			, event: db.event({id:2})
-		}).save().then(function() {
-			return db.event({id:2}, ['*']).getEvent_image('*').fetchImage(['*']).findOne();
-		}).then(function(evt) {
-			log(evt);
-			return evt.event_image[0].delete();
-		}).then(function() {
-			return db.event({id:2}, ['*']).getEvent_image('*').fetchImage(['*']).findOne();
-		}).then(function(evt) {
-			log(evt);
-		}).catch(log);
+		db.timeZoneTest('*').find(log);
+
+		//return;
+
+		new db.timeZoneTest({
+			  timstampWithTimezone: '2015-01-20 08:00:00' // '2015-01-20T08:00:00.000Z'
+			, timstampWithoutTimezone: '2015-01-20 08:00:00' // '2015-01-20T08:00:00.000Z'
+		}).save().then(function(record) {
+			log(record);
+			return db.timeZoneTest('*', {id:record.id}).findOne();
+		}).then(function(data) {
+			log(data);
+		}).catch(err);
 
 /*
 		db.shop(['*'], {id: 1})
@@ -58,3 +60,101 @@
     	}).catch(log)
 */
 	});
+
+/*
+
+
+
+        / *
+         * bring the query into the correcto format
+         *
+         * @param <String> SQL
+         * @param <Mixed> object, array, null, undefined query parameters
+         * /
+        , _paramterizeQuery: function(SQLString, parameters) { //log(SQLString, parameters);
+            var   values = []
+                , reg = /\?([^\b,;\.\s]+)/gi
+                , match; 
+
+            // get a list of parameters from the string
+            while (match = reg.exec(SQLString)) {
+                //log(match[1]);
+                values.push(parameters[match[1]]);
+            }
+
+            // replace
+            reg.lastIndex = 0;
+
+
+            return {
+                  SQL: SQLString.replace(reg, '?')
+                , values: values
+            };
+        }	
+
+
+
+	 / *
+         * bring the query into the correcto format
+         *
+         * @param <String> SQL
+         * @param <Mixed> object, array, null, undefined query parameters
+         * /
+         , _paramterizeQuery: function(SQLString, parameters) { //log(SQLString, parameters);
+            var   values = []
+                , reg = /\?([a-z0-9_-]+)/gi
+                , match; 
+
+            // get a list of parameters from the string
+            while (match = reg.exec(SQLString)) {
+                //log(match[1]);
+                values.push(parameters[match[1]]);
+                SQLString = SQLString.replace(match[0], '$'+values.length);
+                reg.lastIndex += ('$'+values.length).length-match[0].length;
+            }
+
+            // replace
+            reg.lastIndex = 0;
+
+
+            return {
+                  SQL: SQLString //.replace(reg, '?')
+                , values: values
+            };
+        }
+
+
+        , _executeOneQuery: function(mode, query, callback) {
+			var SQLString;
+
+			query.SQLString += ';';
+
+			// fill parameterized queries
+			queryConfig = this._paramterizeQuery(query.SQLString, query.parameters);
+			
+			
+			// execute the query
+			this._query(queryConfig.SQL, queryConfig.values, callback);
+		}
+
+	
+	, queryRaw: function() {
+			var   SQLString		= arg(arguments, 'string')
+				, callback 		= arg(arguments, 'function', function(){})
+				, parameters	= arg(arguments, 'array', arg(arguments, 'object', {}))
+				, readOnly 		= arg(arguments, 'boolean', true)
+				, queryConfig;
+
+			this._setBusy();
+
+			queryConfig = this._paramterizeQuery(SQLString, parameters);
+
+			//SQLString = this._fillSQL(SQLString, parameters);
+
+			this._query(queryConfig.SQL, queryConfig.values, function(err, data) {
+				callback(err, data);
+				this._setIdle();
+			}.bind(this));
+		}
+
+        */
