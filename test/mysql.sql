@@ -121,3 +121,57 @@ CREATE TABLE ee_orm_test_mysql.timeZoneTest (
     , timstampWithoutTimezone   TIMESTAMP
     , CONSTRAINT pk_timeZoneTest PRIMARY KEY (id)
 );
+
+
+
+CREATE TABLE ee_orm_test_mysql.typeTest (
+      id                        int not null PRIMARY KEY AUTO_INCREMENT
+    , t_bit                     bit
+    , t_bit_len                 bit (55)
+    , t_tinyint                 tinyint 
+    , t_tinyint_len             tinyint (2)
+    , t_tinyint_default         tinyint default 6
+    , t_bool                    bool
+    , t_boolean                 boolean 
+    , t_bool_default            bool default true
+    , t_smallint                smallint 
+    , t_smallint_len            smallint (4)
+    , t_mediumint               mediumint 
+    , t_int                     int 
+    , t_int_len                 int (11 )
+    , t_int_default             int default 69
+    , t_integer                 integer
+    , t_bigint                  bigint 
+    , t_decimal                 decimal 
+    , t_decimal_len             decimal (10,4)
+    , t_dec                     dec
+    , t_float                   float 
+    , t_float_len               float (10, 4)
+    , t_double                  double 
+    , t_double_len              double (10,4)
+    , t_double_precision        double 
+    , t_double_precision_len    double (10,4)
+    , t_float_alternative       float (12)
+    , t_date                    date 
+    , t_datetime                datetime
+    , t_timestamp               timestamp
+    , t_time                    time 
+    , t_year                    year
+    , t_year_len                year (2)
+    , t_char                    char 
+    , t_char_len                char (69)
+    , t_varchar_len             varchar (69)
+    , t_binary                  binary 
+    , t_binary_len              binary (69)
+    , t_varbinary_len           varbinary (34)
+    , t_tinyblob                tinyblob 
+    , t_tinytext                tinytext 
+    , t_blob                    blob 
+    , t_blob_len                blob (344)
+    , t_text                    text 
+    , t_text_len                text (333)
+    , t_mediumblob              mediumblob 
+    , t_mediumtext              mediumtext
+    , t_longblob                longblob
+    , t_longtext                longtext
+);

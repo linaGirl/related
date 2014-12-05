@@ -17,7 +17,7 @@
 		 	, completed = 0;
 
 
-		log('orm loaded');
+		log('orm loaded', orm);
 
 		//return log(db.typeTest.getDefinition());
 
