@@ -1,4 +1,4 @@
-# ee-orm
+# related ORM
 
 ORM for relational databases.
 

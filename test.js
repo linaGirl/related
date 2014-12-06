@@ -21,7 +21,7 @@
 
 		//return log(db.typeTest.getDefinition());
 
-		db.timeZoneTest('*').find(log);
+		db.timeZoneTest('*').debug().find(log);
 
 		//return;
 
