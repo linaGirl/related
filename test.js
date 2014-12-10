@@ -19,20 +19,17 @@
 
 		log('orm loaded', orm);
 
-		//return log(db.typeTest.getDefinition());
 
-		db.timeZoneTest('*').debug().find(log);
-
-		//return;
+		
 
 		new db.timeZoneTest({
 			  timstampWithTimezone: '2015-01-20 08:00:00' // '2015-01-20T08:00:00.000Z'
 			, timstampWithoutTimezone: '2015-01-20 08:00:00' // '2015-01-20T08:00:00.000Z'
-		}).save().then(function(record) {
-			log(record);
+		}).setDebugMode().save().then(function(record) {
+			//log(record);
 			return db.timeZoneTest('*', {id:record.id}).findOne();
 		}).then(function(data) {
-			log(data);
+			//log(data);
 		}).catch(err);
 
 /*
