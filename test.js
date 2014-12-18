@@ -3,14 +3,17 @@
 		, log 			= require('ee-log')
 		, assert 		= require('assert')
 		, async 		= require('ee-async')
+        , ORMTimestamps = require('../ee-orm-timestamps')
 		, ORM 			= require('./')
 		, project 		= require('ee-project');
 
 
 	var orm = new ORM(project.config.db);
 
+    //orm.use(new ORMTimestamps());
+
 	orm.load(function(err) {	
-		var   db = orm.ee_orm_test_postgres
+		var   db = orm.public
 		 	, start
 		 	, count = 0
 		 	, failed = 0
@@ -20,17 +23,20 @@
 		log('orm loaded', orm);
 
 
-		
-
-		new db.timeZoneTest({
-			  timstampWithTimezone: '2015-01-20 08:00:00' // '2015-01-20T08:00:00.000Z'
-			, timstampWithoutTimezone: '2015-01-20 08:00:00' // '2015-01-20T08:00:00.000Z'
-		}).setDebugMode().save().then(function(record) {
-			//log(record);
-			return db.timeZoneTest('*', {id:record.id}).findOne();
-		}).then(function(data) {
-			//log(data);
-		}).catch(err);
+        var filters = {};
+        var dbQuery   = db
+            .product(['*'], {id_shop: 1, id: 18})
+            .getArticle(['*'], filters.article)
+            .fetchColor('*')
+            .fetchType('*')
+            .getVariant(['*'], filters.variant)
+            .getSale_variant(['*'], filters.sale_variant)
+            .getSale(['*'], filters.sale);
+         
+        dbQuery.findOne(function(err, product){ log(product);
+            if(err) return log(err);
+            if(product) product.setDebugMode().save();
+        });
 
 /*
 		db.shop(['*'], {id: 1})
