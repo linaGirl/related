@@ -120,6 +120,14 @@ CREATE TABLE ee_orm_test_postgres."timeZoneTest" (
 );
 
 
+CREATE TABLE ee_orm_test_postgres."emptyTypes" (
+	  "id" 				 			serial NOT NULL
+	, "bool"  						boolean
+	, "num"  						int
+	, CONSTRAINT "pk_emptyTypes" PRIMARY KEY (id)
+);
+
+
 CREATE TABLE ee_orm_test_postgres."typeTest" (
 	  "serial" 						serial
 	, "bigserial" 					bigserial

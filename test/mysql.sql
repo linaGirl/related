@@ -124,6 +124,14 @@ CREATE TABLE ee_orm_test_mysql.timeZoneTest (
 
 
 
+CREATE TABLE ee_orm_test_mysql.emptyTypes (
+      id                        serial NOT NULL
+    , bool                      boolean
+    , num                    int
+    , CONSTRAINT pk_emptyTypes PRIMARY KEY (id)
+);
+
+
 CREATE TABLE ee_orm_test_mysql.typeTest (
       id                        int not null PRIMARY KEY AUTO_INCREMENT
     , t_bit                     bit

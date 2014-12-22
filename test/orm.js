@@ -348,7 +348,7 @@
 
 			// query tests
 			describe('Querying Data', function(){
-				it('from an entitiy', function(done){
+ 				it('from an entitiy', function(done){
 					db.event({id:1}).find(function(err, events){
 						if (err) done(err);
 						else {
@@ -794,6 +794,39 @@
 					}.bind(this));
 				});
 			});
+
+
+
+
+
+			describe('[Inserting JS Types]', function() {
+				it('with empty values should work', function(done) {
+					new db.emptyTypes().save(expect('{"id":1,"bool":null,"num":null}', done));
+				});
+
+				it('with wrong types values should work', function(done) {
+					new db.emptyTypes({
+						  bool 	: 'true'
+						, num 	: '33'
+					}).save(expect('{"id":2,"bool":true,"num":33}', done));
+				});
+
+				it('with wrong types values II should work', function(done) {
+					new db.emptyTypes({
+						  bool 	: 'false'
+						, num 	: '37s fsdfdsf'
+					}).save(expect('{"id":3,"bool":false,"num":37}', done));
+				});
+
+				it('with correct types values should work', function(done) {
+					new db.emptyTypes({
+						  bool 	: true
+						, num 	: 196
+					}).save(expect('{"id":4,"bool":true,"num":196}', done));
+				});
+			});
+
+
 
 
 
