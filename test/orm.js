@@ -869,6 +869,19 @@
 
 
 
+			describe('[SET Methods]', function() {
+				it('the toArray method should return the values as an plain array', function(done) {
+					db.event('*').order('id').find().then(function(list) {
+						list = list.toArray();
+						list.length = 1;
+						expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done)(null, list);
+					}).catch(done);
+				});
+			});
+
+
+
+
 
 			describe('[Model Extending]', function() {
 				it('should work', function(done) {
