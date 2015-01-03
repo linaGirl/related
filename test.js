@@ -22,10 +22,10 @@
 
 		log('orm loaded', orm);
 
-
+        log(db.event.getDefinition())
         db.event().find().then(function(list) {
             list = list.toArray();
-            
+
             log.error(list.length);
             log.wtf(list instanceof Array, [1,2].concat(list));
             list.push({});
