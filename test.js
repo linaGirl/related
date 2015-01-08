@@ -22,17 +22,11 @@
 
 		log('orm loaded', orm);
 
-        log(db.event.getDefinition())
-        db.event().find().then(function(list) {
-            list = list.toArray();
-
-            log.error(list.length);
-            log.wtf(list instanceof Array, [1,2].concat(list));
-            list.push({});
-            list.length = 1;
-            log.warn(list, list.length);
-
-        }).catch(log);
+        new db.tree({left: 1, right: 2}).save().then(function(item) {
+            log(item);
+            return db.tree('*').find();
+        }).then(log).catch(log);
+       
 
 /*
 		db.shop(['*'], {id: 1})
