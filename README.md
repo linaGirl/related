@@ -28,7 +28,7 @@ Has plugins for:
 The ORM is tested and in use on several big websites. Extensive docs & paid support are coming soon.
 
 
-An example on a query loagin events an multiple subentites, using selects, filters, limits and promises:
+An example on a query loading events an multiple subentites, using selects, filters, limits and promises:
 
 ````
 var ORM = require('ee-orm');
