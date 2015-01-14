@@ -22,10 +22,26 @@
 
 		log('orm loaded', orm);
 
-        new db.tree({left: 1, right: 2}).save().then(function(item) {
-            log(item);
-            return db.tree('*').find();
-        }).then(log).catch(log);
+        var t = db.createTransaction();
+
+        setTimeout(function() {
+            log.wtf('insert');
+             new t.event({
+                  title: 'transaction test'
+                , startdate: new Date(0)
+                , image: [db.image(['*'], {id: 1})]
+                , venue: db.venue(['*'], {id:1})
+            }).save().then(log).catch(log);
+        }, 1000)
+
+
+        setTimeout(function() {
+            log.wtf('commit');
+             t.commit(log);
+        }, 2000)
+       
+
+       
        
 
 /*

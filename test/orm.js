@@ -910,6 +910,7 @@
 
 
 
+
 			describe('[Promises]', function() {
 				it('should work for loading the ORM', function(done) { 
 					var cfg = config[0];
@@ -977,6 +978,37 @@
 				});
 			});
 			
+	
+
+
+			describe('[Transactions]', function() {
+				it('Executing queries should work', function(done) {
+					var t = db.createTransaction();
+
+					t.event('*').order('id').find().then(function(list) {
+						list = list.toArray();
+						list.length = 1;
+						expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done)(null, list);
+						t.commit();
+					}).catch(done);
+				});
+
+
+				it('Inserting new data should work', function(done) {
+					var t = db.createTransaction();
+
+					new t.event({
+						  title: 'transaction test'
+						, startdate: new Date(0)
+						, image: [db.image(['*'], {id: 1})]
+						, venue: db.venue(['*'], {id:1})
+					}).save().then(function(evt){
+						if (!evt) done(new Error('Failed to create event'));
+						t.commit(done);
+					}).catch(done);
+				});
+			});
+
 
 
 
