@@ -1011,6 +1011,72 @@
 
 
 
+			describe('[Migrations]', function() {
+				
+				it('should not crash when created', function() {
+					var migration = orm.createMigration('0.1.3');
+				});
+
+
+				it('should return the serialized migration', function() {
+					var migration = orm.createMigration('0.1.3');
+
+					migration.describe('Setting up the test db ...');
+					migration.dependsOn('ee-class', '1.0.x');
+
+					migration.down = function() {};
+
+					migration.up = function(transaction, callback) {
+						var myDb;
+
+				        transaction.createSchema('eventbooster').then(function(schema) {
+				            myDb = schema;
+
+				            return myDb.createTable('event', {
+				                  id        : Related.Types.SERIAL
+				                , title     : Related.Types.STRING(255) 
+				            });
+				        }.bind(this)).then(function() {
+				            return myDb.createTable('image', {
+				                  id        : Related.Types.SERIAL.notNull().index()
+				                , title     : Related.Types.STRING(255).nullable()
+				                , hasMany: [
+				                    myDb.event
+				                ]
+				            });
+				        }.bind(this)).catch(function(err) {
+				            log.error('sorry pal, the migration failed!');
+				            done(err);
+				        }.bind(this));
+
+
+
+				        myDb.drop().save();
+
+				        myDb.myTable.drop().save();
+
+
+
+				        myDb.myTable.column('id')
+				            .loadValues(function(value, callback) {
+
+				            })
+				            .nullable(true)
+				            .setType(Related.Types.INTEGER)
+				            .setValues(function(value, callback) {
+
+				            })
+				            .nullable(false)
+				            .save(callback);
+					};
+
+					var data = migration.serialize();
+					data.up.body = data.up.body.substr(0, 200);
+
+					assert.equal(JSON.stringify(data), '{"version":"0.1.3","dependecies":{"ee-class":"1.0.x"},"description":"Setting up the test db ...","up":{"arguments":["transaction","callback"],"body":"var myDb; transaction.createSchema(\'eventbooster\').then(function(schema) {myDb = schema; return myDb.createTable(\'event\', {id: Related.Types.SERIAL, title: Related.Types.STRING(255)});}.bind(this)).th"},"down":{"arguments":[],"body":""},"createDatababase":[],"createSchema":[]}');
+				});
+			});
+
 
 
 			describe('[Connection Pooling]', function(){
@@ -1031,7 +1097,7 @@
 						db.event(['*']).find(cb);
 					}, done);
 				});
-			});			
+			});
 		});
 	});
 
