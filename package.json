@@ -32,9 +32,6 @@
           "mocha"                   : "1.18.x"
 	    , "ee-project" 		        : "0.2.x"
     }
-    , "bin": {
-        "related"                   : "./bin/related.js"
-    }
     , "optionalDependencies": {}
     , "keywords"                    : ["orm", "mysql", "postgres", "object relational mapper", "eager loading", "connection pooling", "cluster"]
     , "scripts": {
