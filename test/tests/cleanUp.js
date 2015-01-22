@@ -7,6 +7,11 @@
 
     module.exports = function(orm, config) {
         describe('Cleanup', function() {
+            it('Closing all conenctions on the orm and destructing the api', function(done) {
+                this.timeout(10000);
+                orm.end(done);
+            });
+
 
             it('Dropping the schema «related_orm_test»', function(done) {
                 orm.dropSchema(config[0], 'related_orm_test').then(function() {

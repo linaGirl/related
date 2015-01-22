@@ -20,7 +20,6 @@
 		}
 	};
 
-return;
 
 	['postgres', 'mysql'].forEach(function(dbType) {
 		var   databaseName = 'ee_orm_test_'+dbType
@@ -42,7 +41,7 @@ return;
 				, password 	: ''
 				, port 		: 5432
 				, mode 		: 'readwrite'
-				, maxConnections: 500
+				, maxConnections: 20
 			}]
 		}, {
 			  schema 		: 'ee_orm_test_mysql'
@@ -59,29 +58,6 @@ return;
 
 		
 
-/*
-		describe('Setup', function() {
-			it('Creating the Database «related_orm_test»', function(done) {
-				orm = new ORM();
-
-				orm.createDatabase(config[0], 'related_orm_test').then(function() {
-					done();
-				}).catch(done);
-			});
-		});
-
-
-
-
-		describe('Cleanup', function() {
-			it('Dropping the Database «related_orm_test»', function(done) {
-				orm.dropDatabase(config[0], 'related_orm_test').then(function() {
-					done();
-				}).catch(done);
-			});
-		});
-
-*/
 
 
 		// sql for test db
@@ -931,7 +907,7 @@ return;
 				it('should work for loading the ORM', function(done) { 
 					var cfg = config[0];
 
-					new ORM(cfg.hosts[0].username, cfg.hosts[0].password, cfg.hosts[0].host, databaseName, cfg.hosts[0].database, dbType).load().then(function(orm2) {
+					new ORM(cfg.hosts[0].username, cfg.hosts[0].password, cfg.hosts[0].host, databaseName, cfg.database, dbType).load().then(function(orm2) {
 						assert.equal(JSON.stringify(orm2), '{"'+databaseName+'":{}}');
 						done();
 					}).catch(function(err) {
