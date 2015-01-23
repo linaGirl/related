@@ -1,32 +1,29 @@
-# related ORM
+# Related ORM
 
-ORM for relational databases.
+An extensive object relational mapper for node.js.  
 
-Built in features for:
-- supports postgres & mysql
-- easy & fast loading of referenced entities
-- on the fly generated models (from the table definitions in the database)
-- transactions
-- subqueries in filters & selects
-- complex queries (select, order, group, join, and, or, in, like, .....)
-- complex joins
-- connection pooling
-- database clusters
-- plugins
-- ES6 Promises
+Got a database but not any representation of the models in Javascript? You don't want to write Javascript models for your Database? The related ORM reads the the definition fo your tables & columns from the database itself and builds an extensive API using that information. Using the related ORM you are up an running in seconds, not hours!
 
-Does not require:
-- JS Models (but does support them)
-- Conventions (no special naming)
+See the full [Documentation](#coming-soon).
 
-Has plugins for:
-- timestamps
-- nested sets
-- data stored in multiple languages
+**Features**
+- Supports PostgreSQL and MySQL, both with connection pooling and cluster support
+- Works with any relational schema, generates the API from the tables in the schema
+- Automatic and manual transactions 
+- A simple and an advanced query builder
+- Subqueries in filters, selects, inserts and updates
+- Aggregate functions
+- Raw SQL queries
+- Unlimited nested loading
+- bulk updates and bulk deletes
+- User extendable models
+- Extensions API
+- Extensions for soft-deletes, nested sets and multilingual content
+- Migrations API and migration tools
+- Works with promises and callbacks
 
 
-The ORM is tested and in use on several big websites. Extensive docs & paid support are coming soon.
-
+## Examples
 
 An example on a query loading events an multiple subentites, using selects, filters, limits and promises:
 
