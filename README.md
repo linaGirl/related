@@ -421,6 +421,20 @@ The filter object which can be used by the queryuilder and the filter mehotd can
 
 
 
+##### Reference counting
+    
+    // get events with no more than 4 mapped or 
+    // referenced venues, order by venueCount desc, 
+    // return the venueCount
+    orm.db.event({
+        venueCount: ORM.lt(4)
+    }, ['*', 'venueCount'])
+    .order('venueCount')
+    .find()
+
+
+
+
 ##### Model Events
 
 All events receive the following parameters (except those which contain the word «commit»)
@@ -463,3 +477,6 @@ the delete event gets as last parameter a flag which indicates if the record was
 3. Join its parent resource, all resources down to the root resource
 4. filter with the «in» statement
 5. Enjoy
+
+
+

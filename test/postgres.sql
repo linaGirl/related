@@ -128,6 +128,19 @@ CREATE TABLE ee_orm_test_postgres."emptyTypes" (
 );
 
 
+CREATE TABLE ee_orm_test_postgres."selfJoin" (
+	  "id" 				 			serial NOT NULL
+	, "id_selfJoin"     			int
+	, "text"  						varchar(200)
+	, CONSTRAINT "pk_selfJoin_id" PRIMARY KEY (id)
+	, CONSTRAINT "fk_selfJoin_selfJoin" FOREIGN KEY ("id_selfJoin") 
+		REFERENCES ee_orm_test_postgres."selfJoin" (id) 
+		ON UPDATE CASCADE 
+		ON DELETE RESTRICT
+);
+
+
+
 CREATE TABLE ee_orm_test_postgres."typeTest" (
 	  "serial" 						serial
 	, "bigserial" 					bigserial

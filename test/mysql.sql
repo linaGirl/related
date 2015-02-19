@@ -132,6 +132,21 @@ CREATE TABLE ee_orm_test_mysql.emptyTypes (
 );
 
 
+
+CREATE TABLE ee_orm_test_mysql.selfJoin (
+      id                          serial NOT NULL
+    , id_selfJoin                 boolean
+    , text                        varchar(200)
+    , CONSTRAINT pk_selfJoin_id PRIMARY KEY (id)
+    , CONSTRAINT fk_selfJoin_selfJoin FOREIGN KEY (id_selfJoin) 
+        REFERENCES ee_orm_test_mysql.selfJoin (id) 
+        ON UPDATE CASCADE 
+        ON DELETE RESTRICT
+);
+
+
+
+
 CREATE TABLE ee_orm_test_mysql.typeTest (
       id                        int not null PRIMARY KEY AUTO_INCREMENT
     , t_bit                     bit
