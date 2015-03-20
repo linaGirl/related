@@ -2,6 +2,13 @@
 
 An extensive object relational mapper for node.js.  
 
+
+[![npm](https://img.shields.io/npm/dm/ee-orm.svg?style=flat-square)](https://www.npmjs.com/package/ee-orm)
+[![Travis](https://img.shields.io/travis/eventEmitter/ee-orm.svg?style=flat-square)](https://travis-ci.org/eventEmitter/ee-orm)
+[![npm](https://img.shields.io/npm/l/ee-orm.svg?style=flat-square)](http://choosealicense.com/licenses/mit/)
+[![node](https://img.shields.io/node/v/ee-orm.svg?style=flat-square)](https://nodejs.org/)
+
+
 Got a database but not any representation of the models in Javascript? You don't want to write Javascript models for your Database? The related ORM reads the the definition fo your tables & columns from the database itself and builds an extensive API using that information. Using the related ORM you are up an running in seconds, not hours!
 
 See the full [Documentation](#coming-soon).
@@ -9,7 +16,7 @@ See the full [Documentation](#coming-soon).
 **Features**
 - Supports PostgreSQL and MySQL, both with connection pooling and cluster support
 - Works with any relational schema, generates the API from the tables in the schema
-- Automatic and manual transactions 
+- Automatic and manual transactions
 - A simple and an advanced query builder
 - Subqueries in filters, selects, inserts and updates
 - Aggregate functions
@@ -23,6 +30,7 @@ See the full [Documentation](#coming-soon).
 - Works with promises and callbacks
 
 
+
 ## Examples
 
 An example on a query loading events an multiple subentites, using selects, filters, limits and promises:
@@ -33,8 +41,8 @@ var ORM = require('ee-orm');
 // generate the models from the db
 new ORM(user, pass, host, db, [schema], ['mysql']).load(function(err, orm) {
 
-    // get 10 events, their images, their tags, their categories, their venues, 
-    // the venues images, the venues types 
+    // get 10 events, their images, their tags, their categories, their venues,
+    // the venues images, the venues types
     orm.event({id: ORM.lt(2000)}, ['*'])
      .fetchImage(['url'])
      .fetchTag(['name'])
@@ -48,7 +56,7 @@ new ORM(user, pass, host, db, [schema], ['mysql']).load(function(err, orm) {
         log(events);
     }).catch(function(err) {
         log.error('something went wrong :(');
-    }); 
+    });
 });
 ````
 
@@ -60,7 +68,7 @@ install via npm, you may only install the packages required for you rdbms. curre
 
 ## Versions
 
-If the api changes the minor version number will change. So if you use the version «0.2.x» you will have always the same api. 
+If the api changes the minor version number will change. So if you use the version «0.2.x» you will have always the same api.
 
 ## build status
 
@@ -74,7 +82,7 @@ If the api changes the minor version number will change. So if you use the versi
     var ORM = require('ee-orm');
 
     // load models from the «eventdata» db, using adb config object instead of a
-    // simple string for conencting to the db 
+    // simple string for conencting to the db
     var orm = new ORM({
         eventdata: {
               type: 'postgres'
@@ -103,7 +111,7 @@ If the api changes the minor version number will change. So if you use the versi
             // has scanned all relations and knows whic entity belongs to which, there is also
             // support for many to many reltions using mapping tables.
 
-            // load events with the ids 1-6, get also the venues for the events but select only the 
+            // load events with the ids 1-6, get also the venues for the events but select only the
             // id and the name attribute
             orm.eventdata.events({id: ORM.in(1,2,3,4,5,6)}, ['*']).fetchVenues(['id', 'name']).limit(10).find(function(err, events){
                 if (err) log(err);
@@ -145,10 +153,10 @@ The consturctor expects the complete configuration used for accessing a database
     var ormInstance = new ORM(config);
 
 For every Database used by the ORM you have to provide a complete configuration stored on the the key which must be the name of the database.
-    
-    // database names «eventdata» and «shopping». the «eventdata» database 
-    // is a single mysql server, the «shopping» database consists of a 
-    // postgres master and a read replica. the orm tries to use the read replica 
+
+    // database names «eventdata» and «shopping». the «eventdata» database
+    // is a single mysql server, the «shopping» database consists of a
+    // postgres master and a read replica. the orm tries to use the read replica
     // for readonly queries
     {
         eventdata: {
@@ -173,8 +181,8 @@ For every Database used by the ORM you have to provide a complete configuration 
                     , password          : 'securebeyondanything'
                     , port              : 5432
                     , mode              : 'readwrite'
-                    , maxConenctions    : 20 
-                    , database          : 'myDatabase'  // optional, the name of the database (not the schema) to 
+                    , maxConenctions    : 20
+                    , database          : 'myDatabase'  // optional, the name of the database (not the schema) to
                                                         // connect to (defaults to the database name, «shopping» in this case)
                 }
                 , {
@@ -184,10 +192,10 @@ For every Database used by the ORM you have to provide a complete configuration 
                     , port              : 5432
                     , mode              : 'readonly'
                     , maxConenctions    : 200
-                    , database          : 'myDatabase'  // optional, the name of the database (not the schema) to 
+                    , database          : 'myDatabase'  // optional, the name of the database (not the schema) to
                                                         // connect to (defaults to the database name, «shopping» in this case)
                 }
-            ] 
+            ]
         }
     }
 
@@ -208,9 +216,9 @@ if you wish we can add support for dynamic adding & removing of database servers
 
 The querybuilder has support for complex queries. Currently some queries are not supported (please report an issue if there is missing something you like to use). You have to use the «queryRaw» method if you need to execute such queries.
 
-Lets take the configuration defined above an see what tables the «eventdata» database has. The ORM scans every database for all tables and all relations between them. There are on naming conventions or requirements exept from some reserved keywords (see «reserved keywords»). 
+Lets take the configuration defined above an see what tables the «eventdata» database has. The ORM scans every database for all tables and all relations between them. There are on naming conventions or requirements exept from some reserved keywords (see «reserved keywords»).
 
-    log(ormInstance.eventdata); 
+    log(ormInstance.eventdata);
     // {
     //       event: {}             // table containing events
     //     , event_image: {}       // mapping to the image table
@@ -257,7 +265,7 @@ Each of the method accepts the following arguments (of whic all are optional) in
 - Array: a select statement
 
 Lets fetch some events:
-    
+
     // select all events in the table, returns only their id (the primary key is selected automatically)
     ormInstance.eventdata.event().find(function(err, events){
 
@@ -274,7 +282,7 @@ Lets fetch some events:
     });
 
 Lets select & filter some events:
-    
+
     // fecth the event with the id 9, select the id only
     ormInstance.eventdata.event({id: 9}).find(function(err, events){
 
@@ -286,36 +294,36 @@ Lets select & filter some events:
     });
 
 Lets select all events of the venue with the id 56, select the events title and id
-    
+
     ormInstance.eventdata.event(['id', 'title']).fetchVenue({id:56}).find(function(err, events){
 
     });
 
     // the exact same query as above (get vs fetch)
     ormInstance.eventdata.event(['id', 'title']).getVenue({id:56}).find(function(err, events){
-        
+
     });
 
 Lets select all events of the venue with the id 56, select the events title and id and all columns of the venue
-    
+
     ormInstance.eventdata.event(['id', 'title']).getVenue(['*'], {id:56}).find(function(err, events){
-        
+
     });
 
 Now lets also get the images of the venue (get vs fetch)
-    
+
     // loads all events of the venue with the id 56 and all images attched to the venue
-    //the getVenue did change the scope to the venue entity, so the fetchImage points to 
+    //the getVenue did change the scope to the venue entity, so the fetchImage points to
     // the images of the ***venue***
     ormInstance.eventdata.event(['id', 'title']).getVenue(['*'], {id:56}).fetchImage(['*']).find(function(err, events){
-        
+
     });
 
-    // fetchVenue vs getVenue: because we used fetchVenue instead of getVenue the scope 
+    // fetchVenue vs getVenue: because we used fetchVenue instead of getVenue the scope
     // stays on the previuos item which is in this case the the «event» entity. this query
     // fetches all events of the venue with the id 56 and all images attched to the ***event***
     ormInstance.eventdata.event(['id', 'title']).fetchVenue(['*'], {id:56}).fetchImage(['*']).find(function(err, events){
-        
+
     });
 
 Now lets do a complex query:
@@ -323,9 +331,9 @@ Now lets do a complex query:
     // get all columns of the event table, dont filter yet
     var myQuery = ormInstance.eventdata.event(['*']);
 
-    // filter events by the venue with the id 56, select all columns of the venue 
-    // table, get the description locale from the locale table where the language 
-    // is english. 
+    // filter events by the venue with the id 56, select all columns of the venue
+    // table, get the description locale from the locale table where the language
+    // is english.
     // the filter method is called on the language entity because we want all the
     // events and not only those with english locales (join vs. left join) but we
     // want only the english locales. filter events by locale vs. filter locales
@@ -412,7 +420,7 @@ The filter object which can be used by the queryuilder and the filter mehotd can
             })
         )
     );
-    
+
 
     query.find(log);
 
