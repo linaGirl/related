@@ -60,19 +60,10 @@ new ORM(user, pass, host, db, [schema], ['mysql']).load(function(err, orm) {
 });
 ````
 
-## installation
-
-install via npm, you may only install the packages required for you rdbms. currently supported are postgres & mysql.
-
-    npm install ee-orm ee-postgres-connection ee-mysql-connection
-
 ## Versions
 
-If the api changes the minor version number will change. So if you use the version «0.2.x» you will have always the same api.
-
-## build status
-
-[![Build Status](https://travis-ci.org/eventEmitter/ee-orm.png?branch=master)](https://travis-ci.org/eventEmitter/ee-orm)
+The ORM has currently a semi pretty stable API, some minor changes will be applied in the near future.
+If theAPI changes the minor version number will change. So if you use the version «0.2.x» you will have always the same api.
 
 ## usage
 

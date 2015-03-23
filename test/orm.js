@@ -1,19 +1,43 @@
 
-	
+
 	var   Class 		= require('ee-class')
 		, log 			= require('ee-log')
 		, assert 		= require('assert')
+		, type 			= require('ee-types')
 		, async 		= require('ee-async')
 		, fs 			= require('fs')
 		, Config 		= require('test-config')
 		, ORM 			= require('../');
 
 
+
+	var datify = function(input) {
+		if (type.array(input)) {
+			input.forEach(datify);
+		}
+		else if (type.object(input)) {
+			Object.keys(input).forEach(function(key) {
+				if (/date/i.test(key) && type.string(input[key])) {
+					input[key] = new Date(input[key]);
+				}
+			})
+		}
+
+		return input;
+	}
+
+
 	var expect = function(val, cb){
-		return function(err, result){
+		if (type.string(val)) val = datify(JSON.parse(val));
+
+		return function(err, result) {
 			try {
-				assert.equal(JSON.stringify(result), val);
+				if (result && result.toJSON) result = result.toJSON();
+				assert.deepEqual(result, val);
 			} catch (err) {
+				log.warn('comparison failed: ');
+				log(JSON.stringify(val), JSON.stringify(result));
+				log(val, result);
 				return cb(err);
 			}
 			cb();
@@ -56,7 +80,7 @@
 			}]
 		}]}).db.filter(function(config) {return config.schema === databaseName});
 
-		
+
 
 
 
@@ -90,7 +114,7 @@
 						else {
 							async.each(sqlStatments, connection.queryRaw.bind(connection), done);
 						}
-					});				
+					});
 				});
 
 				it ('should be able to reload the models', function(done) {
@@ -234,14 +258,14 @@
 							}).save(function(err, image){
 								if (err) done(err);
 								else {
-									assert.equal(JSON.stringify(image), config.expected);								
+									assert.equal(JSON.stringify(image), config.expected);
 									insert(++index);
 								}
 							});
 						}
 						else done();
 					}
-					
+
 					insert(0);
 				});
 
@@ -261,13 +285,7 @@
 							name: 'Bern'
 						})
 						, id_image: 1
-					}).save(function(err, image){
-						if (err) done(err);
-						else {
-							assert.equal(JSON.stringify(image), '{"id":1,"municipality":{"id":1,"id_county":1,"name":"Bern"},"id_municipality":1,"name":"Dachstock Reitschule","id_image":1}');
-							done();
-						}
-					});
+					}).save(expect('{"id":1,"municipality":{"id":1,"id_county":1,"name":"Bern"},"id_municipality":1,"name":"Dachstock Reitschule","id_image":1}', done));
 				});
 
 
@@ -279,7 +297,7 @@
 							, municipality: db.municipality({
 								name: 'Bern'
 							})
-						}).save();	
+						}).save();
 					} catch (err) {
 						assert.ok(err instanceof Error);
 						done();
@@ -295,7 +313,7 @@
 						, municipality: db.municipality({
 							name: 'Bern'
 						})
-					}).save(done);	
+					}).save(done);
 				});
 
 
@@ -305,13 +323,7 @@
 						, startdate: new Date(0)
 						, image: [db.image(['*'], {id: 1})]
 						, venue: db.venue(['*'], {id:1})
-					}).save(function(err, event){
-						if (err) done(err);
-						else {
-							assert.equal(JSON.stringify(event), '{"image":[{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif"}],"id":1,"venue":{"id":1,"id_municipality":1,"name":"Dachstock Reitschule","id_image":1},"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}');
-							done();
-						}
-					});
+					}).save(expect('{"image":[{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif"}],"id":1,"venue":{"id":1,"id_municipality":1,"name":"Dachstock Reitschule","id_image":1},"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}', done));
 				});
 
 
@@ -336,7 +348,7 @@
 				});
 			});
 
-			
+
 
 			// query tests
 			describe('Querying Data', function(){
@@ -351,49 +363,25 @@
 				});
 
 				it('from an entitiy including a reference', function(done){
-					db.event({id:1}, ['*']).getVenue(['*']).find(function(err, events){
-						if (err) done(err);
-						else {
-							assert.equal(JSON.stringify(events), '[{"id":1,"venue":{"id":1,"id_municipality":1,"name":"Dachstock Reitschule","id_image":1},"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]');
-							done();
-						}
-					});
+					db.event({id:1}, ['*']).getVenue(['*']).find(expect('[{"id":1,"venue":{"id":1,"id_municipality":1,"name":"Dachstock Reitschule","id_image":1},"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 
 				it('from an entitiy including a mapping', function(done){
-					db.event({id:1}, ['*']).getImage(['*']).find(function(err, events){
-						if (err) done(err);
-						else {
-							assert.equal(JSON.stringify(events), '[{"image":[{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif"}],"id":1,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]');
-							done();
-						}
-					});
+					db.event({id:1}, ['*']).getImage(['*']).find(expect('[{"image":[{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif"}],"id":1,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 
 				it('from an entitiy including an entity belonging to the current entity', function(done){
-					db.event({id:2}, ['*']).getEventLocale(['*']).find(function(err, events){
-						if (err) done(err);
-						else {
-							assert.equal(JSON.stringify(events), '[{"eventLocale":[{"id_event":2,"id_language":1,"description":"some text"}],"id":2,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]');
-							done();
-						}
-					});
+					db.event({id:2}, ['*']).getEventLocale(['*']).find(expect('[{"eventLocale":[{"id_event":2,"id_language":1,"description":"some text"}],"id":2,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 			});
 
-			
+
 
 
 			// complex query tests
 			describe('Querying Data with advanced eager loading', function(){
 				it('through a mapping table', function(done){
-					db.event({id:2}).getEventLocale(['*']).fetchLanguage(['*']).find(function(err, events){
-						if (err) done(err);
-						else {
-							assert.equal(JSON.stringify(events), '[{"eventLocale":[{"id_event":2,"language":{"id":1,"code":"en"},"id_language":1,"description":"some text"}],"id":2}]');
-							done();
-						}
-					});
+					db.event({id:2}).getEventLocale(['*']).fetchLanguage(['*']).find(expect('[{"eventLocale":[{"id_event":2,"language":{"id":1,"code":"en"},"id_language":1,"description":"some text"}],"id":2}]', done));
 				});
 
 				it('with two mapepd entities', function(done){
@@ -658,7 +646,7 @@
 
 				it('Records with the < operator', function(done){
 					db.event(['*'], {id: ORM.lt(2)}).find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
-				});			
+				});
 
 				it('Records with the >= operator', function(done){
 					db.event(['*'], {id: ORM.gte(2)}).order('id').find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
@@ -690,7 +678,7 @@
 
 				it('Filtering using the notEqual operator', function(done){
 					db.event(['*'], {title: ORM.notEqual('hui')}).order('id').find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
-				}); 
+				});
 
 
 
@@ -702,13 +690,13 @@
 					});
 				});*/
 			});
-			
-		
+
+
 
 
 			describe('[Deleting]', function(){
 				it('A model should be deleted when the delete method is called on it', function(done) {
-					db.event({id:1}).findOne(function(err, evt){ 
+					db.event({id:1}).findOne(function(err, evt){
 						if (err) done(err);
 						else {
 							evt.delete(function(err){
@@ -759,7 +747,7 @@
 					}).catch(done);
 				});
 			});
-			
+
 
 
 			describe('[Forcing Joins]', function() {
@@ -845,9 +833,9 @@
 					query.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 			});
-	
 
-	
+
+
 
 			describe('[Aggregate functions]', function() {
 				it('Counting should work', function(done) {
@@ -866,7 +854,8 @@
 					db.event('*').order('id').find().then(function(list) {
 						list = list.toArray();
 						list.length = 1;
-						expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done)(null, list);
+						assert.equal(JSON.stringify(list), '[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]');
+						done();
 					}).catch(done);
 				});
 			});
@@ -904,7 +893,7 @@
 
 
 			describe('[Promises]', function() {
-				it('should work for loading the ORM', function(done) { 
+				it('should work for loading the ORM', function(done) {
 					var cfg = config[0];
 
 					new ORM(cfg.hosts[0].username, cfg.hosts[0].password, cfg.hosts[0].host, databaseName, cfg.database, dbType).load().then(function(orm2) {
@@ -938,11 +927,11 @@
 						return event.save();
 					}).then(function(event) {
 						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
-						
+
 						return db.event(['*'], {id: 3}).findOne();
 					}).then(function(evt) {
 						assert.equal(JSON.stringify(evt), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
-						
+
 						done();
 					}).catch(function(err){
 						done(err);
@@ -958,19 +947,19 @@
 						return event.delete();
 					}).then(function(event) {
 						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
-						
+
 						return db.event(['*'], {id: 3}).findOne();
 					}).then(function(evt) {
 						assert.equal(evt, undefined);
-						
+
 						done();
 					}).catch(function(err){
 						done(err);
 					});
 				});
 			});
-			
-	
+
+
 
 
 			describe('[Transactions]', function() {
@@ -978,9 +967,8 @@
 					var t = db.createTransaction();
 
 					t.event('*').order('id').find().then(function(list) {
-						list = list.toArray();
-						list.length = 1;
-						expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done)(null, list);
+						list = list.toArray().slice(0, 1);
+						expect('{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}', done)(null, list[0]);
 						t.commit();
 					}).catch(done);
 				});
@@ -1004,7 +992,7 @@
 
 
 			describe('[Migrations]', function() {
-				
+
 				it('should not crash when created', function() {
 					var migration = orm.createMigration('0.1.3');
 				});
@@ -1026,7 +1014,7 @@
 
 				            return myDb.createTable('event', {
 				                  id        : Related.Types.SERIAL
-				                , title     : Related.Types.STRING(255) 
+				                , title     : Related.Types.STRING(255)
 				            });
 				        }.bind(this)).then(function() {
 				            return myDb.createTable('image', {
@@ -1092,4 +1080,3 @@
 			});
 		});
 	});
-
