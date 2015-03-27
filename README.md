@@ -3,10 +3,9 @@
 An extensive object relational mapper for node.js.  
 
 
-[![npm](https://img.shields.io/npm/dm/ee-orm.svg?style=flat-square)](https://www.npmjs.com/package/ee-orm)
-[![Travis](https://img.shields.io/travis/eventEmitter/ee-orm.svg?style=flat-square)](https://travis-ci.org/eventEmitter/ee-orm)
-[![npm](https://img.shields.io/npm/l/ee-orm.svg?style=flat-square)](http://choosealicense.com/licenses/mit/)
-[![node](https://img.shields.io/node/v/ee-orm.svg?style=flat-square)](https://nodejs.org/)
+[![npm](https://img.shields.io/npm/dm/related.svg?style=flat-square)](https://www.npmjs.com/package/related)
+[![Travis](https://img.shields.io/travis/eventEmitter/related.svg?style=flat-square)](https://travis-ci.org/eventEmitter/related)
+[![node](https://img.shields.io/node/v/related.svg?style=flat-square)](https://nodejs.org/)
 
 
 Got a database but not any representation of the models in Javascript? You don't want to write Javascript models for your Database? The related ORM reads the the definition fo your tables & columns from the database itself and builds an extensive API using that information. Using the related ORM you are up an running in seconds, not hours!
@@ -36,7 +35,7 @@ See the full [Documentation](#coming-soon).
 An example on a query loading events an multiple subentites, using selects, filters, limits and promises:
 
 ````
-var ORM = require('ee-orm');
+var ORM = require('related');
 
 // generate the models from the db
 new ORM(user, pass, host, db, [schema], ['mysql']).load(function(err, orm) {
@@ -70,7 +69,7 @@ If theAPI changes the minor version number will change. So if you use the versio
 
 ### Example
 
-    var ORM = require('ee-orm');
+    var ORM = require('related');
 
     // load models from the «eventdata» db, using adb config object instead of a
     // simple string for conencting to the db
@@ -139,7 +138,7 @@ If theAPI changes the minor version number will change. So if you use the versio
 
 The consturctor expects the complete configuration used for accessing a database or cluster. The ORM makes always use of a conenction pool which may be configured in the config described below.
 
-    var ORM = require('ee-orm');
+    var ORM = require('related');
 
     var ormInstance = new ORM(config);
 
