@@ -18,5 +18,7 @@ npm-debug.log
 
 travis.js
 
+test.js
+
 node_modules
 config.js

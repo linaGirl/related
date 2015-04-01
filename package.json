@@ -1,46 +1,46 @@
 {
-      "name"                        : "related"
-    , "description"                 : "ORM for postgres and mysql. Loads and saves referenced entites, executes complex queries, supports joins, transactions, complex database clusters, connection pooling and much more. No conventions. MIT Licence"
-    , "version"                     : "0.17.2"
-    , "homepage"                    : "https://github.com/eventEmitter/related"
-    , "author"                      : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
-    , "licence"                     : "MIT"
+      "name"                            : "related"
+    , "description"                     : "ORM for postgres and mysql. Loads and saves referenced entites, executes complex queries, supports joins, transactions, complex database clusters, connection pooling and much more. No conventions. MIT Licence"
+    , "version"                         : "0.17.2"
+    , "homepage"                        : "https://github.com/eventEmitter/related"
+    , "author"                          : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
+    , "licence"                         : "MIT"
     , "repository": {
-          "url"                     : "https://github.com/eventEmitter/related.git"
-        , "type"                    : "git"
+          "url"                         : "https://github.com/eventEmitter/related.git"
+        , "type"                        : "git"
     }
     , "engines": {
-        "node"                      : ">=v0.10.17"
+        "node"                          : ">=v0.10.17"
     }
     , "bugs": {
-        "url"                       : "https://github.com/eventEmitter/related/issues"
+        "url"                           : "https://github.com/eventEmitter/related/issues"
     }
     , "dependencies": {
-          "ee-class"                : "1.0.x"
-        , "ee-event-emitter"        : "0.2.x"
-        , "ee-types"                : "0.1.x"
-        , "ee-log"                  : "0.2.x"
-        , "ee-async"                : "0.2.x"
-        , "ee-argv"                 : "0.1.x"
-        , "ee-arguments"            : "1.0.x"
-        , "ee-db-cluster"           : "0.2.x"
-        , "ee-mysql-connection"     : "0.6.x"
-        , "ee-postgres-connection"  : "0.10.x"
-        , "es6-promise"             : "2.0.x"
-        , "test-config"             : "0.1.x"
-        , "async-method"            : "0.1.x"
-        , "related-selector"        : "0.1.x"
+          "ee-class"                    : "1.0.x"
+        , "ee-event-emitter"            : "0.2.x"
+        , "ee-types"                    : "0.1.x"
+        , "ee-log"                      : "0.2.x"
+        , "ee-async"                    : "0.2.x"
+        , "ee-argv"                     : "0.1.x"
+        , "ee-arguments"                : "1.0.x"
+        , "related-db-cluster"          : "0.4.x"
+        , "related-mysql-connection"    : "0.7.x"
+        , "related-postgres-connection" : "0.11.x"
+        , "es6-promise"                 : "2.0.x"
+        , "test-config"                 : "0.1.x"
+        , "async-method"                : "0.1.x"
+        , "related-selector"            : "0.1.x"
     }
     , "devDependencies": {
-          "mocha"                   : "1.18.x"
-	    , "ee-project" 		        : "0.2.x"
+          "mocha"                       : "1.18.x"
+	    , "ee-project" 		            : "0.2.x"
     }
     , "bin": {
-        "related"                   : "./bin/related.js"
+        "related"                       : "./bin/related.js"
     }
     , "optionalDependencies": {}
-    , "keywords"                    : ["orm", "mysql", "postgres", "object relational mapper", "eager loading", "connection pooling", "cluster"]
+    , "keywords"                        : ["orm", "mysql", "postgres", "object relational mapper", "eager loading", "connection pooling", "cluster"]
     , "scripts": {
-        "test"                      : "./node_modules/mocha/bin/mocha --reporter spec --bail"
+        "test"                          : "./node_modules/mocha/bin/mocha --reporter spec --bail"
     }
 }
