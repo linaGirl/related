@@ -232,6 +232,16 @@
 				});
 				it('the «image» mapping on the «venue model»', function(){
 					db.venue.setMappingAccessorName('venue_image', 'images');
+
+				});
+
+
+				it('the «venue» belonging to the image model»', function(done) {
+					db.image.setBelongsToAccessorName('venue', 'id_image', 'venueLogo');
+
+					db.image('*').limit(2).getVenueLogo('*', {
+						id: ORM.notNull()
+					}).find(done);
 				});
 			});
 
