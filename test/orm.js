@@ -46,7 +46,7 @@
 
 
 	['postgres', 'mysql'].forEach(function(dbType) {
-		var   databaseName = 'ee_orm_test_'+dbType
+		var   databaseName = 'related_test_'+dbType
 			, config
 			, sqlStatments
 			, key
@@ -56,7 +56,7 @@
 
 
 		config = new Config('config-test.js', {db:[{
-			  schema 		: 'ee_orm_test_postgres'
+			  schema 		: 'related_test_postgres'
 			, database 		: 'test'
 			, type 			: 'postgres'
 			, hosts: [{
@@ -68,7 +68,7 @@
 				, maxConnections: 20
 			}]
 		}, {
-			  schema 		: 'ee_orm_test_mysql'
+			  schema 		: 'related_test_mysql'
 			, type 			: 'mysql'
 			, hosts: [{
 				  host 		: 'localhost'
