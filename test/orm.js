@@ -405,7 +405,7 @@
 
 			describe('Queriying mutliple times on the same querybuilder', function(){
 				it('should return the correct results', function(done){
-					var query = db.event(['*']);
+					var query = db.event(['*']).order('id');
 					query.getVenue(['*']);
 					query.getVenue(['*'], {id: ORM.or([1,2,3,4])});
 					query.getVenue(['*'], {name: ORM.like('Da%')});
