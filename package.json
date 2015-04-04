@@ -1,7 +1,7 @@
 {
       "name"                            : "related"
     , "description"                     : "ORM for postgres and mysql. Loads and saves referenced entites, executes complex queries, supports joins, transactions, complex database clusters, connection pooling and much more. No conventions. MIT Licence"
-    , "version"                         : "0.18.3"
+    , "version"                         : "0.18.4"
     , "homepage"                        : "https://github.com/eventEmitter/related"
     , "author"                          : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
     , "licence"                         : "MIT"
