@@ -458,3 +458,9 @@ the delete event gets as last parameter a flag which indicates if the record was
 3. Join its parent resource, all resources down to the root resource
 4. filter with the «in» statement
 5. Enjoy
+
+
+
+
+
+model.clone().including('', '').excluding()

@@ -1,0 +1,37 @@
+{
+      "name": "Related ORM"
+    , "description": "An easy to use ORM for node.js / io.js nad relational databases"
+    , "keywords": ["Related", "ORM", "Postgres", "MySQL"]
+    , "translations": ["en"]
+    , "contents": {
+        "description": {
+              "type": "teaser"
+            , "source": "teaser.md"
+        }
+        , "getting-started": {
+              "type": "reference"
+            , "title": "getting Started"
+            , "source": "docs/getting-started"
+        }
+        ,  "docs": {
+              "type": "project-documentation"
+            , "title": "Docs"
+            , "source": "/docs"
+        }
+        , "features": {
+              "type": "text"
+            , "title": "Features"
+            , "source": "features.md"
+        }
+        , "support": {
+              "type": "text"
+            , "title": "Support"
+            , "source": "features.md"
+        }
+        , "changelog": {
+              "type": "gh-changelog"
+            , "title": "changelog"
+            , "source": "distributed-systems/related"
+        }
+    }
+}
