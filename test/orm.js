@@ -30,7 +30,7 @@
 	var expect = function(val, cb){
 		if (type.string(val)) val = datify(JSON.parse(val));
 
-		return function(err, result) {
+		return function(err, result) {// log(JSON.stringify(result));
 			try {
 				if (result && result.toJSON) result = result.toJSON();
 				assert.deepEqual(result, val);
@@ -385,11 +385,11 @@
 				});
 			});
 
-
+			
 
 
 			// complex query tests
-			describe('Querying Data with advanced eager loading', function(){
+			describe('Querying Data with chidlentity loading', function(){
 				it('through a mapping table', function(done){
 					db.event({id:2}).getEventLocale(['*']).fetchLanguage(['*']).find(expect('[{"eventLocale":[{"id_event":2,"language":{"id":1,"code":"en"},"id_language":1,"description":"some text"}],"id":2}]', done));
 				});
@@ -1064,6 +1064,28 @@
 					data.up.body = data.up.body.substr(0, 200);
 
 					assert.equal(JSON.stringify(data), '{"version":"0.1.3","dependecies":{"ee-class":"1.0.x"},"description":"Setting up the test db ...","up":{"arguments":["transaction","callback"],"body":"var myDb; transaction.createSchema(\'eventbooster\').then(function(schema) {myDb = schema; return myDb.createTable(\'event\', {id: Related.Types.SERIAL, title: Related.Types.STRING(255)});}.bind(this)).th"},"down":{"arguments":[],"body":""},"createDatababase":[],"createSchema":[]}');
+				});
+			});
+
+
+
+			describe('[Cloning]', function(){
+				it('an entity without related entities', function(done) {
+					db.venue({id:2}).findOne().then(function(venue) {
+						venue.clone().save(expect('{"id":4,"id_municipality":1,"name":"Dachstock Reitschule","id_image":5}', done));
+					}).catch(done);
+				});
+
+				it('an entity with copied related entities', function(done) {
+					db.venue({id:2}).findOne().then(function(venue) {
+						venue.clone().copy('venue_image').save(expect('{"venue_image":[{"id":2,"id_venue":5,"id_image":1}],"id":5,"id_municipality":1,"name":"Dachstock Reitschule","id_image":5}', done));
+					}).catch(done);
+				});
+
+				it('an entity with reassigned related entities', function(done) {
+					db.image({id:1}).findOne().then(function(image) {
+						image.clone().reassign('venueLogo').save(expect('{"id":9,"url":"http://gfycat.com/ScentedPresentKingfisher.gif","venueLogo":[{"id":1,"id_municipality":1,"name":"Dachstock Reitschule","id_image":9},{"id":3,"id_municipality":1,"name":"another venue","id_image":9}]}', done));
+					}).catch(done);
 				});
 			});
 
