@@ -30,7 +30,7 @@
 	var expect = function(val, cb){
 		if (type.string(val)) val = datify(JSON.parse(val));
 
-		return function(err, result) {// log(JSON.stringify(result));
+		return function(err, result) { //log(JSON.stringify(result));
 			try {
 				if (result && result.toJSON) result = result.toJSON();
 				assert.deepEqual(result, val);
@@ -690,15 +690,21 @@
 					db.event(['*'], {title: ORM.notEqual('hui')}).order('id').find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 
+				it('Filtering using a loaded entity', function(done){
+					db.venue('id').offset(1).joinEvent().findOne().then(function(venue) {
+						db.event(['*'], {venue: venue}).find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+					}).catch(done);
+				});
 
-
-				/*it('Filtering using a subquery should work', function(done){
+/*
+				it('Filtering using a subquery should work', function(done) {
 					db.event().getVenue({
 						county: db.country({name: 'ch'}).get
 					}).find(function(err, result){
 						log(err, result);
 					});
-				});*/
+				});
+*/
 			});
 
 
