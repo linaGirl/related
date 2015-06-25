@@ -356,6 +356,25 @@
 						, canceled: true
 					}).save(expect('{"image":[{"id":6,"url":"http://imgur.com/gallery/laxsJHr"}],"id":3,"venue":{"id":1,"id_municipality":1,"name":"Dachstock Reitschule","id_image":1},"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}', done));
 				});
+
+
+				it('with a mapped records loaded prior to the insertion', function(done) {
+					db.image('*').limit(3).find().then(function(images) {
+						return new db.event({
+							  title: 'Mapping Query Loaded Test'
+							, startdate: new Date(0)
+							, image: images
+							, venue: db.venue(['*'], {id:1})
+							, canceled: true
+						}).save().then(function(evt) {
+							assert(evt.image.length === 3);
+							return evt.delete();
+						});
+					}).then(function() {
+						done();
+					}).catch(done);
+				});
+
 			});
 
 
@@ -439,7 +458,7 @@
 							event.title = 'Changed title';
 							event.enddate = new Date(1400000000000);
 							event.startdate = new Date(0);
-							event.save(expect('{"id":4,"venue":{"id":1,"id_municipality":1,"name":"Dachstock Reitschule","id_image":1},"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}', done));
+							event.save(expect('{"id":5,"venue":{"id":1,"id_municipality":1,"name":"Dachstock Reitschule","id_image":1},"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}', done));
 						}
 					});
 				});
@@ -539,7 +558,7 @@
 
 			describe('[Ordering]', function(){
 				it('should work :)', function(done){
-					db.event(['*']).order('id', true).find(expect('[{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+					db.event(['*']).order('id', true).find(expect('[{"id":5,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 
 				it('should order the rootquery using a child resource', function(done) {
@@ -551,7 +570,7 @@
 
 			describe('[Grouping]', function(){
 				it('should work :)', function(done){
-					db.event(['id']).order('id').group('id').find(expect('[{"id":1},{"id":2},{"id":3},{"id":4}]', done));
+					db.event(['id']).order('id').group('id').find(expect('[{"id":1},{"id":2},{"id":3},{"id":5}]', done));
 				});
 
 				/*it('with aggregate function count', function(done){
@@ -635,7 +654,7 @@
 				});
 
 				it('Filter using null', function(done){
-					db.event(['*'], {canceled: null}).order('id').find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+					db.event(['*'], {canceled: null}).order('id').find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":5,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 
 				it('Filter using notNull', function(done){
@@ -651,7 +670,7 @@
 				});
 
 				it('Records with the > operator', function(done){
-					db.event(['*'], {id: ORM.gt(2)}).find(expect('[{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+					db.event(['*'], {id: ORM.gt(2)}).find(expect('[{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":5,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 
 				it('Records with the < operator', function(done){
@@ -659,7 +678,7 @@
 				});
 
 				it('Records with the >= operator', function(done){
-					db.event(['*'], {id: ORM.gte(2)}).order('id').find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+					db.event(['*'], {id: ORM.gte(2)}).order('id').find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":5,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 
 				it('Records with the <= operator', function(done){
@@ -683,11 +702,11 @@
 				});
 
 				it('Filtering using the notLike operator', function(done){
-					db.event(['*'], {title: ORM.notLike('Mapp%')}).order('id').find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+					db.event(['*'], {title: ORM.notLike('Mapp%')}).order('id').find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":5,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 
 				it('Filtering using the notEqual operator', function(done){
-					db.event(['*'], {title: ORM.notEqual('hui')}).order('id').find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+					db.event(['*'], {title: ORM.notEqual('hui')}).order('id').find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":5,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 
 				it('Filtering using a loaded entity', function(done){
@@ -846,7 +865,7 @@
 						)
 					);
 
-					query.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+					query.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":5,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 			});
 
@@ -859,7 +878,7 @@
 					.joinVenue()
 					.group('id')
 					.order('id')
-					.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null,"idCount":"1"},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null,"idCount":"1"},{"id":4,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null,"idCount":"1"}]', done));
+					.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null,"idCount":"1"},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null,"idCount":"1"},{"id":5,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null,"idCount":"1"}]', done));
 				});
 			});
 
@@ -926,7 +945,7 @@
 
 						return db.event(['id']).group('id').order('id').find();
 					}).then(function(data) {
-						assert.equal(JSON.stringify(data), '[{"id":2},{"id":3},{"id":4}]');
+						assert.equal(JSON.stringify(data), '[{"id":2},{"id":3},{"id":5}]');
 						done();
 					}).catch(function(err){
 						done(err);
