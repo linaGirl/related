@@ -715,6 +715,13 @@
 					}).catch(done);
 				});
 
+				it('Filtering using an empty in statement', function(done){
+					db.event(['*'], {id: ORM.in()}).find(expect('[]', done));
+				});
+
+				it('Filtering using an empty not in statement', function(done){
+					db.event(['*'], {id: ORM.notIn()}).order('id').limit(1).find(expect('[{"id":1,"id_venue":2,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+				});
 /*
 				it('Filtering using a subquery should work', function(done) {
 					db.event().getVenue({
