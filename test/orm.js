@@ -131,7 +131,7 @@
 
 
 			// inserting data into test database
-			describe('Inserting Test Data', function() {
+			describe('[Inserting Test Data]', function() {
 				it('into the language table', function(done) {
 					var   index = 0
 						, items
@@ -214,7 +214,7 @@
 
 
 
-			describe('Setting a new Accessor name for', function(){
+			describe('[Setting a new Accessor name for]', function(){
 				it('the «image» reference on the «venue model» using an invalid identifier should fail', function(){
 					assert.throws(function(){
 						db.venue.setReferenceAccessorName('id_images', 'logo');
@@ -249,8 +249,21 @@
 
 
 
+
+
+
+			describe('[Generic Functionality]', function(){
+				it('the db instance should return the static orm', function(){
+					assert(typeof db.getORM().gt === 'function'); 
+				});
+			});
+
+
+
+
+
 			// insert tests
-			describe('Inserting Data', function(){
+			describe('[Inserting Data]', function(){
 				it('into an entity', function(done){
 					var images = [
 						  {url:'http://gfycat.com/ScentedPresentKingfisher.gif', expected:'{"id":1,"url":"http://gfycat.com/ScentedPresentKingfisher.gif"}'}
@@ -380,7 +393,7 @@
 
 
 			// query tests
-			describe('Querying Data', function(){
+			describe('[Querying Data]', function(){
  				it('from an entitiy', function(done){
 					db.event({id:1}).find(function(err, events){
 						if (err) done(err);
@@ -408,7 +421,7 @@
 
 
 			// complex query tests
-			describe('Querying Data with chidlentity loading', function(){
+			describe('[Querying Data with chidlentity loading]', function(){
 				it('through a mapping table', function(done){
 					db.event({id:2}).getEventLocale(['*']).fetchLanguage(['*']).find(expect('[{"eventLocale":[{"id_event":2,"language":{"id":1,"code":"en"},"id_language":1,"description":"some text"}],"id":2}]', done));
 				});
@@ -422,7 +435,7 @@
 
 
 
-			describe('Queriying mutliple times on the same querybuilder', function(){
+			describe('[Queriying mutliple times on the same querybuilder]', function(){
 				it('should return the correct results', function(done){
 					var query = db.event(['*']).order('id');
 					query.getVenue(['*']);
@@ -436,7 +449,7 @@
 
 
 
-			describe('Updating existing Data', function(){
+			describe('[Updating existing Data]', function(){
 				it('for a simple entity using the loaded model should work', function(done){
 					db.event({id:1}).findOne(function(err, event){
 						if (err) done(err);
