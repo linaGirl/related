@@ -1,12 +1,11 @@
 language: node_js
 
-node_js : 
-    - "0.10"
+node_js :
     - "0.12"
     - "iojs"
 
 addons:
-    postgresql: "9.3"
+    postgresql: "9.4"
 
 before_script:
   - psql -f test/createdb.sql -U postgres
