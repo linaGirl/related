@@ -13,10 +13,10 @@ Got a database but not any representation of the models in Javascript? You don't
 See the full [Documentation](#coming-soon).
 
 **Features**
-- Supports PostgreSQL and MySQL, both with connection pooling and cluster support
-- Works with any relational schema, generates the API from the tables in the schema
+- Supports PostgreSQL and MySQL, both with connection pooling and clusters
+- Works with any relational schema, generates the API from the table definitions loaded from the database
 - Automatic and manual transactions
-- A simple and an advanced query builder
+- A simple and an advanced query builder for complex wueries
 - Subqueries in filters, selects, inserts and updates
 - Aggregate functions
 - Raw SQL queries
@@ -24,7 +24,7 @@ See the full [Documentation](#coming-soon).
 - bulk updates and bulk deletes
 - User extendable models
 - Extensions API
-- Extensions for soft-deletes, nested sets and multilingual content
+- Extensions for soft-deletes, nested sets, multilingual content, geo distance computation and reference counting
 - Migrations API and migration tools
 - Works with promises and callbacks
 
@@ -64,7 +64,7 @@ new ORM(user, pass, host, db, [schema], ['mysql']).load(function(err, orm) {
 The ORM has currently a semi pretty stable API, some minor changes will be applied in the near future.
 If theAPI changes the minor version number will change. So if you use the version «0.2.x» you will have always the same api.
 
-## usage
+## API
 
 
 ### Example
@@ -389,7 +389,14 @@ Now lets do a complex query:
 
 The filter object which can be used by the queryuilder and the filter mehotd can contain the following structure
 
-- tbd
+
+
+If the ORM adds joins for filtering data it uses normally left joins. If you filter
+entites with nullable coulmns only exisitng rows from the right table will be returned.
+If you wish to get also entites which have no entry in the other table you have to filter
+using the ORM.nil value.
+
+
 
 ##### Advanced Query Builder
 

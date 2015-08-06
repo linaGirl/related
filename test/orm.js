@@ -254,7 +254,7 @@
 
 			describe('[Generic Functionality]', function(){
 				it('the db instance should return the static orm', function(){
-					assert(typeof db.getORM().gt === 'function'); 
+					assert(typeof db.getORM().gt === 'function');
 				});
 			});
 
@@ -417,7 +417,7 @@
 				});
 			});
 
-			
+
 
 
 			// complex query tests
@@ -886,6 +886,54 @@
 					);
 
 					query.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null},{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null},{"id":5,"id_venue":1,"title":"Changed title","startdate":"1970-01-01T00:00:00.000Z","enddate":"2014-05-13T16:53:20.000Z","canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+				});
+
+
+
+				it('on nullable fields', function(done) {
+					var   query = db.event(['*']).order('id')
+						, qb  	= query.queryBuilder();
+
+
+					qb.and({
+						  id: ORM.gt(0)
+						}
+						, qb.or({
+								  'venue.name': ORM.like('re%')
+								, 'venue.id_image': 5
+							}
+							, qb.and({
+								  'venue.municipality.county.country.code': 'ch'
+								, 'venue.municipality.county.code': null
+							})
+						)
+					);
+
+					query.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
+				});
+
+
+
+				it('using nil as value', function(done) {
+					var   query = db.event(['*']).order('id')
+						, qb  	= query.queryBuilder();
+
+
+					qb.and({
+						  id: ORM.gt(0)
+						}
+						, qb.or({
+								  'venue.name': ORM.like('re%')
+								, 'venue.id_image': 5
+							}
+							, qb.and({
+								  'venue.municipality.county.country.code': 'ch'
+								, 'venue.municipality.county.code': ORM.nil
+							})
+						)
+					);
+
+					query.find(expect('[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]', done));
 				});
 			});
 
