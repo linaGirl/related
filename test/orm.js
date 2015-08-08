@@ -109,6 +109,8 @@
 				});
 
 				it('should be able to drop & create the testing schema ('+sqlStatments.length+' raw SQL queries)', function(done){
+					this.timeout(5000);
+
 					orm.getDatabase(databaseName).getConnection(function(err, connection){
 						if (err) done(err);
 						else {
@@ -859,6 +861,26 @@
 						, num 	: 196
 					}).save(expect('{"id":4,"bool":true,"num":196}', done));
 				});
+			});
+
+
+
+
+			describe('[JSON Type]', function() {
+				if (dbType === 'postgres') {
+					it('inserting', function(done) {
+						new db.jsonType({
+							data: [{a:5, b: 10}]
+						}).save(expect('{"id":1,"data":[{"a":5,"b":10}]}', done));
+					});
+
+					it('modIfying', function(done) {
+						db.jsonType('*', {id: 1}).findOne().then(function(item) {
+							item.data[0].b = 1337;
+							item.save(expect('{"id":1,"data":[{"a":5,"b":1337}]}', done));
+						}).catch(done);
+					});
+				}
 			});
 
 

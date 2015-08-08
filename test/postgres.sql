@@ -127,6 +127,12 @@ CREATE TABLE related_test_postgres."emptyTypes" (
 	, CONSTRAINT "pk_emptyTypes" PRIMARY KEY (id)
 );
 
+CREATE TABLE related_test_postgres."jsonType" (
+	  "id" 				 			serial NOT NULL
+	, "data"  						json
+	, CONSTRAINT "pk_jsonType" PRIMARY KEY (id)
+);
+
 
 CREATE TABLE related_test_postgres."typeTest" (
 	  "serial" 						serial
