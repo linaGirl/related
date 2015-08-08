@@ -874,10 +874,24 @@
 						}).save(expect('{"id":1,"data":[{"a":5,"b":10}]}', done));
 					});
 
-					it('modIfying', function(done) {
+					it('modifying', function(done) {
 						db.jsonType('*', {id: 1}).findOne().then(function(item) {
 							item.data[0].b = 1337;
 							item.save(expect('{"id":1,"data":[{"a":5,"b":1337}]}', done));
+						}).catch(done);
+					});
+
+					it('filtering', function(done) {
+						new db.jsonType({
+							data: {focalPoint: {x: 10, y: 20}}
+						}).save().then(function() {
+							return new db.jsonType({
+								data: {focalPoint: {x: 300, y: 1}}
+							}).save();
+						}).then(function() {
+							db.jsonType('*', {
+								data: ORM.jsonValue('focalPoint.x::int', ORM.gt(50))
+							}).find(expect('[{"id":3,"data":{"focalPoint":{"x":300,"y":1}}}]', done));
 						}).catch(done);
 					});
 				}
