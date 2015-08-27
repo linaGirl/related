@@ -258,6 +258,10 @@
 				it('the db instance should return the static orm', function(){
 					assert(typeof db.getORM().gt === 'function');
 				});
+
+				it('the haColumn method should work', function(){
+					assert(typeof db.country().hasColumn('code'));
+				});
 			});
 
 
