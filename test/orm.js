@@ -66,6 +66,7 @@
 				, port 		: 5432
 				, mode 		: 'readwrite'
 				, maxConnections: 20
+				, id 			 : 'master'
 			}]
 		}, {
 			  schema 		: 'related_test_mysql'
@@ -77,6 +78,7 @@
 				, port 		: 3306
 				, mode 		: 'readwrite'
 				, maxConnections: 20
+				, id 			 : 'master'
 			}]
 		}]}).db.filter(function(config) {return config.schema === databaseName});
 
@@ -899,6 +901,28 @@
 						}).catch(done);
 					});
 				}
+			});
+
+
+
+
+			describe('[Executing on specific hosts]', function() {
+				it('should work', function(done) {
+					db.event('*').joinVenue(true).joinImages().host('master').count(function(err, count) {
+						if (err) done(err);
+						else {
+							assert.equal(count, 1);
+							done();
+						}
+					}.bind(this));
+				});	
+
+				it('should not work if the host was not laoded', function(done) {
+					db.event('*').joinVenue(true).joinImages().host('fantasyHost').count(function(err, count) {
+						if (!err) done(new Error('No error thrown while executing on an invalid host!'));
+						else done();
+					}.bind(this));
+				});				
 			});
 
 

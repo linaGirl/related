@@ -1,7 +1,7 @@
 {
       "name"                            : "related"
     , "description"                     : "ORM for postgres and mysql. Loads and saves referenced entites, executes complex queries, supports joins, transactions, complex database clusters, connection pooling and much more. No conventions. MIT Licence"
-    , "version"                         : "0.20.18"
+    , "version"                         : "0.21.0"
     , "homepage"                        : "https://github.com/eventEmitter/related"
     , "author"                          : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
     , "license"                         : "MIT"
@@ -23,7 +23,7 @@
         , "ee-async"                    : "0.2.x"
         , "ee-argv"                     : "0.1.x"
         , "ee-arguments"                : "1.0.x"
-        , "related-db-cluster"          : "0.4.x"
+        , "related-db-cluster"          : "0.5.x"
         , "related-mysql-connection"    : "0.7.x"
         , "related-postgres-connection" : "0.11.x"
         , "test-config"                 : "0.1.x"
