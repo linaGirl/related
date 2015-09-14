@@ -915,14 +915,33 @@
 							done();
 						}
 					}.bind(this));
-				});	
+				});
 
 				it('should not work if the host was not laoded', function(done) {
 					db.event('*').joinVenue(true).joinImages().host('fantasyHost').count(function(err, count) {
 						if (!err) done(new Error('No error thrown while executing on an invalid host!'));
 						else done();
 					}.bind(this));
-				});				
+				});
+				
+				it('should work with transactions', function(done) {
+					var t = db.createTransaction('master');
+
+					t.event('*').order('id').find().then(function(list) {
+						list = list.toArray().slice(0, 1);
+						expect('{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}', done)(null, list[0]);
+						t.commit();
+					}).catch(done);
+				});
+				
+				it('should not work with transactions if the host was not laoded', function(done) {
+					var t = db.createTransaction('fantasyHost');
+
+					t.event('*').order('id').find(function(err) {
+						if (!err) done(new Error('No error thrown while executing on an invalid host!'));
+						else done();
+					}.bind(this));
+				});
 			});
 
 
