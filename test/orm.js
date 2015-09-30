@@ -900,6 +900,12 @@
 							}).find(expect('[{"id":3,"data":{"focalPoint":{"x":300,"y":1}}}]', done));
 						}).catch(done);
 					});
+
+					it('inserting as string', function(done) {
+						new db.jsonType({
+							data: '[{"a":51, "b": 101}]'
+						}).save(expect('{"id":4,"data":[{"a":51,"b":101}]}', done));
+					});
 				}
 			});
 

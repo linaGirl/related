@@ -25,7 +25,7 @@
     ['postgres', 'mysql'].forEach(function(dbType) {
         var   config
             , orm;
-
+            
 
 
         config = new Config('config-test.js', {db:[{
