@@ -62,7 +62,7 @@ new Related({
         .fetchVenueType(['name'])
         .limit(10)
         .find().then(function(events) {
-        
+
         log(events);
     }).catch(function(err) {
 
@@ -75,3 +75,12 @@ new Related({
 ## API
 
 We are currently working on an extensive documentation and a website. Until those are online please look at the [tests](https://github.com/eventEmitter/related/blob/master/test/orm.js) 
+
+
+### Extensions
+
+- ***[Timestamps](https://www.npmjs.com/package/related-timestamps):*** support for automatic timestamps and soft deletes 
+- ***[GEO](https://www.npmjs.com/package/related-geo):*** Area and distance searches using longitutde and latitude
+- ***[Localization](https://www.npmjs.com/package/related-localization):*** support for multilanguage content in the relational model
+- ***[Nested Sets](https://www.npmjs.com/package/related-nested-set):*** support for [nested sets](https://en.wikipedia.org/wiki/Nested_set_model) 
+- ***[Reference Counting](https://www.npmjs.com/package/related-reference-counter):*** Counts items that are referenced by the current entity
