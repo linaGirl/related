@@ -31,11 +31,12 @@ Got a database but not any representation of the models in Javascript? You don't
 ````
 var Related = require('related');
 
-// generate the models from the db
+// The ORM looks at your database and builds on the fly models. 
+// You can start working on your database immediatelly. 
 new Related({
       schema        : 'mySchemaName' // optional for mysql
     , database      : 'myDatabaseName'
-    , type          : 'postgres' // or mysql
+    , type          : 'postgres'     // or mysql
     , hosts: [{
           host      : 'localhost'
         , username  : 'postgres'
@@ -47,9 +48,12 @@ new Related({
     }]    
 }).load().then(function(orm) {
 
+
     // get 10 events, their images, their tags, their categories, their venues,
-    // the venues images, the venues types
-    orm.event({id: ORM.lt(2000)}, ['*'])
+    // the venues images, the venues types. the 'get' prefix change sscope to the other model
+    // the 'fetch' prefix doenst change the scope and you can continue working on the current
+    // model
+    orm.event({id: Related.lt(2000)}, ['*'])
         .fetchImage(['url'])
         .fetchTag(['name'])
         .fetchCategory(['name'])
@@ -58,7 +62,7 @@ new Related({
         .fetchVenueType(['name'])
         .limit(10)
         .find().then(function(events) {
-
+        
         log(events);
     }).catch(function(err) {
 
@@ -70,4 +74,4 @@ new Related({
 
 ## API
 
-We are currently working on an extensive documentation and a website. Until that is online please look in the [test](https://github.com/eventEmitter/related/blob/master/test/orm.js) 
+We are currently working on an extensive documentation and a website. Until those are online please look at the [tests](https://github.com/eventEmitter/related/blob/master/test/orm.js) 
