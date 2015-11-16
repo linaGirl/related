@@ -1292,5 +1292,40 @@
 					}, done);
 				});
 			});
+
+
+
+			describe('[Performance]', function() {
+				it('creating simple test data', function(done) {
+					this.timeout(120000);
+
+					async.each(Array.apply(null, {length: 1000}), function(nope, cb){
+						new db.event({
+							  title: Math.random()+'---'
+							, startdate: new Date()
+							, id_venue: Math.random() > .5 ? 1: 2
+						}).save(cb, true);
+					}, done);
+				});
+
+
+				
+				it('should be able to query all events (raw)', function(done) {
+					this.timeout(120000);
+
+					async.each(Array.apply(null, {length: 1}), function(nope, cb){
+						db.event('*').getVenue('*').raw().find(cb);
+					}, done);
+				});
+
+
+				it('should be able to query all events', function(done) {
+					this.timeout(120000);
+
+					async.each(Array.apply(null, {length: 1}), function(nope, cb){
+						db.event('*').getVenue('*').find(cb);
+					}, done);
+				});
+			});
 		});
 	});
