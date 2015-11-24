@@ -1309,6 +1309,14 @@
 				});
 
 
+				it('should be able to query all events', function(done) {
+					this.timeout(120000);
+
+					async.each(Array.apply(null, {length: 1}), function(nope, cb){
+						db.event('*').getVenue('*').find(cb);
+					}, done);
+				});
+
 				
 				it('should be able to query all events (raw)', function(done) {
 					this.timeout(120000);
@@ -1319,13 +1327,6 @@
 				});
 
 
-				it('should be able to query all events', function(done) {
-					this.timeout(120000);
-
-					async.each(Array.apply(null, {length: 1}), function(nope, cb){
-						db.event('*').getVenue('*').find(cb);
-					}, done);
-				});
 			});
 		});
 	});
