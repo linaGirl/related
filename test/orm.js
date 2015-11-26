@@ -1,4 +1,5 @@
-
+(function() {
+	'use strict';
 
 	var   Class 		= require('ee-class')
 		, log 			= require('ee-log')
@@ -7,6 +8,7 @@
 		, async 		= require('ee-async')
 		, fs 			= require('fs')
 		, Config 		= require('test-config')
+		, QueryContext 	= require('related-query-context')
 		, ORM 			= require('../');
 
 
@@ -63,10 +65,8 @@
 				  host 		: 'localhost'
 				, username 	: 'postgres'
 				, password 	: ''
-				, port 		: 5432
-				, mode 		: 'readwrite'
 				, maxConnections: 20
-				, id 			 : 'master'
+				, pools     : ['write', 'read', 'master']
 			}]
 		}, {
 			  schema 		: 'related_test_mysql'
@@ -75,10 +75,8 @@
 				  host 		: 'localhost'
 				, username 	: 'root'
 				, password 	: ''
-				, port 		: 3306
-				, mode 		: 'readwrite'
 				, maxConnections: 20
-				, id 			 : 'master'
+				, pools     : ['write', 'read', 'master']
 			}]
 		}]}).db.filter(function(config) {return config.schema === databaseName});
 
@@ -113,15 +111,26 @@
 				it('should be able to drop & create the testing schema ('+sqlStatments.length+' raw SQL queries)', function(done){
 					this.timeout(5000);
 
-					orm.getDatabase(databaseName).getConnection(function(err, connection){
-						if (err) done(err);
-						else {
-							async.each(sqlStatments, connection.queryRaw.bind(connection), done);
-						}
-					});
+					orm.getDatabase(databaseName).getConnection('write').then((connection) => {
+						return new Promise((resolve, reject) => {
+							let exec = (index) => {
+								if (sqlStatments[index]) {
+									connection.query(new QueryContext({sql:sqlStatments[index]})).then(() => {
+										exec(index + 1);
+									}).catch(reject);
+								}
+								else resolve();
+							}
+
+							exec(0);
+						});
+					}).then(() => {
+						done();
+					}).catch(done);
 				});
 
 				it ('should be able to reload the models', function(done) {
+					this.timeout(10000);
 					orm.reload(function(err){
 						if (err) done(err);
 						else {
@@ -134,6 +143,7 @@
 
 
 
+
 			// inserting data into test database
 			describe('[Inserting Test Data]', function() {
 				it('into the language table', function(done) {
@@ -143,7 +153,7 @@
 
 					insert = function(){
 						if (index < items.length) {
-							new db.language({code: items[index]}).save(function(err) {
+							new db.language({code: items[index]}).save(function( err) {
 								if (err) done(err);
 								else insert();
 							});
@@ -914,7 +924,7 @@
 
 			describe('[Executing on specific hosts]', function() {
 				it('should work', function(done) {
-					db.event('*').joinVenue(true).joinImages().host('master').count(function(err, count) {
+					db.event('*').joinVenue(true).joinImages().pool('master').count(function(err, count) {
 						if (err) done(err);
 						else {
 							assert.equal(count, 1);
@@ -924,7 +934,7 @@
 				});
 
 				it('should not work if the host was not laoded', function(done) {
-					db.event('*').joinVenue(true).joinImages().host('fantasyHost').count(function(err, count) {
+					db.event('*').joinVenue(true).joinImages().pool('fantasyHost').count(function(err, count) {
 						if (!err) done(new Error('No error thrown while executing on an invalid host!'));
 						else done();
 					}.bind(this));
@@ -1176,7 +1186,9 @@
 						, venue: db.venue(['*'], {id:1})
 					}).save().then(function(evt){
 						if (!evt) done(new Error('Failed to create event'));
-						t.commit(done);
+						t.commit().then(() => {
+							done();
+						}).catch(done);
 					}).catch(done);
 				});
 			});
@@ -1330,3 +1342,4 @@
 			});
 		});
 	});
+})();

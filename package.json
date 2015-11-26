@@ -1,7 +1,7 @@
 {
       "name"                            : "related"
     , "description"                     : "ORM for relational databases. Eager loading, connection pooling, automatic failover, clusters, transactions, complex queries. Database first. No conventions"
-    , "version"                         : "1.1.3"
+    , "version"                         : "2.0.0"
     , "homepage"                        : "https://github.com/eventEmitter/related"
     , "author"                          : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
     , "license"                         : "MIT"
@@ -18,14 +18,13 @@
     , "dependencies": {
           "ee-class"                    : "1.x"
         , "ee-types"                    : "1.x"
+        , "related-db-cluster"          : "2.x"
+        , "related-query-context"       : "2.x"
         , "ee-event-emitter"            : "0.3.x"
         , "ee-log"                      : "0.3.x"
         , "ee-async"                    : "0.2.x"
         , "ee-argv"                     : "0.1.x"
         , "ee-arguments"                : "1.0.x"
-        , "related-db-cluster"          : "0.5.x"
-        , "related-mysql-connection"    : "0.7.x"
-        , "related-postgres-connection" : "0.11.x"
         , "test-config"                 : "0.1.x"
         , "async-method"                : "0.1.x"
     }
