@@ -1,7 +1,7 @@
 {
       "name"                            : "related"
-    , "description"                     : "ORM for relational databases. Eager loading, connection pooling, automatic failover, clusters, transactions, complex queries. Database first. No conventions"
-    , "version"                         : "2.1.1"
+    , "description"                     : "Unopinionated ORM for relational databases"
+    , "version"                         : "2.1.2"
     , "homepage"                        : "https://github.com/eventEmitter/related"
     , "author"                          : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
     , "license"                         : "MIT"
