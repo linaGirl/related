@@ -1,6 +1,6 @@
 # Related ORM
 
-ORM for relational databases. Eager loading, connection pooling, automatic failover, clusters, transactions, complex queries. Database first. No conventions.
+Unopinionated ORM for relational databases.
 
 
 [![npm](https://img.shields.io/npm/dm/related.svg?style=flat-square)](https://www.npmjs.com/package/related)
@@ -8,24 +8,23 @@ ORM for relational databases. Eager loading, connection pooling, automatic failo
 [![node](https://img.shields.io/node/v/related.svg?style=flat-square)](https://nodejs.org/)
 
 
-Got a database but not any representation of the models in Javascript? You don't want to write Javascript models for your Database? The related ORM reads the the definition fo your tables & columns from the database itself and builds an extensive API using that information. Using the related ORM you are up an running in seconds, not hours!
+Related builds on the fly an extensive API representing your database and its tables including their relations and columns. No need to write javascript models.
 
 
 **Features**
-- Support for Postgres & MySQL, both with connection pooling and clusters
-- Works with any relational schema, generates the API from the table definitions loaded from the database
-- Automatic and manual transactions
-- A simple and an advanced query builder for complex queries
-- Subqueries in filters, selects, inserts and updates
-- Aggregate functions
-- Raw SQL queries
-- Unlimited nested loading
-- Bulk updates and bulk deletes
-- User extendable models
-- Extensions API
+- Supports Postgres & MySQL
+- Simple loading and filtering of nested entities
+- Advanced query builder that rocks
+- Transactions
+- Table locks
+- Bulk operations
+- User extendable models (optional)
+- Connection pooling
 - Extensions for soft-deletes, nested sets, multilingual content, geo distance computation and reference counting
-- Works with promises and callbacks
-- ES6
+- Complex DB Cluster support (includes read replicas and failover on AWS RDS)
+- No conventions for column names etc.
+- Commercial support avialable
+- And much more
 
 
 ````
@@ -34,17 +33,15 @@ var Related = require('related');
 // The ORM looks at your database and builds on the fly models. 
 // You can start working on your database immediatelly. 
 new Related({
-      schema        : 'mySchemaName' // optional for mysql
+      schema        : 'mySchemaName' // optional
     , database      : 'myDatabaseName'
     , type          : 'postgres'     // or mysql
     , hosts: [{
           host      : 'localhost'
         , username  : 'postgres'
         , password  : ''
-        , port      : 5432
-        , mode      : 'readwrite'
         , maxConnections: 20
-        , id        : 'master'
+        , pools     : ['master', 'read', 'write']
     }]    
 }).load().then(function(orm) {
 
