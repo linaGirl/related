@@ -8,7 +8,7 @@ Unopinionated ORM for relational databases.
 [![node](https://img.shields.io/node/v/related.svg?style=flat-square)](https://nodejs.org/)
 
 
-Related builds on the fly an extensive API representing your database and its tables including their relations and columns. No need to write javascript models.
+On the fly builds an extensive API representing your database and its tables including their relations and columns. No need to write javascript models.
 
 
 **Features**
