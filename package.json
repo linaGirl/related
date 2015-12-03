@@ -1,7 +1,7 @@
 {
       "name"                            : "related"
     , "description"                     : "Unopinionated ORM for relational databases"
-    , "version"                         : "2.1.3"
+    , "version"                         : "2.1.4"
     , "homepage"                        : "https://github.com/eventEmitter/related"
     , "author"                          : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
     , "license"                         : "MIT"
@@ -30,6 +30,7 @@
     }
     , "devDependencies": {
           "mocha"                       : "2.x"
+        , "related-timestamps"          : "2.x"
 	    , "ee-project" 		            : "0.2.x"
     }
     , "bin": {
