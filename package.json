@@ -32,6 +32,7 @@
           "mocha"                       : "2.x"
         , "related-timestamps"          : "2.x"
 	    , "ee-project" 		            : "0.2.x"
+        , "related-db-analyzer"         : "0.x"
     }
     , "bin": {
         "related"                       : "./bin/related.js"

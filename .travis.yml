@@ -7,9 +7,15 @@ node_js :
 addons:
     postgresql: "9.4"
 
+
+services:
+  - mysql
+  - postgresql
+
+
 before_script:
-  - psql -f test/createdb.sql -U postgres
-  - psql -f test/postgres.sql -U postgres
+  - psql -f test/sql/createdb.sql -U postgres
+  - psql -f test/sql/postgres.sql -U postgres
   - mysql -e 'create database ee_orm_test_mysql;'
 
 

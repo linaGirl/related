@@ -1,5 +1,4 @@
 
-
 DROP DATABASE IF EXISTS related_test_mysql;
 CREATE DATABASE related_test_mysql;
 

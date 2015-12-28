@@ -1,4 +1,4 @@
 
 
 
-	module.exports = require('./lib/ORM');
+	module.exports = require('./src/Database');
