@@ -13,6 +13,7 @@ results
 
 config.js
 config-test.js
+test-config.js
 
 npm-debug.log
 
@@ -22,3 +23,5 @@ test.js
 
 node_modules
 config.js
+
+coverage
