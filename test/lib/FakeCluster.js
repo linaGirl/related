@@ -9,7 +9,7 @@
 
     // fake db
     let FakeDBDefinition = require('./FakeDBDefinition');
-    let FakeConnection   = require('./FakeConnection')
+    let FakeConnection   = require('./FakeConnection');
 
 
 

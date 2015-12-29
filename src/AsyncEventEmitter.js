@@ -7,7 +7,7 @@
     let log         = require('ee-log');
 
 
-    let Parameters  = require('./AsyncEventEmitterParameters')
+    let Parameters  = require('./AsyncEventEmitterParameters');
 
 
 
@@ -54,7 +54,7 @@
             });
         }
         else return Promise.resolve(parameters);
-    }
+    };
 
 
 

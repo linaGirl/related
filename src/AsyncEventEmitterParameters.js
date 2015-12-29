@@ -3,7 +3,6 @@
 
 
     let Class       = require('ee-class');
-    let type        = require('ee-types');
     let log         = require('ee-log');
 
 

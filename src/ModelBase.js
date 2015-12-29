@@ -526,12 +526,12 @@
             // the $isDirty variable is normally
             // not used, it can be usêd by extensionss
             // or custom user models
-            return this.$isDirty 
-                || this.isNew() 
-                || this.hasDirtyColumn()
-                || this.hasDirtyReferences()
-                || this.hasDirtyMappings()
-                || this.hasDirtyReferenceBys();
+            return this.$isDirty || 
+                this.isNew() || 
+                this.hasDirtyColumn() || 
+                this.hasDirtyReferences() || 
+                this.hasDirtyMappings() || 
+                this.hasDirtyReferenceBys();
         }
 
 

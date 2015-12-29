@@ -118,5 +118,5 @@
 
         // return customized class
         return new Class(Model);
-    }
+    };
 })();

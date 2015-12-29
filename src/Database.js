@@ -5,7 +5,7 @@
     let Class       = require('ee-class');
     let type        = require('ee-types');
     let log         = require('ee-log');
-    let Cluster     = require('related-db-cluster')
+    let Cluster     = require('related-db-cluster');
 
 
     let Config      = require('./Config');
@@ -84,7 +84,7 @@
 
             // first load the db cluster 
             // for this db
-            return this.getCluster(this.$config).then((cluster) => {
+            return this.getCluster(this.$config).then(() => {
 
 
                 // load the databse definition
@@ -137,7 +137,7 @@
 
                 // return this to the user
                 return Promise.resolve(this);
-            })
+            });
         }
 
 

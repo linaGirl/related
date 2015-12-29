@@ -9,7 +9,6 @@
 
     // sadly we'll have to simulate a db using these :/
     let DatabaseDefinition      = require('related-db-analyzer').Database;
-    let FunctionDefinition      = require('related-db-analyzer').Function;
     let EntityDefinition        = require('related-db-analyzer').Entity;
     let ColumnDefinition        = require('related-db-analyzer').Column;
     let ReferenceDefinition     = require('related-db-analyzer').Reference;
