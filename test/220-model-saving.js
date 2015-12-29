@@ -16,7 +16,7 @@
     
     describe('Model Saving', function() {
 
-        it('simple values using promises', function(done) {
+        /*it('simple values using promises', function(done) {
             getDB().then((db) => {
 
                 // 
@@ -31,7 +31,7 @@
 
                 });
             }).catch(done);
-        });
+        });*/
 
     });
 })();

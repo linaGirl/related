@@ -20,3 +20,7 @@ before_script:
 
 
 sudo: false
+
+
+after_success:
+- npm run coveralls

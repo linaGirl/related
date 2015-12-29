@@ -30,6 +30,8 @@
     }
     , "devDependencies": {
           "mocha"                       : "2.x"
+        , "coveralls"                   : "*"
+        , "mocha-lcov-reporter"         : "*"
         , "related-timestamps"          : "2.x"
 	    , "ee-project" 		            : "0.2.x"
         , "related-db-analyzer"         : "0.x"
@@ -41,6 +43,8 @@
     , "keywords"                        : ["orm", "mysql", "postgres", "object relational mapper", "eager loading", "connection pooling", "cluster"]
     , "scripts": {
           "test"                        : "./node_modules/mocha/bin/mocha --reporter spec --bail"
-        , "cov"                         : "istanbul cover node_modules/mocha/bin/_mocha"
+        , "posttest"                    : "istanbul cover node_modules/mocha/bin/_mocha"
+        , "cover"                       : "istanbul cover node_modules/mocha/bin/_mocha"
+        , "coveralls"                   : "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
     }
 }

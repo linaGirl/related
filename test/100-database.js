@@ -49,7 +49,7 @@
 
 
 
-        it('should fail to return a transactio when not initialized', function(done) {
+        it('should fail to return a transaction when not initialized', function(done) {
             new Related().createTransaction().then((t) => {
                 assert(!t);
                 done();
@@ -69,7 +69,6 @@
                 done();
             }).catch(done);
         });
-
 
         it('should not return the fantasy entity using the get method', function(done) {
             getDB().then((db) => {

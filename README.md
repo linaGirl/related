@@ -6,6 +6,8 @@ Unopinionated ORM for relational databases.
 [![npm](https://img.shields.io/npm/dm/related.svg?style=flat-square)](https://www.npmjs.com/package/related)
 [![Travis](https://img.shields.io/travis/eventEmitter/related.svg?style=flat-square)](https://travis-ci.org/eventEmitter/related)
 [![node](https://img.shields.io/node/v/related.svg?style=flat-square)](https://nodejs.org/)
+[![bitHound Overall Score](https://www.bithound.io/github/eventEmitter/related/badges/score.svg)](https://www.bithound.io/github/eventEmitter/related)
+[![Coverage Status](https://coveralls.io/repos/eventEmitter/related/badge.svg?branch=master&service=github)](https://coveralls.io/github/eventEmitter/related?branch=master)
 
 
 On the fly builds an extensive API representing your database and its tables including their relations and columns. No need to write javascript models.
