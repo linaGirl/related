@@ -25,4 +25,4 @@ node_modules
 config.js
 
 
-./coverage
+coverage
