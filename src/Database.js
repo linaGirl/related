@@ -10,6 +10,7 @@
 
     let Config      = require('./Config');
     let Entity      = require('./Entity');
+    let Transaction = require('./Transaction');
 
 
 
@@ -51,8 +52,9 @@
 
             if (options) {
 
-                // check for an alternative db cluster implementation
+                // check for an alternative db cluster implementations
                 if (options.Cluster) Class.define(this, '$Cluster', Class(options.Cluster));
+                if (options.clusterInstance) Class.define(this, '$cluster', Class(options.clusterInstance));
             }
         }
 
@@ -219,6 +221,40 @@
 
 
 
+        
+
+
+
+
+
+
+
+
+
+        /**
+         * create a new transaction
+         *
+         * @param {string} poolName
+         *
+         * @returns {promise} transaction
+         */
+        , createTransaction: function(poolName) {
+            if (!this.$cluster) return Promise.reject(new Error('Cannot create transaction, the cluster is not initialized!'));
+            else {
+
+                // get conenction
+                return this.$cluster.getConnection(poolName).then((connection) => {
+
+                    // create transaction
+                    return connection.createTransaction().then(() => {
+                        
+                        // nice, return
+                        return Promise.resolve(new Transaction(this, connection));
+                    });
+                });
+            }
+        }
+
 
 
 
@@ -235,7 +271,7 @@
          * @param {string} entityName the name of the entitiy
          */
         , get: function(entityName) {
-            return this.$entities.has(schemaName) ? this.$entities.get(entityName) : null;
+            return this.$entities.has(entityName) ? this.$entities.get(entityName) : null;
         }
     });
 })();

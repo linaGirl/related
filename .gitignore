@@ -23,3 +23,6 @@ test.js
 
 node_modules
 config.js
+
+
+./coverage

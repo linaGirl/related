@@ -40,6 +40,7 @@
     , "optionalDependencies": {}
     , "keywords"                        : ["orm", "mysql", "postgres", "object relational mapper", "eager loading", "connection pooling", "cluster"]
     , "scripts": {
-        "test"                          : "./node_modules/mocha/bin/mocha --reporter spec --bail"
+          "test"                        : "./node_modules/mocha/bin/mocha --reporter spec --bail"
+        , "cov"                         : "istanbul cover node_modules/mocha/bin/_mocha"
     }
 }

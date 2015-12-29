@@ -16,11 +16,11 @@
         /**
          * set up the related orm
          */
-        init: function(database, connection) {
+        init: function(options) {
 
             // store db reference and definition
-            Class.define(this, 'database', Class(database));
-            Class.define(this, 'connection', Class(connection));
+            
         }
+
     });
 })();

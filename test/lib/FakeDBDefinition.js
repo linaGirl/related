@@ -56,6 +56,7 @@
             db.setEntity('venue', this.getVenueEntitiy(db));
             db.setEntity('venue_image', this.getVenueImageEntitiy(db));
             db.setEntity('event', this.getEventEntitiy(db));
+            db.setEntity('event_image', this.getEventImageEntitiy(db));
 
 
             return db;
@@ -299,6 +300,86 @@
             db.getEntity('image').getColumn('id').addMapping(new MappingDefinition({
                   mapping: entity
                 , mappedColumn: db.getEntity('venue').getColumn('id')
+            }, db.getEntity('image').getColumn('id')));
+
+
+            return entity;
+        }
+
+
+
+
+
+        , getEventImageEntitiy: function(db) {
+            let entity = new EntityDefinition({
+                name: 'event_image'
+            }, db);
+
+
+            entity.setColumn('id_event', new ColumnDefinition({
+                  name          : 'id_event'
+                , type          : 'int'
+                , jsTypeMapping : 'number'
+                , nullable      : false
+                , nativeType    : 'int32'
+                , isPrimary     : true
+                , isForeignKey  : true
+            }, entity));
+
+
+            entity.setColumn('id_image', new ColumnDefinition({
+                  name          : 'id_image'
+                , type          : 'int'
+                , jsTypeMapping : 'number'
+                , nullable      : false
+                , nativeType    : 'int32'
+                , isPrimary     : true
+                , isForeignKey  : true
+            }, entity));
+
+
+            
+
+            entity.getColumn('id_image').setReference(new ReferenceDefinition({
+                  referencedColumn  : db.getEntity('image').getColumn('id')
+                , onUpdate          : 'cascade'
+                , onDelete          : 'restrict'
+            }, entity.getColumn('id_image')));
+            
+
+            entity.getColumn('id_event').setReference(new ReferenceDefinition({
+                  referencedColumn  : db.getEntity('event').getColumn('id')
+                , onUpdate          : 'cascade'
+                , onDelete          : 'restrict'
+            }, entity.getColumn('id_event')));
+
+
+            db.getEntity('event').getColumn('id').addReferencedColumn(new ReferenceByDefinition({
+                  referencedByColumn: entity.getColumn('id_event')
+                , onUpdate          : 'cascade'
+                , onDelete          : 'restrict'
+            }, db.getEntity('event').getColumn('id')));
+
+
+            db.getEntity('image').getColumn('id').addReferencedColumn(new ReferenceByDefinition({
+                  referencedByColumn: entity.getColumn('id_image')
+                , onUpdate          : 'cascade'
+                , onDelete          : 'restrict'
+            }, db.getEntity('image').getColumn('id')));
+
+
+
+            entity.defineMapping(['id_event', 'id_image']);
+
+
+            db.getEntity('event').getColumn('id').addMapping(new MappingDefinition({
+                  mapping: entity
+                , mappedColumn: db.getEntity('image').getColumn('id')
+            }, db.getEntity('event').getColumn('id')));
+
+            db.getEntity('image').getColumn('id').addMapping(new MappingDefinition({
+                  mapping: entity
+                , mappedColumn: db.getEntity('event').getColumn('id')
             }, db.getEntity('image').getColumn('id')));
 
 

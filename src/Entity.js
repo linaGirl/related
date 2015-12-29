@@ -8,7 +8,7 @@
 
 
     let QueryBuilderGenerator = require('./QueryBuilderGenerator');
-    let ModelGenerator = require('./ModelGenerator');
+    let Model = require('./Model');
 
 
 
@@ -113,7 +113,7 @@
         , createQueryBuilder: function() {
             return new QueryBuilderGenerator({
                   database    : this.database
-                , definition : this.definition
+                , definition  : this.definition
             });
         }
 
@@ -128,9 +128,9 @@
          * @returns {constructor}
          */
         , createModel: function() {
-            return new ModelGenerator({
+            return new Model({
                   database    : this.database
-                , definition : this.definition
+                , definition  : this.definition
                 , UserModel   : this.UserModel
             });
         }
