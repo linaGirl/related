@@ -32,8 +32,6 @@
           "mocha"                       : "2.x"
         , "coveralls"                   : "*"
         , "mocha-lcov-reporter"         : "*"
-        , "related-timestamps"          : "2.x"
-	    , "ee-project" 		            : "0.2.x"
         , "related-db-analyzer"         : "0.x"
     }
     , "bin": {

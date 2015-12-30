@@ -1,17 +1,14 @@
 
 
 	module.exports = {
-		db: {
-			eventbooster: {
-				  type: 'mysql'
-				, hosts: [
-					{
-						  host 		: '10.0.100.1'
-						, username 	: ''
-						, password 	: ''
-						, mode 		: 'readwrite'
-					}
-				]
-			}
-		}
+		  type 		: 'postgres'
+		, database 	: 'test'
+		, schema 	: 'test'
+		, hosts: [{
+			  host 			 : '10.0.100.1'
+			, username 		 : 'postgres'
+			, password 		 : ''
+			, maxConnections : 50
+			, pools     	 : ['write', 'read', 'master']
+		}]
 	};
