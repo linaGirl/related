@@ -36,17 +36,6 @@
             }).catch(done);
         });
 
-        it('should initialize the cluster II', function(done) {
-            new Related().load(config).then((related) => {
-                assert(!related);
-                done();
-            }).catch((err) => {
-                assert(err);
-                done();
-            });
-        });
-
-
 
 
         it('should fail to return a transaction when not initialized', function(done) {

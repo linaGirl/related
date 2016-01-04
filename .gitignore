@@ -1,4 +1,3 @@
-lib-cov
 *.seed
 *.log
 *.csv
@@ -16,8 +15,6 @@ config-test.js
 test-config.js
 
 npm-debug.log
-
-travis.js
 
 test.js
 

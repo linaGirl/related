@@ -2,3 +2,4 @@
 ./test.js
 ./travis.yml
 ./coverage
+./docs
