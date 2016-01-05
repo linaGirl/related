@@ -14,33 +14,7 @@
 
 
 
-
-
-
-    module.exports = new Class({
-
-        // the config provided by teh user
-          $config: null
-
-        // the database cluster
-        , $cluster: null
-
-        // the dbs definition
-        , $definition: null
-        
-        // entity map
-        , $entities: null
-
-
-        // flags
-        , loaded: false
-        , loading: false
-
-
-
-
-
-
+    class Database {
 
 
         /**
@@ -48,16 +22,16 @@
          *
          * @param {object} options options object
          */
-        , init: function(options) {
+        init(options) {
 
             if (options) {
 
                 // check for an alternative db cluster implementations
-                if (options.Cluster) Class.define(this, '$Cluster', Class(options.Cluster));
-                if (options.clusterInstance) Class.define(this, '$cluster', Class(options.clusterInstance));
+                if (options.Cluster) Object.defineProperty(this, '$Cluster', {value: options.Cluster});
+                if (options.clusterInstance) Object.defineProperty(this, '$cluster', {value: options.clusterInstance});
             }
         }
-
+        
 
 
 
@@ -76,10 +50,10 @@
          *
          * @returns {promise}
          */
-        , load: function(userConfig) {
+        load(userConfig) {
 
             // store the config
-            Class.define(this, '$config', Class(new Config(userConfig)));
+            Object.defineProperty(this, '$config', {value: new Config(userConfig)});
 
 
             // first load the db cluster 
@@ -110,13 +84,16 @@
          *
          * @returns {promise}         
          */
-        , reload: function() {
+        reload() {
             let schemaName = this.$config.getSchemaName();
 
 
 
             // entity list
-            Class.define(this, '$entities', Class(new Map()).Writable());
+            Object.defineProperty(this, '$entities', {
+                  value: new Map()
+                , writable: true
+            });
 
 
 
@@ -128,7 +105,10 @@
                 else {
 
                     // store the definition
-                    Class.define(this, '$definition', Class(definition.get(schemaName)).Writable());
+                    Object.defineProperty(this, '$definition', {
+                          value: definition.get(schemaName)
+                        , writable: true
+                    });
 
                     // set up the models & querybuilder
                     return this.initialize();
@@ -157,7 +137,7 @@
          *
          * @returns {promise}
          */
-        , initialize: function() {
+        initialize() {
 
             // iterate over all entities
             for (let entityDefinition of this.$definition.entities.values()) {
@@ -200,18 +180,23 @@
          *
          * @returns {promise} RelatedDBCluster
          */
-        , getCluster: function(config) {
+        getCluster(config) {
             if (this.$cluster) return Promise.resolve(this.$cluster);
             else {
 
                 // create cluster instance, either 
                 // from a user provided cluster impleentation
                 // or our default
-                let cluster = new (this.$Cluster || Cluster)();
+                let cluster;
+                if (this.$Cluster) cluster = new this.$Cluster();
+                else cluster = new Cluster();
 
 
                 // store the cluster
-                Class.define(this, '$cluster', Class(cluster).Writable());
+                Object.defineProperty(this, '$cluster', {
+                      value: cluster
+                    , writable: true
+                });
 
 
                 // start cluster, return to user
@@ -234,11 +219,11 @@
         /**
          * create a new transaction
          *
-         * @param {string} poolName
+          * @param {string} poolName
          *
          * @returns {promise} transaction
          */
-        , createTransaction: function(poolName) {
+        createTransaction(poolName) {
             if (!this.$cluster) return Promise.reject(new Error('Cannot create transaction, the cluster is not initialized!'));
             else {
 
@@ -256,11 +241,7 @@
         }
 
 
-
-
-
-
-
+        
 
 
 
@@ -270,8 +251,18 @@
          *
          * @param {string} entityName the name of the entitiy
          */
-        , get: function(entityName) {
+        get(entityName) {
             return this.$entities.has(entityName) ? this.$entities.get(entityName) : null;
-        }
-    });
+        } 
+    }
+
+
+
+    // flags
+    Database.prototype.loaded = false;
+    Database.prototype.loading = false;
+
+
+    // export
+    module.exports = Database;
 })();

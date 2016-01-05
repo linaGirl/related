@@ -2,14 +2,9 @@
     'use strict';
 
 
-    let Class       = require('ee-class');
-    let type        = require('ee-types');
-    let log         = require('ee-log');
-
-
-    let Parameters  = require('./AsyncEventEmitterParameters');
-
-
+    let type = require('ee-types');
+    let Parameters = require('./AsyncEventEmitterParameters');
+    
 
 
 
@@ -62,11 +57,7 @@
 
 
 
-    module.exports = new Class({
-        inherits: null
-
-        
-
+    class AsyncEventEmitter {
 
         /**
          * add an event listener
@@ -77,7 +68,7 @@
          *
          * @returns {object} this
          */
-        , on: function(eventName, listener, once) {
+        on(eventName, listener, once) {
             if (!validEvents.has(eventName)) throw new Error(`The '${eventName}' is not a valid model event!`);
             else {
                 if (!this.$listeners.has(eventName)) this.$listeners.set(eventName, new Set());
@@ -106,7 +97,7 @@
          *
          * @returns {object} this
          */
-        , once: function(eventName, listener) {
+        once(eventName, listener) {
             return this.on(eventName, listener, true);
         }
 
@@ -127,7 +118,7 @@
          *
          * @returns {object} this
          */
-        , off: function(eventName, listener) {
+        off(eventName, listener) {
             if (!validEvents.has(eventName)) throw new Error(`The '${eventName}' is not a valid model event!`);
             else {
                 if (this.$listeners.has(eventName)) {
@@ -156,7 +147,7 @@
          *
          * @returns {promise}
          */
-        , emit: function(eventName, eventParameters) {
+        emit(eventName, eventParameters) {
             if (!validEvents.has(eventName)) return Promise.reject(new Error(`The '${eventName}' is not a valid model event!`));
             else {
 
@@ -194,5 +185,9 @@
                 else return Promise.resolve(false);
             }
         }
-    });
+    }
+
+
+
+    module.exports = AsyncEventEmitter;
 })();

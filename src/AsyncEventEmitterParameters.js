@@ -2,31 +2,13 @@
     'use strict';
 
 
-    let Class       = require('ee-class');
-    let log         = require('ee-log');
 
-
-
-    
-
-    module.exports = new Class({
-
-
-        // flags if all remaning listneres mus tbe skipped
-        listenersSkipped: false
-
-
-        // flags if the main action after
-        // the event should be skipped
-        , mainSkipped: false
-
-
-
+    class AsyncEventEmitterParameter {
 
         /**
          * set up
          */
-        , init: function(eventName, eventParameters) {
+        constructor(eventName, eventParameters) {
             this.eventName = eventName;
 
             // apply the eventParameters to this opbject
@@ -45,7 +27,7 @@
          *
          * @returns {promise}
          */
-        , skipMain: function() {
+        skipMain() {
             this.mainSkipped = true;
 
             return Promise.resolve();
@@ -59,7 +41,7 @@
          *
          * @returns {promise}
          */
-        , skipListeners: function() {
+        skipListeners() {
             this.listenersSkipped = true;
 
             return Promise.resolve();
@@ -73,7 +55,7 @@
          *
          * @returns {promise}
          */
-        , skipMainAndListeners: function() {
+        skipMainAndListeners() {
             this.mainSkipped = true;
             this.listenersSkipped = true;
 
@@ -88,9 +70,21 @@
          *
          * @returns {promise}
          */
-        , resolve: function() {
+        resolve() {
             return Promise.resolve();
         }
+    }
 
-    });
+
+
+    // flags if all remaning listneres mus tbe skipped
+    AsyncEventEmitterParameter.prototype.listenersSkipped = false;
+    
+    // flags if the main action after
+    // the event should be skipped
+    AsyncEventEmitterParameter.prototype.mainSkipped = false;
+    
+
+    // export the class
+    module.exports = AsyncEventEmitterParameter;
 })();

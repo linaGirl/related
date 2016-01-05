@@ -2,27 +2,22 @@
     'use strict';
 
 
-    let Class       = require('ee-class');
-    let type        = require('ee-types');
-    let log         = require('ee-log');
+    let type = require('ee-types');
 
 
 
 
-    
 
-    module.exports = new Class({
 
-        // storage for the user provided config
-        userConfig: null
 
+    class Config {
 
 
 
         /**
          * set up the related orm
          */
-        , init: function(userConfig) {
+        constructor(userConfig) {
 
             // some basic validation
             if (!type.object(userConfig)) throw new Error('Missing the config object!');
@@ -48,7 +43,7 @@
          *
          * @returns {string} driverName
          */
-        , getDriverName: function() {
+        getDriverName() {
             return this.userConfig.type || 'postgres';
         }
 
@@ -68,7 +63,7 @@
          *
          * @returns {string} schemaName
          */
-        , getSchemaName: function() {
+        getSchemaName() {
             return this.userConfig.schema || this.userConfig.database;
         }
 
@@ -88,7 +83,7 @@
          *
          * @returns {array}
          */
-        , getHosts: function() {
+        getHosts() {
             let hosts = [];
 
             for (let host of this.hosts()) hosts.push(host);
@@ -117,7 +112,7 @@
          *
          * @returns {iterator protocol}
          */
-        , hosts: function() {
+        hosts() {
             
             // return enclosed iterator
             return (() => {
@@ -153,5 +148,11 @@
                 };
             })();
         }
-    });
+    }
+
+    
+
+
+
+    module.exports = Config;
 })();
