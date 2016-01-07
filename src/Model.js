@@ -9,6 +9,7 @@
     let AsyncEventEmitter   = require('./AsyncEventEmitter');
     let QueryBuilder        = require('./QueryBuilder');
     let ModelSetInstance    = require('./ModelSetInstance');
+    let ModelSetProxy       = require('./ModelSetProxy');
 
 
 
@@ -23,6 +24,7 @@
      */
     let publicMethods = new Set([
           'has'
+        , 'hasColumn'
         , 'set'
         , 'get'
         , 'getName'
@@ -108,6 +110,25 @@
          */
         has(propertyName) {
             return this.properties.has(propertyName);
+        }
+
+
+
+
+
+
+
+
+        /**
+         * returnes if the model has a column with the
+         * given name
+         *
+         * @param {string} propertyName
+         *
+         * @returns {boolean} true if the model has the column
+         */
+        hasColumn(propertyName) {
+            return this.properties.has(propertyName) && this.properties.get(propertyName).kind === 'column';
         }
 
 
@@ -349,7 +370,7 @@
 
             // first check if there is a custom
             // constructor for this property
-            if (this.mappingConstrutors.has(propertyName)) return new (this.mappingConstrutors.get(propertyName))();
+            if (this.mappingConstrutors.has(propertyName)) return new Proxy(new (this.mappingConstrutors.get(propertyName))(), ModelSetProxy);
             else {
 
                 // the constructor was not yet created
@@ -377,7 +398,7 @@
 
 
                         // return
-                        return new SetConstructor();
+                        return new Proxy(new SetConstructor(), ModelSetProxy);
                     }
                     else throw new Error(`Cannot create the mapping set '${propertyName} on the model '${this.getName()}, expected the type 'mapping', got the type '${definition.getPropertyType(propertyName)}' instead!`);
                     
@@ -597,10 +618,7 @@
 
 
 
-
     // export
     module.exports = Model;
-
-
 
 })();

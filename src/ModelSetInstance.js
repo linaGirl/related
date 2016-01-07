@@ -31,8 +31,8 @@
              * stets the class up
              *
              */
-            constructor(options) {
-                super(options);
+            constructor() {
+                super();
             }
         }
 
