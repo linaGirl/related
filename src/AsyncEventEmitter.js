@@ -4,7 +4,7 @@
 
     let type = require('ee-types');
     let Parameters = require('./AsyncEventEmitterParameters');
-    
+
 
 
 
@@ -58,6 +58,28 @@
 
 
     class AsyncEventEmitter {
+
+
+
+
+
+
+
+
+        /**
+         * stets the class up
+         *
+         */
+        constructor() {
+            
+        }
+
+
+
+
+
+
+
 
         /**
          * add an event listener

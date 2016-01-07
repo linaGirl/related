@@ -9,4 +9,8 @@
     , "esnext"                  : true
     , "laxcomma"                : true
     , "node"                    : true
+    , "predef": [
+          "describe"
+        , "it"
+    ]
 }

@@ -2,30 +2,24 @@
     'use strict';
 
 
-    let Class       = require('ee-class');
-    let type        = require('ee-types');
-    let log         = require('ee-log');
-
-
+    let log = require('ee-log');
     let QueryBuilderGenerator = require('./QueryBuilderGenerator');
-    let Model = require('./Model');
+    let ModelInstance = require('./ModelInstance');
+    let ModelProxy = require('./ModelProxy');
 
 
 
-    
-
-    module.exports = new Class({
-
+    class Entity {
 
 
         /**
          * set up the related orm
          */
-        init: function(options) {
+        constructor(options) {
 
             // store db reference and definition
-            Class.define(this, 'database', Class(options.database));
-            Class.define(this, 'definition', Class(options.definition));
+            Object.defineProperty(this, 'database', {value: options.database});
+            Object.defineProperty(this, 'definition', {value: options.definition});
 
 
             // dynamically create the model && querybuilder
@@ -35,22 +29,21 @@
 
 
             // create the constructor that is beeing returneed
-            let Constructor = function() {
+            let Constructor = function(...args) {
 
-                // create an array from the arguments
-                // wish i could use rest paramters :/
-                let args = [];
-                for (let i = 0, l = arguments.length; i <l; i++) args.push(arguments[i]);
 
                 // check what has to be returned 
                 if (this instanceof Constructor) {
 
+                    let modelInstance = new Model({
+                        args: args
+                    });
+
+
 
                     // called with the new keyword
                     // return a new model instance
-                    return new Model({
-                        args: args
-                    });
+                    return new Proxy(modelInstance, ModelProxy);
                 }
                 else {
 
@@ -72,21 +65,21 @@
 
 
 
-        , defineReferenceName: function(localColumn, name) {
+        defineReferenceNam(localColumn, name) {
 
         }
 
 
 
 
-        , defineMappingName: function(mappingEntity, name) {
+        defineMappingName(mappingEntity, name) {
 
         }
 
 
 
 
-        , defineReferecedByName: function(foreignColumn, name) {
+        defineReferecedByName(foreignColumn, name) {
 
         }
 
@@ -94,7 +87,7 @@
 
 
 
-        , use: function(UserModel) {
+        use(UserModel) {
             this.UserModel = UserModel;
         }
 
@@ -110,7 +103,7 @@
          *
          * @returns {constructor}
          */
-        , createQueryBuilder: function() {
+        createQueryBuilder() {
             return new QueryBuilderGenerator({
                   database    : this.database
                 , definition  : this.definition
@@ -127,12 +120,16 @@
          *
          * @returns {constructor}
          */
-        , createModel: function() {
-            return new Model({
+        createModel() {
+            return new ModelInstance({
                   database    : this.database
                 , definition  : this.definition
                 , UserModel   : this.UserModel
             });
         }
-    });
+    }
+
+    
+
+    module.exports = Entity;
 })();

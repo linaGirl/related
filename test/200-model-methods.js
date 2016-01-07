@@ -9,13 +9,18 @@
 
 
     let getDB           = require('./lib/getDB');
+    let Related         = require('../');
 
 
 
-    
+
     
     describe('Model Methods', function() {
 
+
+        it('Publshing a new public model method', function() {
+            Related.Model.addPublicMethod('test');
+        });
        
 
         it('Instantiating a Model', function(done) {
@@ -24,10 +29,9 @@
                 done();
             }).catch(done);
         });
+       
 
-
-
-        it('Model.isNew() I', function(done) {
+        it('Model.isNew() with a newly createdd model instance', function(done) {
             getDB().then((db) => {
                 let model = new db.event({});
 
@@ -38,11 +42,12 @@
             
         });
 
-        it('Model.isNew() II', function(done) {
+
+        it('Model.isNew() with a model populated from the database', function(done) {
             getDB().then((db) => {
                 let model = new db.event({}).populateFromDatabase({
                     title: 'testEvent'
-                }, ['title']);
+                });
 
                 assert.equal(model.isNew(), false);
 
@@ -53,7 +58,7 @@
 
 
 
-        it('Model.isDirty() I', function(done) {
+        it('Model.isDirty() with a freshly instantiated model', function(done) {
             getDB().then((db) => {
                 let model = new db.event({});
 
@@ -63,11 +68,11 @@
             }).catch(done);
         });
 
-        it('Model.isDirty() II', function(done) {
+        it('Model.isDirty() with a model populated from the database', function(done) {
             getDB().then((db) => {
                 let model = new db.event({}).populateFromDatabase({
                     title: 'testEvent'
-                }, ['title']);
+                });
 
                 assert.equal(model.isDirty(), false);
 
@@ -77,11 +82,11 @@
 
 
 
-        it('Model.populateFromDatabase() I', function(done) {
+        it('Model.populateFromDatabase() with regular properties', function(done) {
             getDB().then((db) => {
                 let model = new db.event({}).populateFromDatabase({
                     title: 'testEvent'
-                }, ['title']);
+                });
 
                 assert.equal(model.isNew(), false);
                 assert.equal(model.title, 'testEvent');
@@ -91,11 +96,11 @@
             }).catch(done);            
         });
 
-        it('Model.populateFromDatabase() II', function(done) {
+        it('Model.populateFromDatabase() with reserved properties', function(done) {
             getDB().then((db) => {
                 let model = new db.event({}).populateFromDatabase({
                     get: 'getValue'
-                }, ['get']);
+                });
 
                 assert.equal(model.isNew(), false);
                 assert.equal(type(model.get), 'function');
@@ -105,9 +110,35 @@
             }).catch(done);     
         });
 
+        it('Model.populateFromDatabase() with invalid input', function(done) {
+            getDB().then((db) => {
+                assert.throws(() => {
+                    new db.event({}).populateFromDatabase(1); 
+                });
+
+                done(); 
+            }).catch(done);
+        });
+
+        it('Model.populateFromDatabase() with no input', function(done) {
+            getDB().then((db) => {
+                new db.event({}).populateFromDatabase(); 
+
+                done(); 
+            }).catch(done);
+        });
+
+        it('Model.populateFromDatabase() with null as input', function(done) {
+            getDB().then((db) => {
+                new db.event({}).populateFromDatabase(null); 
+
+                done(); 
+            }).catch(done);
+        });
 
 
-        it('Model.get()', function(done) {
+
+        it('Model.get() using normal and reserved properties', function(done) {
             getDB().then((db) => {
                 let model = new db.event({}).populateFromDatabase({
                       get: 'getValue'
@@ -123,19 +154,154 @@
             }).catch(done);
         });
 
+        it('Model.get() a mapped entitiy', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({});
+
+                assert.equal(type(model.get('image')), 'object');
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.get() a referenced and uninitialized entity', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({});
+
+                assert.equal(type(model.get('venue')), 'null');
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.get() a referenced and initialized entity', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({});
+                model.venue = new db.venue();
+
+                assert.equal(type(model.get('venue')), 'object');
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.get() with a referenced by entity', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({});
+
+                assert.equal(type(model.get('event_image')), 'object');
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.get() a not existing property', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                assert.throws(() => {
+                    model.get('a');
+                });
+
+                done();
+            }).catch(done);
+        });
 
 
-        it('Model.set()', function(done) {
+
+
+        it('Model.set() with regular properties, setting one twice', function(done) {
             getDB().then((db) => {
                 let model = new db.event();
 
                 model.set('get', 'getValue');
+                model.set('title', 'testEvent');
                 model.set('title', 'testEvent');
 
                 assert.equal(type(model.get), 'function');
                 assert.equal(model.get('get'), 'getValue');
                 assert.equal(model.title, 'testEvent');
                 assert.equal(model.get('title'), 'testEvent');
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.set() a not existing property', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                assert.throws(() => {
+                    model.set('a', 'getValue');
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.set() a reference', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                model.venue = new db.venue();
+
+                assert.equal(type(model.venue), 'object');
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.set() a mapping using an array', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                model.image = [new db.image()];
+
+                assert.equal(type(model.image), 'object');
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.set() an invalid mapping', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                assert.throws(() => {
+                    model.image = new Map();
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.set() a mappign usin a set', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                model.image = new Set([new db.image()]);
+
+                assert.equal(type(model.image), 'object');
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.set() a reference by using a set', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                model.event_image = new Set([new db.event_image()]);
+
+                assert.equal(type(model.event_image), 'object');
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.set() a reference by using invalid input', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                assert.throws(() => {
+                    model.event_image = new Map();
+                });
 
                 done();
             }).catch(done);

@@ -22,7 +22,7 @@
          *
          * @param {object} options options object
          */
-        init(options) {
+        constructor(options) {
 
             if (options) {
 
@@ -31,7 +31,7 @@
                 if (options.clusterInstance) Object.defineProperty(this, '$cluster', {value: options.clusterInstance});
             }
         }
-        
+
 
 
 
@@ -241,7 +241,7 @@
         }
 
 
-        
+
 
 
 

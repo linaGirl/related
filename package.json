@@ -17,7 +17,7 @@
     }
     , "dependencies": {
           "ee-class"                    : "1.x"
-        , "ee-types"                    : "1.x"
+        , "ee-types"                    : "2.x"
         , "related-db-cluster"          : "2.x"
         , "related-query-context"       : "2.x"
         , "ee-event-emitter"            : "0.3.x"
@@ -27,11 +27,13 @@
         , "ee-arguments"                : "1.0.x"
         , "test-config"                 : "0.1.x"
         , "async-method"                : "0.1.x"
+        , "harmony-reflect"             : "1.4.x"
     }
     , "devDependencies": {
           "mocha"                       : "2.x"
-        , "coveralls"                   : "*"
-        , "mocha-lcov-reporter"         : "*"
+        , "coveralls"                   : "2.x"
+        , "istanbul"                    : "0.4.x"
+        , "mocha-lcov-reporter"         : "1.x"
         , "related-db-analyzer"         : "0.x"
     }
     , "bin": {
@@ -40,9 +42,9 @@
     , "optionalDependencies": {}
     , "keywords"                        : ["orm", "mysql", "postgres", "object relational mapper", "eager loading", "connection pooling", "cluster"]
     , "scripts": {
-          "test"                        : "./node_modules/mocha/bin/mocha --reporter spec --bail"
-        , "posttest"                    : "istanbul cover node_modules/mocha/bin/_mocha"
-        , "cover"                       : "istanbul cover node_modules/mocha/bin/_mocha"
+          "test"                        : "node --harmony_rest_parameters --harmony_proxies ./node_modules/mocha/bin/_mocha --reporter spec --bail"
+        , "posttest"                    : "node --harmony_rest_parameters --harmony_proxies ./node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha"
+        , "cover"                       : "node --harmony_rest_parameters --harmony_proxies ./node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha"
         , "coveralls"                   : "npm run cover -- --report lcovonly && cat ./coverage/lcov.info | coveralls"
     }
 }

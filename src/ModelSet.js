@@ -2,7 +2,6 @@
     'use strict';
 
 
-    let Class       = require('ee-class');
     let type        = require('ee-types');
     let log         = require('ee-log');
 
@@ -10,17 +9,29 @@
 
     
 
-    module.exports = new Class({
+     class ModelSet {
 
 
         /**
          * set up the related orm
          */
-        init: function(options) {
+        constructor() {
 
             // store db reference and definition
             
         }
 
-    });
+
+
+
+
+        add() {
+
+        }
+    }
+
+
+
+
+    module.exports = ModelSet;
 })();
