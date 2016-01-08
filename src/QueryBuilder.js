@@ -2,27 +2,76 @@
     'use strict';
 
 
-    let Class       = require('ee-class');
-    let type        = require('ee-types');
-    let log         = require('ee-log');
+    let type                = require('ee-types');
+    let log                 = require('ee-log');
 
 
 
-    
 
-    module.exports = new Class({
+
+    /**
+     * storage for the names pf all public methods
+     * that should be retuned by the proxy
+     *
+     * the list can be extended by calling 
+     * Model.addPublicMethod(propertyName);
+     */
+    let publicMethods = new Set([
+          'find'
+        , 'findOne'
+        , 'limit'
+    ]);
+
+
+
+
+
+
+        
+    // the basic model definition
+    class QueryBuilder {
+
+
 
 
         /**
-         * set up the related orm
+         * static method for adding another
+         * public method that should be exposed to
+         * the user
+         *
+         * @param {string} propertyName
          */
-        init: function(options) {
-
-            // store db reference and definition
-            Class.define(this, 'database', Class(options.database));
-            Class.define(this, 'definintion', Class(options.definintion));
-
+        static addPublicMethod(propertyName) {
+            publicMethods.add(propertyName);
         }
 
-    });
+
+
+
+        find() {
+            return Promise.resolve();
+        }
+
+
+
+
+        /**
+         * stets the class up
+         */
+        constructor(parameters) {
+
+
+
+        }
+    }
+
+
+
+
+
+
+
+    // export
+    module.exports = QueryBuilder;
+
 })();

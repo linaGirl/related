@@ -75,7 +75,10 @@
          * @returns {boolean}
          */
         , has(set, propertyName) {
-            return set.has(propertyName);
+
+            if (type.number(propertyName)) return set.has(propertyName);
+            if (type.string(propertyName) && !/[^0-9]/.test(propertyName)) return set.has(parseInt(propertyName, 10));
+            return false;
         }
 
 

@@ -101,7 +101,7 @@
                 // check if the item is contained
                 return this.queries.indexOf(item) >= 0;
             }
-            else throw new Error(`Cannot check if item is in the set for the mapping between '${this.definition.column.entity.getAliasName()}' and '${this.definition.mappedColumn.entity.getAliasName()}'. Expected a Model, QueryBuilder instance or index, got '${type(item)}'!`);
+            else throw new Error(`Cannot check if item is in the set for the mapping between '${this.definition.column.entity.getAliasName()}' and '${this.definition.getRemoteName()}'. Expected a Model, QueryBuilder instance or index, got '${type(item)}'!`);
         }
 
 
@@ -125,19 +125,35 @@
         add(item) {
             if (item instanceof Model) {
                 
-                // add the model to this collection
-                this.models.push(item);
+                
+                // check for the correct type
+                if (item instanceof this.database.getModelContructor(this.containingEntitiyName)) {
 
-                return this;
+                     // add the model to this collection
+                    this.models.push(item);
+
+                    // mark as dirty
+                    this.setDirty();
+                    return this;
+                }
+                else throw new Error(`Cannot add '${item.getName()}' Model to the Set between '${this.definition.column.entity.getAliasName()}' and '${this.definition.getRemoteName()}'. Expected a '${this.containingEntitiyName}' Model!`);
             }
             else if (item instanceof QueryBuilder) {
 
-                // add to queries
-                this.queries.push(item);
 
-                return this;
+                // check for the correct type
+                if (item instanceof this.database.getQueryBuilderContructor(this.containingEntitiyName)) {
+
+                     // add to queries
+                    this.queries.push(item);
+
+                    // mark as dirty
+                    this.setDirty();
+                    return this;
+                }
+                else throw new Error(`Cannot add '${item.getName()}' Query Builder to the Set between '${this.definition.column.entity.getAliasName()}' and '${this.definition.getRemoteName()}'. Expected a '${this.containingEntitiyName}' Query Builder!`);
             }
-            else throw new Error(`Cannot add item to the mapping between '${this.definition.column.entity.getAliasName()}' and '${this.definition.mappedColumn.entity.getAliasName()}'. Expected a Model or QueryBuilder instance, got '${type(item)}'!`);
+            else throw new Error(`Cannot add item to the Set between '${this.definition.column.entity.getAliasName()}' and '${this.definition.getRemoteName()}'. Expected a Model or QueryBuilder instance, got '${type(item)}'!`);
         }
 
 
@@ -164,6 +180,10 @@
                 // delete if available
                 if (this.has(item)) {
                     this.models.splice(this.models.indexOf(item), 1);
+
+                    // mark as dirty
+                    this.setDirty();
+
                     return true;
                 }
                 else return false;
@@ -173,11 +193,15 @@
                 // delete if available
                 if (this.has(item)) {
                     this.queries.splice(this.queries.indexOf(item), 1);
+
+                    // mark as dirty
+                    this.setDirty();
+
                     return true;
                 }
                 else return false;
             }
-            else throw new Error(`Cannot delete item from the mapping between '${this.definition.column.entity.getAliasName()}' and '${this.definition.mappedColumn.entity.getAliasName()}'. Expected a Model or QueryBuilder instance, got '${type(item)}'!`);
+            else throw new Error(`Cannot delete item from the mapping between '${this.definition.column.entity.getAliasName()}' and '${this.definition.getRemoteName()}'. Expected a Model or QueryBuilder instance, got '${type(item)}'!`);
         }
 
 
@@ -225,6 +249,9 @@
          */
         set (index, item) {
             this.models[index] = item;
+
+            // mark as dirty
+            this.setDirty();
             return this;
         }
 
@@ -246,8 +273,42 @@
         clear() {
             this.models = [];
             this.queries = [];
+
+            // mark as dirty
+            this.setDirty();
+
+            return this;
         }
 
+
+
+
+
+
+        /**
+         * flags if the model has changes
+         *
+         * @returns {boolean}
+         */
+        isDirty() {
+            return this.$isDirty || this.queries.length || this.models.some(m => m.isDirty());
+        }
+
+
+
+
+
+
+
+
+
+
+        /**
+         * marks the model as dirty
+         */
+        setDirty(isDirty) {
+            Object.defineProperty(this, '$isDirty', {value: (type.boolean(isDirty) ? isDirty : true), writable: true, configurable: true});
+        }
 
 
 
@@ -328,6 +389,14 @@
             };
         }
     }
+
+
+
+
+        
+    // flags if the model set is dirty 
+    // aka a value has changed
+    ModelSet.prototype.$isDirty = false;
 
 
 

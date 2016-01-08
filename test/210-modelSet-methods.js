@@ -2,7 +2,6 @@
     'use strict';
 
 
-    let Class           = require('ee-class');
     let log             = require('ee-log');
     let assert          = require('assert');
     let type            = require('ee-types');
@@ -37,7 +36,7 @@
             getDB().then((db) => {
                 let mapping = new db.event({}).image;
 
-                assert.equal(type(mapping.add(new db.event_image())), 'object');
+                assert.equal(type(mapping.add(new db.image())), 'object');
                 assert(type(mapping[0]), 'object');
                 
                 done();
@@ -265,6 +264,81 @@
                     , {url: "b"}
                 ]);
                 
+                done();
+            }).catch(done);
+        });
+
+
+
+
+
+
+        
+        it('ModelSet.isDirty() on a new set', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+                assert.equal(mapping.isDirty(), false);
+                
+                done();
+            }).catch(done);
+        });
+        
+        it('ModelSet.isDirty() on a set with new models', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+                let img = new db.image({url: 'a'});
+
+                mapping.add(img);
+                assert.equal(mapping.isDirty(), true);
+                
+                done();
+            }).catch(done);
+        });
+        
+        it('ModelSet.isDirty() on a cleared set', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+                mapping.clear();
+                assert.equal(mapping.isDirty(), true);
+                
+                done();
+            }).catch(done);
+        });
+
+
+
+
+
+        it('x in ModelSet with an existing property', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                let mapping = model.image;
+                mapping.add(new db.image());
+                
+                assert.equal('0' in mapping, true);
+
+                done();
+            }).catch(done);
+        });
+
+        it('x in ModelSet with a non existing property', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                let mapping = model.image;
+                
+                assert.equal('0' in mapping, false);
+
+                done();
+            }).catch(done);
+        });
+
+        it('x in ModelSet with a method', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                let mapping = model.image;
+                
+                assert.equal('has' in mapping, false);
+
                 done();
             }).catch(done);
         });

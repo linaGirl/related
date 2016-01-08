@@ -40,6 +40,10 @@
 
 
 
+
+        // cache the name of the other entity
+        ModelSetInstance.prototype.containingEntitiyName = options.definition.getContainingName();
+
         // add the definition to the model
         ModelSetInstance.prototype.definition = options.definition;
 
@@ -54,7 +58,4 @@
         // return the generated model
         return ModelSetInstance;
     };
-
-
-
 })();

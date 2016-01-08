@@ -4,7 +4,7 @@
 
     let log                     = require('ee-log');
     let type                    = require('ee-types');
-    let QueryBuilderGenerator   = require('./QueryBuilderGenerator');
+    let QueryBuilderInstance    = require('./QueryBuilderInstance');
     let ModelInstance           = require('./ModelInstance');
     let ModelProxy              = require('./ModelProxy');
 
@@ -24,8 +24,8 @@
 
 
             // dynamically create the model && querybuilder
-            let Model = this.createModel();
-            let QueryBuilder = this.createQueryBuilder();
+            let Model = this.Model = this.createModel();
+            let QueryBuilder = this.QueryBuilder = this.createQueryBuilder();
 
 
 
@@ -59,8 +59,51 @@
             };
 
 
+
+            // fixme: this is pretty stupid
+            Constructor.getModelContructor = this.getModelContructor.bind(this);
+            Constructor.getQueryBuilderContructor = this.getQueryBuilderContructor.bind(this);
+
+
             return Constructor;
         }
+
+
+
+
+
+
+
+
+
+        /**
+         * returns the constructor for the model
+         *
+         * @returns {function} constructor
+         */
+        getModelContructor() {
+            return this.Model;
+        }
+
+
+
+        
+
+
+
+
+        /**
+         * returns the constructor for the query builder
+         *
+         * @returns {function} constructor
+         */
+        getQueryBuilderContructor() {
+            return this.QueryBuilder;
+        }
+
+
+
+
 
 
 
@@ -107,7 +150,7 @@
          * @returns {constructor}
          */
         createQueryBuilder() {
-            return new QueryBuilderGenerator({
+            return new QueryBuilderInstance({
                   database    : this.database
                 , definition  : this.definition
             });

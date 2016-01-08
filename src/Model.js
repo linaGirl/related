@@ -2,7 +2,6 @@
     'use strict';
 
 
-    let Class               = require('ee-class');
     let type                = require('ee-types');
     let log                 = require('ee-log');
 
@@ -36,6 +35,7 @@
         , 'references'
         , 'belongTos'
         , 'properties'
+        , 'prepare'
     ]);
 
 
@@ -86,7 +86,7 @@
                     this.set(key, values[key]);
                 });
             }
-            else if (type.map(values) || type.weakMap(values)) {
+            else if (type.map(values)) {
 
                 // got map values
                 values.forEach((value, key) => {
@@ -94,9 +94,35 @@
                 });
             }
             else if (!type.undefined(values) && !type.null(values)) {
-                throw new Error(`When instantiating the '${this.name}' model, an object, a map, a weak map, null or undefined can passed to the constructor, got '${type(values)}' instead!`);
+                throw new Error(`When instantiating the '${this.name}' model, an object, a map, null or undefined can passed to the constructor, got '${type(values)}' instead!`);
             }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+        /**
+         * prepares the model and all oonnected entities
+         * executes all items added as query and returns 
+         * the status. may be invoked by the user, but is
+         * normally invoked by the save() method
+         *
+         * @param {object*} transaction optional 
+         *
+         * @returns {promise}
+         */
+        prepare(transaction) {
+
+        }
+
 
 
 
@@ -168,7 +194,7 @@
                         this.createStorageMap('$values');
 
                         // dirty status
-                        if (!this.$values.has(propertyName) || this.$values.get(propertyName) !== value) this.setDrity();
+                        if (!this.$values.has(propertyName) || this.$values.get(propertyName) !== value) this.setDirty();
 
 
                         // store
@@ -182,7 +208,7 @@
                         this.createStorageMap('$mappings');
 
                         if (type.array(value) || type.set(value)) {
-                            this.setDrity();
+                            this.setDirty();
 
                             let set = this.createMappingSet(propertyName);
 
@@ -207,7 +233,7 @@
                         this.createStorageMap('$belongTos');
 
                         if (type.array(value) || type.set(value)) {
-                            this.setDrity();
+                            this.setDirty();
 
                             let set = this.createBelongsToSet(propertyName);
 
@@ -233,7 +259,7 @@
 
 
                         if (type.object(value) && (value instanceof Model || value instanceof QueryBuilder)) {
-                            this.setDrity();
+                            this.setDirty();
 
                             this.$references.set(propertyName, value);
                         }
@@ -350,7 +376,7 @@
 
 
                 // reset dirty flag
-                this.setDrity(false);
+                this.setDirty(false);
                 this.setNew(false);
 
                 return this;
@@ -398,7 +424,7 @@
                         let SetConstructor = new ModelSetInstance({
                               database      : this.database
                             , definition    : definition.getProperty(propertyName)
-                            , kind          : 'mapping' 
+                            , kind          : 'mapping'
                         });
 
 
@@ -506,7 +532,7 @@
         /**
          * marks the model as dirty
          */
-        setDrity(isDirty) {
+        setDirty(isDirty) {
             Object.defineProperty(this, '$isDirty', {value: (type.boolean(isDirty) ? isDirty : true), writable: true, configurable: true});
         }
 
