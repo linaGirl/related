@@ -98,5 +98,54 @@
         , enumerate(set) {
             return set.models[Symbol.iterator];
         }
+
+
+
+
+
+
+
+
+
+
+        /**
+         * returns custom propery descriptors for all models that were added
+         * to the set
+         *
+         * @param {object} model the model that is beeing proxied
+         * @param {string} propertyName the name of the proxies property
+         *
+         * @returns {object}
+         */
+        , getOwnPropertyDescriptor(set, propertyName) {
+            if (type.number(propertyName) || type.string(propertyName) && !/[^0-9]/.test(propertyName)) {
+                return {
+                      configurable: true
+                    , writable: true
+                    , value: set.get(propertyName)
+                    , enumerable: true
+                };
+            }
+            else return Reflect.getOwnPropertyDescriptor(set, propertyName);
+        }
+
+
+
+
+
+
+
+
+
+
+
+        /**
+         * returns properties for all models that were added to the set
+         * 
+         * @returns {array}
+         */
+        , ownKeys(set) {
+            return Array.apply(null, {length: set.length}).map((v, i) => i+'');
+        }
     };
 })();

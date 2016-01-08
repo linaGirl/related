@@ -31,6 +31,11 @@
         , 'isDirty'
         , 'isNew'
         , 'populateFromDatabase'
+        , 'columns'
+        , 'mappings'
+        , 'references'
+        , 'belongTos'
+        , 'properties'
     ]);
 
 
@@ -67,28 +72,31 @@
         /**
          * stets the class up
          *
+         * @param {object} values
          */
-        constructor(options) {
-            super(options);
+        constructor(values) {
+            super();
 
+
+
+            if (type.object(values)) {
+                
+                // got initial values
+                Object.keys(values).forEach((key) => {
+                    this.set(key, values[key]);
+                });
+            }
+            else if (type.map(values) || type.weakMap(values)) {
+
+                // got map values
+                values.forEach((value, key) => {
+                    this.set(key, value);
+                });
+            }
+            else if (!type.undefined(values) && !type.null(values)) {
+                throw new Error(`When instantiating the '${this.name}' model, an object, a map, a weak map, null or undefined can passed to the constructor, got '${type(values)}' instead!`);
+            }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -109,7 +117,7 @@
          * @returns {boolean} true if the model has the property
          */
         has(propertyName) {
-            return this.properties.has(propertyName);
+            return this.$properties.has(propertyName);
         }
 
 
@@ -128,7 +136,7 @@
          * @returns {boolean} true if the model has the column
          */
         hasColumn(propertyName) {
-            return this.properties.has(propertyName) && this.properties.get(propertyName).kind === 'column';
+            return this.definition.columns.has(propertyName);
         }
 
 
@@ -149,7 +157,7 @@
 
             // check if it is actually a propery
             if (this.has(propertyName)) {
-                let property = this.properties.get(propertyName);
+                let property = this.$properties.get(propertyName);
 
 
                 // dont overwrite mappings and reverenceBy
@@ -157,21 +165,21 @@
                 switch (property.kind) {
 
                     case 'column':
-                        if (!this.values) this.values = new Map();
+                        this.createStorageMap('$values');
 
                         // dirty status
-                        if (!this.values.has(propertyName) || this.values.get(propertyName) !== value) this.setDrity();
+                        if (!this.$values.has(propertyName) || this.$values.get(propertyName) !== value) this.setDrity();
 
 
                         // store
-                        this.values.set(propertyName, value);
+                        this.$values.set(propertyName, value);
                         break;
 
 
 
 
                     case 'mapping':
-                        if (!this.mappings) this.mappings = new Map();
+                        this.createStorageMap('$mappings');
 
                         if (type.array(value) || type.set(value) || type.weakSet(value)) {
                             this.setDrity();
@@ -183,7 +191,7 @@
                             });
 
                             // replace existing
-                            this.mappings.set(propertyName, set);
+                            this.$mappings.set(propertyName, set);
 
                             // return to the user
                             return set;
@@ -195,25 +203,25 @@
 
 
 
-                    case 'referenceBy':
-                        if (!this.referenceBys) this.referenceBys = new Map();
+                    case 'belongsTo':
+                        this.createStorageMap('$belongTos');
 
                         if (type.array(value) || type.set(value) || type.weakSet(value)) {
                             this.setDrity();
 
-                            let set = this.createReferenceBySet(propertyName);
+                            let set = this.createBelongsToSet(propertyName);
 
                             value.forEach((val) => {
                                 set.add(val);
                             });
 
                             // replace existing
-                            this.referenceBys.set(propertyName, set);
+                            this.$belongTos.set(propertyName, set);
 
                             // return to the user
                             return set;
                         }
-                        else throw new Error(`Cannot set value for reference by '${propertyName}' on model '${this.getName()}', only arrays, sets and weak sets are accepted. Got type '${type(value)}'!`);
+                        else throw new Error(`Cannot set value for belongs to '${propertyName}' on model '${this.getName()}', only arrays, sets and weak sets are accepted. Got type '${type(value)}'!`);
                         break;
 
 
@@ -221,13 +229,13 @@
 
 
                     case 'reference':
-                        if (!this.references) this.references = new Map();
+                        this.createStorageMap('$references');
 
 
                         if (type.object(value) && (value instanceof Model || value instanceof QueryBuilder)) {
                             this.setDrity();
 
-                            this.references.set(propertyName, value);
+                            this.$references.set(propertyName, value);
                         }
                         else throw new Error(`Cannot set value for reference '${propertyName}' on model '${this.getName()}', only models or queries are accepted. Got type '${type(value)}'!`);
                         break;
@@ -265,7 +273,7 @@
 
             // check if it is actually a propery
             if (this.has(propertyName)) {
-                let property = this.properties.get(propertyName);
+                let property = this.$properties.get(propertyName);
 
 
                 // dont overwrite mappings and reverenceBy
@@ -273,38 +281,39 @@
                 switch (property.kind) {
 
                     case 'column':
+                        this.createStorageMap('$values');
 
                         // return
-                        return this.values.get(propertyName);
+                        return this.$values.get(propertyName);
 
 
 
 
                     case 'mapping':
-                        if (!this.mappings) this.mappings = new Map();
-                        if (!this.mappings.has(propertyName)) this.mappings.set(propertyName, this.createMappingSet(propertyName));
+                        this.createStorageMap('$mappings');
+                        if (!this.$mappings.has(propertyName)) this.$mappings.set(propertyName, this.createMappingSet(propertyName));
 
                         // return
-                        return this.mappings.get(propertyName);
+                        return this.$mappings.get(propertyName);
 
 
 
 
-                    case 'referenceBy':
-                        if (!this.referenceBys) this.referenceBys = new Map();
-                        if (!this.referenceBys.has(propertyName)) this.referenceBys.set(propertyName, this.createReferenceBySet(propertyName));
+                    case 'belongsTo':
+                        this.createStorageMap('$belongTos');
+                        if (!this.$belongTos.has(propertyName)) this.$belongTos.set(propertyName, this.createBelongsToSet(propertyName));
 
                         // return
-                        return this.referenceBys.get(propertyName);
+                        return this.$belongTos.get(propertyName);
 
 
 
 
                     case 'reference':
-                        if (!this.references) this.references = new Map();
+                        this.createStorageMap('$references');
 
                         // return
-                        return this.references.has(propertyName) ? this.references.get(propertyName) : null;
+                        return this.$references.has(propertyName) ? this.$references.get(propertyName) : null;
 
 
 
@@ -370,7 +379,7 @@
 
             // first check if there is a custom
             // constructor for this property
-            if (this.mappingConstrutors.has(propertyName)) return new Proxy(new (this.mappingConstrutors.get(propertyName))(), ModelSetProxy);
+            if (this.mappingConstructors.has(propertyName)) return new Proxy(new (this.mappingConstructors.get(propertyName))(), ModelSetProxy);
             else {
 
                 // the constructor was not yet created
@@ -394,7 +403,7 @@
 
 
                         // add to storage
-                        this.mappingConstrutors.set(propertyName, SetConstructor);
+                        this.mappingConstructors.set(propertyName, SetConstructor);
 
 
                         // return
@@ -417,17 +426,17 @@
 
 
         /**
-         * creates a new set for a referenced by entity
+         * creates a new set for a entitiy this entitiy belongs to
          *
          * @param {string} propertyName
          *
          * @returns {object} set
          */
-        createReferenceBySet(propertyName) {
+        createBelongsToSet(propertyName) {
             
             // first check if there is a custom
             // constructor for this property
-            if (this.referenceByConstrutors.has(propertyName)) return new (this.referenceByConstrutors.get(propertyName))();
+            if (this.belongsToConstructors.has(propertyName)) return new (this.belongsToConstructors.get(propertyName))();
             else {
 
                 // the constructor was not yet created
@@ -439,28 +448,28 @@
                 if (definition.hasProperty(propertyName)) {
 
                     // check if the property is a mapping
-                    if (definition.getPropertyType(propertyName) === 'referenceBy') {
+                    if (definition.getPropertyType(propertyName) === 'belongsTo') {
 
 
                         // create the custom class constructor
                         let SetConstructor = new ModelSetInstance({
                               database      : this.database
                             , definition    : definition.getProperty(propertyName)
-                            , kind          : 'referenceBy' 
+                            , kind          : 'belongsTo' 
                         });
 
 
                         // add to storage
-                        this.referenceByConstrutors.set(propertyName, SetConstructor);
+                        this.belongsToConstructors.set(propertyName, SetConstructor);
 
 
                         // return
-                        return new SetConstructor();
+                        return new Proxy(new SetConstructor(), ModelSetProxy);
                     }
-                    else throw new Error(`Cannot create the reference by set '${propertyName} on the model '${this.getName()}, expected the type 'referenceBy', got the type '${definition.getPropertyType(propertyName)}' instead!`);
+                    else throw new Error(`Cannot create the belongs to set '${propertyName} on the model '${this.getName()}, expected the type 'belongsTo', got the type '${definition.getPropertyType(propertyName)}' instead!`);
                     
                 }
-                else throw new Error(`Cannot create the reference by set '${propertyName} on the model '${this.getName()}, the property does not exist!`);
+                else throw new Error(`Cannot create the belongs to set '${propertyName} on the model '${this.getName()}, the property does not exist!`);
             }
         }
 
@@ -498,7 +507,7 @@
          * marks the model as dirty
          */
         setDrity(isDirty) {
-            this.$isDirty = type.boolean(isDirty) ? isDirty : true;
+            Object.defineProperty(this, '$isDirty', {value: (type.boolean(isDirty) ? isDirty : true), writable: true, configurable: true});
         }
 
 
@@ -533,7 +542,7 @@
          * marks the model as new
          */
         setNew(isNew) {
-            this.$isNew = type.boolean(isNew) ? isNew : true;
+            Object.defineProperty(this, '$isNew', {value: (type.boolean(isNew) ? isNew : true), writable: true, configurable: true});
         }
 
 
@@ -589,6 +598,258 @@
         getDefinition() {
             return this.definition;
         }
+
+
+
+
+
+
+
+
+
+
+        /**
+         * creates a map with the specific name on this 
+         * object, but only if it doesn't exist already
+         *
+         * @param {string} mapName
+         */
+        createStorageMap(mapName) {
+            if (type.undefined(this[mapName])) Object.defineProperty(this, mapName, {value:new Map(), configurable: true});
+            else if (!type.map(this[mapName])) throw new Error(`Cannot create map with the name '${mapName}' on the model '${this.name}', a property with this name and the type '${type(this[mapName])}' exists already!`);
+        }
+
+
+
+
+
+
+
+         /**
+         * retutns if referencing property has been initialized
+         *
+         * @param {string} propertyName
+         *
+         * @returns {boolean}
+         */
+        propertyIsInitialized(propertyName) {
+            if (this.has(propertyName)) {
+                let property = this.$properties.get(propertyName);
+
+                // redirect to the appropriate method
+                switch (property.kind) {
+
+                    case 'mapping':
+                        return this.mappingIsInitialized(propertyName);
+
+                    case 'belongsTo':
+                        return this.belongsToIsInitialized(propertyName);
+
+                    case 'reference':
+                        return this.referenceIsInitialized(propertyName);
+
+                    case 'column':
+                        return this.valueIsInitialized(propertyName);
+
+
+                    default:
+                        throw new Error(`Cannot check the property '${propertyName}' on the '${this.getName()}' model, the property is registerd but of an invalid kind '${property.kind}'!`);
+                }
+            }
+            else throw new Error(`Cannot check the property '${propertyName}' on the '${this.getName()}' model, a property with that name does not exist!`);
+        }
+
+
+
+
+
+
+
+
+        /**
+         * retutns if a mapping has been initialized
+         *
+         * @param {string} propertyName
+         *
+         * @returns {boolean}
+         */
+        valueIsInitialized(propertyName) {
+            return !!this.$values && this.$values.has(propertyName);
+        }
+
+
+
+
+
+
+
+
+        /**
+         * retutns if a mapping has been initialized
+         *
+         * @param {string} propertyName
+         *
+         * @returns {boolean}
+         */
+        mappingIsInitialized(propertyName) {
+            return !!this.$mappings && this.$mappings.has(propertyName);
+        }
+
+
+
+
+
+
+
+        /**
+         * retutns if a reference has been initialized
+         *
+         * @param {string} propertyName
+         *
+         * @returns {boolean}
+         */
+        referenceIsInitialized(propertyName) {
+            return !!this.$references && this.$references.has(propertyName);
+        }
+
+
+
+
+
+
+
+        /**
+         * retutns if a belongs to has been initialized
+         *
+         * @param {string} propertyName
+         *
+         * @returns {boolean}
+         */
+        belongsToIsInitialized(propertyName) {
+            return !!this.$belongTos && this.$belongTos.has(propertyName);
+        }
+
+
+
+
+
+
+
+        /**
+         * lets the user iterate over the column names
+         *
+         * @returns {iterable}
+         */
+        columns() {
+            return this.getDefinition().columns.keys();
+        }
+
+
+
+
+
+        /**
+         * lets the user iterate over the mapping names
+         *
+         * @returns {iterable}
+         */
+        mappings() {
+            return this.getDefinition().mappings.keys();
+        }
+
+
+
+
+
+        /**
+         * lets the user iterate over the reference names
+         *
+         * @returns {iterable}
+         */
+        references() {
+            return this.getDefinition().references.keys();
+        }
+
+
+
+
+
+        /**
+         * lets the user iterate over the belongsTo names
+         *
+         * @returns {iterable}
+         */
+        belongTos() {
+            return this.getDefinition().belongTos.keys();
+        }
+
+
+
+
+
+        /**
+         * lets the user iterate over the properties
+         *
+         * @returns {iterable}
+         */
+        properties() {
+            let entryIterator = this.$properties.entries();
+
+
+            return {
+                next() {
+                    let status = entryIterator.next();
+
+                    if (!status.done) {
+
+                        return {
+                            value: {
+                                  key       : status.value[0]
+                                , value     : status.value[1].kind
+                            }
+                            , done: false
+                        };
+                    }
+                    else return {done: true};
+                }
+
+
+                , [Symbol.iterator]() {
+                    return this;
+                }
+            };
+        }
+
+
+
+
+
+        /**
+         * lets the user iterate over the columns and values
+         *
+         * @returns {Iterable}
+         */
+        [Symbol.iterator]() {
+            let keyIterator = this.getDefinition().columns.keys();
+
+            return {
+                next: function() {
+                    let status = keyIterator.next();
+
+                    if (!status.done) {
+
+                        return {
+                            value: {
+                                  key       : status.value
+                                , value     : this.get(status.value)
+                            }
+                            , done: false
+                        };
+                    }
+                    else return {done: true};
+                }.bind(this)
+            };
+        }
     }
 
 
@@ -610,9 +871,6 @@
     // flags if the model is dirty 
     // aka a value has changed
     Model.prototype.$isDirty = true;
-
-
-
 
 
 

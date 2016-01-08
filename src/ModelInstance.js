@@ -28,8 +28,8 @@
              * stets the class up
              *
              */
-            constructor(options) {
-                super(options);
+            constructor(values) {
+                super(values);
             }
         }
 
@@ -40,7 +40,7 @@
         // information about the model public properties
         let properties = new Map();
         options.definition.usedNames.forEach((value, key) => properties.set(key, {kind:value}));
-        ModelInstance.prototype.properties = properties;
+        ModelInstance.prototype.$properties = properties;
 
 
 
@@ -48,7 +48,7 @@
         // add the definition to the model
         ModelInstance.prototype.definition = options.definition;
 
-        // add the database to the model
+        // add the database to the models
         ModelInstance.prototype.database = options.database;
 
         // publish the models name
@@ -63,9 +63,8 @@
         // be generated on first use. The generated
         // classes will be cached using the storage
         // defoned below
-        ModelInstance.prototype.mappingConstrutors = new Map();
-        ModelInstance.prototype.referenceByConstrutors = new Map();
-
+        ModelInstance.prototype.mappingConstructors = new Map();
+        ModelInstance.prototype.belongsToConstructors = new Map();
 
 
 

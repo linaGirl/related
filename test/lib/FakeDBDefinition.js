@@ -13,7 +13,7 @@
     let ColumnDefinition        = require('related-db-analyzer').Column;
     let ReferenceDefinition     = require('related-db-analyzer').Reference;
     let MappingDefinition       = require('related-db-analyzer').Mapping;
-    let ReferenceByDefinition   = require('related-db-analyzer').ReferenceBy;
+    let BelongsToDefinition     = require('related-db-analyzer').BelongsTo;
 
 
 
@@ -119,7 +119,7 @@
             }, entity.getColumn('id_venue')));
 
 
-            db.getEntity('venue').getColumn('id').addReferencedColumn(new ReferenceByDefinition({
+            db.getEntity('venue').getColumn('id').addReferencedColumn(new BelongsToDefinition({
                   referencedByColumn: entity.getColumn('id_venue')
                 , onUpdate          : 'cascade'
                 , onDelete          : 'restrict'
@@ -178,7 +178,7 @@
                 , onDelete          : 'restrict'
             }, entity.getColumn('id_image')));
 
-            db.getEntity('image').getColumn('id').addReferencedColumn(new ReferenceByDefinition({
+            db.getEntity('image').getColumn('id').addReferencedColumn(new BelongsToDefinition({
                   referencedByColumn: entity.getColumn('id_image')
                 , onUpdate          : 'cascade'
                 , onDelete          : 'restrict'
@@ -273,14 +273,14 @@
             }, entity.getColumn('id_venue')));
 
 
-            db.getEntity('venue').getColumn('id').addReferencedColumn(new ReferenceByDefinition({
+            db.getEntity('venue').getColumn('id').addReferencedColumn(new BelongsToDefinition({
                   referencedByColumn: entity.getColumn('id_venue')
                 , onUpdate          : 'cascade'
                 , onDelete          : 'restrict'
             }, db.getEntity('venue').getColumn('id')));
 
 
-            db.getEntity('image').getColumn('id').addReferencedColumn(new ReferenceByDefinition({
+            db.getEntity('image').getColumn('id').addReferencedColumn(new BelongsToDefinition({
                   referencedByColumn: entity.getColumn('id_image')
                 , onUpdate          : 'cascade'
                 , onDelete          : 'restrict'
@@ -353,14 +353,14 @@
             }, entity.getColumn('id_event')));
 
 
-            db.getEntity('event').getColumn('id').addReferencedColumn(new ReferenceByDefinition({
+            db.getEntity('event').getColumn('id').addReferencedColumn(new BelongsToDefinition({
                   referencedByColumn: entity.getColumn('id_event')
                 , onUpdate          : 'cascade'
                 , onDelete          : 'restrict'
             }, db.getEntity('event').getColumn('id')));
 
 
-            db.getEntity('image').getColumn('id').addReferencedColumn(new ReferenceByDefinition({
+            db.getEntity('image').getColumn('id').addReferencedColumn(new BelongsToDefinition({
                   referencedByColumn: entity.getColumn('id_image')
                 , onUpdate          : 'cascade'
                 , onDelete          : 'restrict'

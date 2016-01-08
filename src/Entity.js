@@ -2,10 +2,11 @@
     'use strict';
 
 
-    let log = require('ee-log');
-    let QueryBuilderGenerator = require('./QueryBuilderGenerator');
-    let ModelInstance = require('./ModelInstance');
-    let ModelProxy = require('./ModelProxy');
+    let log                     = require('ee-log');
+    let type                    = require('ee-types');
+    let QueryBuilderGenerator   = require('./QueryBuilderGenerator');
+    let ModelInstance           = require('./ModelInstance');
+    let ModelProxy              = require('./ModelProxy');
 
 
 
@@ -35,15 +36,17 @@
                 // check what has to be returned 
                 if (this instanceof Constructor) {
 
-                    let modelInstance = new Model({
-                        args: args
-                    });
+                    if (args.length > 1) throw new Error(`When instantiating the '${this.definition.getAliasName()}' model, an object, a map, a weak map or nothing can passed to the constructor, got too many arguments!`);
+                    else {
+
+                        // instantiate model
+                        let modelInstance = new Model(args[0]);
 
 
-
-                    // called with the new keyword
-                    // return a new model instance
-                    return new Proxy(modelInstance, ModelProxy);
+                        // called with the new keyword
+                        // return a new model instance
+                        return new Proxy(modelInstance, ModelProxy);
+                    }
                 }
                 else {
 

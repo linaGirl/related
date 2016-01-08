@@ -18,20 +18,116 @@
     describe('Model Methods', function() {
 
 
-        it('Publshing a new public model method', function() {
+        it('Model.addPublicMethod() Publshing a new public model method', function() {
             Related.Model.addPublicMethod('test');
         });
        
 
-        it('Instantiating a Model', function(done) {
+
+        it('new Model() Instantiating a Model', function(done) {
             getDB().then((db) => {
-                new db.event({});
+                new db.event();
                 done();
             }).catch(done);
         });
+
+        it('new Model(values) Instantiating a Model with existing properites', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                    title: 'winning!'
+                });
+
+                assert.deepEqual(model, {
+                    title: "winning!"
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model with invalid properites', function(done) {
+            getDB().then((db) => {
+
+                assert.throws(() => {
+                    new db.event({
+                        crap: 'is invalid!'
+                    });
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model with existing properites and values for a mapping', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                      title: 'winning!'
+                    , image: [new db.image({
+                        url: 'http://crapple.com/'
+                    })]
+                });
+
+                assert.deepEqual(model, {
+                      title: "winning!"
+                    , image: {
+                        0: {
+                            url: "http://crapple.com/"
+                        }
+                    }
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model with existing properites and values for a belongs to', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                      title: 'winning!'
+                    , event_image: [new db.event_image({
+                          id_event: 1
+                        , id_image: 1
+                    })]
+                });
+
+                assert.deepEqual(model, {
+                      title: "winning!"
+                    , event_image: {
+                        0: {
+                              id_event: 1
+                            , id_image: 1
+                        }
+                    }
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model with existing properites and values for a reference', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                      title: 'winning!'
+                    , venue: new db.venue({
+                        name: 'Jamie Jones'
+                    })
+                });
+
+                assert.deepEqual(model, {
+                      title: "winning!"
+                    , venue: {
+                        name: "Jamie Jones"
+                    }
+                });
+
+                done();
+            }).catch(done);
+        });
+
        
 
-        it('Model.isNew() with a newly createdd model instance', function(done) {
+
+        it('Model.isNew() with a newly created model instance', function(done) {
             getDB().then((db) => {
                 let model = new db.event({});
 
@@ -45,7 +141,7 @@
 
         it('Model.isNew() with a model populated from the database', function(done) {
             getDB().then((db) => {
-                let model = new db.event({}).populateFromDatabase({
+                let model = new db.event().populateFromDatabase({
                     title: 'testEvent'
                 });
 
@@ -60,7 +156,7 @@
 
         it('Model.isDirty() with a freshly instantiated model', function(done) {
             getDB().then((db) => {
-                let model = new db.event({});
+                let model = new db.event();
 
                 assert.equal(model.isDirty(), true);
 
@@ -70,7 +166,7 @@
 
         it('Model.isDirty() with a model populated from the database', function(done) {
             getDB().then((db) => {
-                let model = new db.event({}).populateFromDatabase({
+                let model = new db.event().populateFromDatabase({
                     title: 'testEvent'
                 });
 
@@ -84,7 +180,7 @@
 
         it('Model.populateFromDatabase() with regular properties', function(done) {
             getDB().then((db) => {
-                let model = new db.event({}).populateFromDatabase({
+                let model = new db.event().populateFromDatabase({
                     title: 'testEvent'
                 });
 
@@ -98,7 +194,7 @@
 
         it('Model.populateFromDatabase() with reserved properties', function(done) {
             getDB().then((db) => {
-                let model = new db.event({}).populateFromDatabase({
+                let model = new db.event().populateFromDatabase({
                     get: 'getValue'
                 });
 
@@ -113,7 +209,7 @@
         it('Model.populateFromDatabase() with invalid input', function(done) {
             getDB().then((db) => {
                 assert.throws(() => {
-                    new db.event({}).populateFromDatabase(1); 
+                    new db.event().populateFromDatabase(1); 
                 });
 
                 done(); 
@@ -122,7 +218,7 @@
 
         it('Model.populateFromDatabase() with no input', function(done) {
             getDB().then((db) => {
-                new db.event({}).populateFromDatabase(); 
+                new db.event().populateFromDatabase(); 
 
                 done(); 
             }).catch(done);
@@ -130,7 +226,7 @@
 
         it('Model.populateFromDatabase() with null as input', function(done) {
             getDB().then((db) => {
-                new db.event({}).populateFromDatabase(null); 
+                new db.event().populateFromDatabase(null); 
 
                 done(); 
             }).catch(done);
@@ -140,7 +236,7 @@
 
         it('Model.get() using normal and reserved properties', function(done) {
             getDB().then((db) => {
-                let model = new db.event({}).populateFromDatabase({
+                let model = new db.event().populateFromDatabase({
                       get: 'getValue'
                     , title: 'testEvent'
                 }, ['get']);
@@ -156,7 +252,7 @@
 
         it('Model.get() a mapped entitiy', function(done) {
             getDB().then((db) => {
-                let model = new db.event({});
+                let model = new db.event();
 
                 assert.equal(type(model.get('image')), 'object');
 
@@ -166,7 +262,7 @@
 
         it('Model.get() a referenced and uninitialized entity', function(done) {
             getDB().then((db) => {
-                let model = new db.event({});
+                let model = new db.event();
 
                 assert.equal(type(model.get('venue')), 'null');
 
@@ -176,7 +272,7 @@
 
         it('Model.get() a referenced and initialized entity', function(done) {
             getDB().then((db) => {
-                let model = new db.event({});
+                let model = new db.event();
                 model.venue = new db.venue();
 
                 assert.equal(type(model.get('venue')), 'object');
@@ -187,7 +283,7 @@
 
         it('Model.get() with a referenced by entity', function(done) {
             getDB().then((db) => {
-                let model = new db.event({});
+                let model = new db.event();
 
                 assert.equal(type(model.get('event_image')), 'object');
 
@@ -284,7 +380,7 @@
             }).catch(done);
         });
 
-        it('Model.set() a reference by using a set', function(done) {
+        it('Model.set() a belongs to using a set', function(done) {
             getDB().then((db) => {
                 let model = new db.event();
                 model.event_image = new Set([new db.event_image()]);
@@ -295,13 +391,144 @@
             }).catch(done);
         });
 
-        it('Model.set() a reference by using invalid input', function(done) {
+        it('Model.set() a belongs to using invalid input', function(done) {
             getDB().then((db) => {
                 let model = new db.event();
 
                 assert.throws(() => {
                     model.event_image = new Map();
                 });
+
+                done();
+            }).catch(done);
+        });
+
+
+
+
+
+        it('Model.columns() Iterating over the models columns', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                    title: 'hi'
+                });
+
+                assert.deepEqual(Array.from(model.columns()), [ 'id', 'id_venue', 'title', 'get' ]);
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.mappings() Iterating over the models mappings', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                    title: 'hi'
+                });
+
+                assert.deepEqual(Array.from(model.mappings()), [ 'image' ]);
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.references() Iterating over the models references', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                    title: 'hi'
+                });
+
+                assert.deepEqual(Array.from(model.references()), [ 'venue' ]);
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.belongTos() Iterating over the models belong tos', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                    title: 'hi'
+                });
+
+                assert.deepEqual(Array.from(model.belongTos()), [ 'event_image' ]);
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.properties() Iterating over the models properties', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                    title: 'hi'
+                });
+
+                assert.deepEqual(Array.from(model.properties()),  [{"key":"id","value":"column"},{"key":"id_venue","value":"column"},{"key":"title","value":"column"},{"key":"get","value":"column"},{"key":"venue","value":"reference"},{"key":"event_image","value":"belongsTo"},{"key":"image","value":"mapping"}]);
+
+                done();
+            }).catch(done);
+        });
+
+
+
+
+
+        it('Model.hasColumn() with an existing column', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                
+                assert.equal(model.hasColumn('title'), true);
+
+                done();
+            }).catch(done);
+        });
+
+        it('Model.hasColumn() with an not existing column', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                
+                assert.equal(model.hasColumn('so what?'), false);
+
+                done();
+            }).catch(done);
+        });
+
+
+
+
+        it('x in Model with an existing property', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                
+                assert.equal('title' in model, true);
+
+                done();
+            }).catch(done);
+        });
+
+        it('x in Model with a non existing property', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                
+                assert.equal('nope' in model, false);
+
+                done();
+            }).catch(done);
+        });
+
+        it('x in Model with a public method', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                
+                assert.equal('columns' in model, false);
+
+                done();
+            }).catch(done);
+        });
+
+        it('x in Model with a private method', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+                
+                assert.equal('createBelongsToSet' in model, false);
 
                 done();
             }).catch(done);

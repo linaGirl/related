@@ -64,7 +64,7 @@
 
 
 
-        
+
 
 
 
@@ -90,6 +90,7 @@
 
 
 
+
          /**
          * trap the for in operator, we publish all columns, mappings, 
          * references and refenced bys
@@ -101,6 +102,64 @@
          */
         , enumerate(model) {
             return model.properties[Symbol.iterator];
+        }
+
+
+
+
+
+
+
+
+
+
+
+        /**
+         * returns custom propery descriptors for all model properties 
+         * such as columns, mappings, references and belong tos that  
+         * are not a public methods
+         *
+         * @param {object} model the model that is beeing proxied
+         * @param {string} propertyName the name of the proxies property
+         *
+         * @returns {object}
+         */
+        , getOwnPropertyDescriptor(model, propertyName) {
+            if (model.has(propertyName) && !model.hasPublicMethod(propertyName)) {
+
+                let value = (model.hasColumn(propertyName) ? model.get(propertyName) : (model.propertyIsInitialized(propertyName) ? model.get(propertyName) : undefined));
+
+                return {
+                      configurable: true
+                    , writable: true
+                    , value: value
+                    , enumerable: true
+                };
+            }
+            else return Reflect.getOwnPropertyDescriptor(model, propertyName);
+        }
+
+
+
+
+
+
+
+
+
+
+
+        /**
+         * returns all model properties such as columns, mappings,
+         * references and belong tos that are not a public methods
+         * and are initialized
+         *
+         * @returns {array}
+         */
+        , ownKeys(model) {
+            return Array.from(model.$properties.keys()).filter(propertyName => {
+                return !model.hasPublicMethod(propertyName) && model.propertyIsInitialized(propertyName);
+            });
         }
     };
 })();

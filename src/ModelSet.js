@@ -48,11 +48,66 @@
         constructor() {
 
             // instance storage for queries
-            Object.defineProperty(this, 'queries', {value: []});
+            Object.defineProperty(this, 'queries', {value: [], writable: true, configurable: true});
 
             // instance storage for models
-            Object.defineProperty(this, 'models', {value: []});
+            Object.defineProperty(this, 'models', {value: [], writable: true, configurable: true});
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /**
+         * checks if an item is in the set
+         *
+         * @param {object} item
+         *
+         * @returns {booleam}
+         */
+        has(item) {
+            if (type.number(item)) {
+
+                // check if the array is longer 
+                // then index
+                return this.models.length > item;
+            }
+            else if (type.string(item) && !/[^0-9]/.test(item)) {
+
+                // check if the array is longer 
+                // then index
+                return this.models.length > parseInt(item, 10);
+            }
+            else if (item instanceof Model) {
+                
+                // check if the item is contained
+                return this.models.indexOf(item) >= 0;
+            }
+            else if (item instanceof QueryBuilder) {
+                
+                // check if the item is contained
+                return this.queries.indexOf(item) >= 0;
+            }
+            else throw new Error(`Cannot check if item is in the set for the mapping between '${this.definition.column.entity.getAliasName()}' and '${this.definition.mappedColumn.entity.getAliasName()}'. Expected a Model, QueryBuilder instance or index, got '${type(item)}'!`);
+        }
+
+
+
+
+
 
 
 
@@ -185,58 +240,12 @@
 
 
 
-
-        /**
-         * checks if an item is in the set
-         *
-         * @param {object} item
-         *
-         * @returns {booleam}
-         */
-        has(item) {
-            if (type.number(item)) {
-
-                // check if the array is longer 
-                // then index
-                return this.models.length > item;
-            }
-            else if (type.string(item) && !/[^0-9]/.test(item)) {
-
-                // check if the array is longer 
-                // then index
-                return this.models.length > parseInt(item, 10);
-            }
-            else if (item instanceof Model) {
-                
-                // check if the item is contained
-                return this.models.indexOf(item) >= 0;
-            }
-            else if (item instanceof QueryBuilder) {
-                
-                // check if the item is contained
-                return this.queries.indexOf(item) >= 0;
-            }
-            else throw new Error(`Cannot check if item is in the set for the mapping between '${this.definition.column.entity.getAliasName()}' and '${this.definition.mappedColumn.entity.getAliasName()}'. Expected a Model, QueryBuilder instance or index, got '${type(item)}'!`);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
         /** 
          * clears the set
          */
         clear() {
-            this.models.clear();
-            this.queries.clear();
+            this.models = [];
+            this.queries = [];
         }
 
 
@@ -279,8 +288,6 @@
 
 
 
-        
-
 
 
 
@@ -294,7 +301,7 @@
             let index = 0;
 
             return {
-                next: function() {
+                next() {
 
                     if (index < this.length) {
                         return {
