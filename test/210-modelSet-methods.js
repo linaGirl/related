@@ -13,7 +13,7 @@
 
        
     
-    describe('Model Mappings', function() {
+    describe('Model Sets', function() {
         it('getters for mappings', function(done) {            
             getDB().then((db) => {
                 assert.equal(type(new db.event({}).image), 'object');
@@ -240,6 +240,27 @@
                 mapping.add(img2);
                 
                 assert.deepEqual(mapping.toArray(), [
+                      {url: "a"}
+                    , {url: "b"}
+                ]);
+                
+                done();
+            }).catch(done);
+        });
+
+
+
+        
+        it('ModelSet.entries() iterating over all models of the set', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+                let img = new db.image({url: 'a'});
+                let img2 = new db.image({url: 'b'});
+
+                mapping.add(img);
+                mapping.add(img2);
+
+                assert.deepEqual(Array.from(mapping.entries()), [
                       {url: "a"}
                     , {url: "b"}
                 ]);

@@ -293,6 +293,20 @@
 
 
 
+        /**
+         * lets the user iterate over the entries
+         *
+         * @returns {iterable}
+         */
+        entries() {
+            return this.models[Symbol.iterator]();
+        }
+
+
+
+
+
+
 
         /**
          * its iterable

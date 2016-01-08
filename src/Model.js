@@ -181,7 +181,7 @@
                     case 'mapping':
                         this.createStorageMap('$mappings');
 
-                        if (type.array(value) || type.set(value) || type.weakSet(value)) {
+                        if (type.array(value) || type.set(value)) {
                             this.setDrity();
 
                             let set = this.createMappingSet(propertyName);
@@ -196,7 +196,7 @@
                             // return to the user
                             return set;
                         }
-                        else throw new Error(`Cannot set value for mapping '${propertyName}' on model '${this.getName()}', only arrays, sets and weak sets are accepted. Got type '${type(value)}'!`);
+                        else throw new Error(`Cannot set value for mapping '${propertyName}' on model '${this.getName()}', only arrays and sets are accepted. Got type '${type(value)}'!`);
                         break;
 
 
@@ -206,7 +206,7 @@
                     case 'belongsTo':
                         this.createStorageMap('$belongTos');
 
-                        if (type.array(value) || type.set(value) || type.weakSet(value)) {
+                        if (type.array(value) || type.set(value)) {
                             this.setDrity();
 
                             let set = this.createBelongsToSet(propertyName);
@@ -221,7 +221,7 @@
                             // return to the user
                             return set;
                         }
-                        else throw new Error(`Cannot set value for belongs to '${propertyName}' on model '${this.getName()}', only arrays, sets and weak sets are accepted. Got type '${type(value)}'!`);
+                        else throw new Error(`Cannot set value for belongs to '${propertyName}' on model '${this.getName()}', only arraysand  sets are accepted. Got type '${type(value)}'!`);
                         break;
 
 
