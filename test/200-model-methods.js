@@ -8,7 +8,7 @@
 
 
     let getDB           = require('./lib/getDB');
-    let FakeQuery       = require('./lib/FakeQuery')
+    let FakeQuery       = require('./lib/FakeQuery');
     let Related         = require('../');
 
 

@@ -124,8 +124,7 @@
          */
         add(item) {
             if (item instanceof Model) {
-                
-                
+
                 // check for the correct type
                 if (item instanceof this.database.getModelContructor(this.containingEntitiyName)) {
 
@@ -141,17 +140,13 @@
             else if (item instanceof QueryBuilder) {
 
 
-                // check for the correct type
-                if (item instanceof this.database.getQueryBuilderContructor(this.containingEntitiyName)) {
+                 // add to queries
+                this.queries.push(item);
 
-                     // add to queries
-                    this.queries.push(item);
-
-                    // mark as dirty
-                    this.setDirty();
-                    return this;
-                }
-                else throw new Error(`Cannot add '${item.getName()}' Query Builder to the Set between '${this.definition.column.entity.getAliasName()}' and '${this.definition.getRemoteName()}'. Expected a '${this.containingEntitiyName}' Query Builder!`);
+                // mark as dirty
+                this.setDirty();
+                return this;
+               
             }
             else throw new Error(`Cannot add item to the Set between '${this.definition.column.entity.getAliasName()}' and '${this.definition.getRemoteName()}'. Expected a Model or QueryBuilder instance, got '${type(item)}'!`);
         }

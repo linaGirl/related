@@ -8,6 +8,7 @@
 
 
     let getDB           = require('./lib/getDB');
+    let FakeQuery       = require('./lib/FakeQuery');
 
 
        
@@ -51,6 +52,97 @@
                 mapping.add(img);
                 assert.equal(mapping.size, 1);
                 mapping.delete(img);
+                assert.equal(mapping.size, 0);
+                
+                done();
+            }).catch(done);
+        });
+
+        it('ModelSet.add() adding model items to a mapping that are the wrong model', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+
+                assert.throws(() => {
+                    mapping.add(new db.event_image());
+                });
+                
+                done();
+            }).catch(done);
+        });
+
+        it('ModelSet.add() adding model items to a mapping that are the wrong type', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+
+                assert.throws(() => {
+                    mapping.add({});
+                });
+                
+                done();
+            }).catch(done);
+        });
+
+        it('ModelSet.delete() deleting model item from mapping that not exists', function(done) {            
+            getDB().then((db) => {
+                assert.equal(new db.event({}).image.delete(new db.image()), false);                
+                done();
+            }).catch(done);
+        });
+
+        it('ModelSet.delete() deleting query builder item from mapping that not exists', function(done) {            
+            getDB().then((db) => {
+                assert.equal(new db.event({}).image.delete(new FakeQuery()), false);                
+                done();
+            }).catch(done);
+        });
+
+        it('ModelSet.delete() deleting item from mapping with the wrong type', function(done) {            
+            getDB().then((db) => {
+
+                assert.throws(() => {
+                    new db.event({}).image.delete(1);
+                });
+                
+                done();
+            }).catch(done);
+        });
+
+
+
+
+        it('ModelSet.has() invalid item', function(done) {            
+            getDB().then((db) => {
+
+                assert.throws(() => {
+                    new db.event({}).image.has({});
+                });
+                
+                done();
+            }).catch(done);
+        });
+
+
+
+
+        it('ModelSet.add() adding query builder items to a mapping', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+
+                assert.equal(type(mapping.add(new FakeQuery())), 'object');
+                assert(type(mapping[0]), 'undefined');
+                
+                done();
+            }).catch(done);
+        });
+
+        it('ModelSet.delete() removing query builder items from a mapping using the items pointer', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+                let img = new FakeQuery();
+
+                mapping.add(img);
+                assert.equal(mapping.size, 0);
+                assert.equal(mapping.delete(img), true);
                 assert.equal(mapping.size, 0);
                 
                 done();
