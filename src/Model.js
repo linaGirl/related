@@ -36,6 +36,7 @@
         , 'belongTos'
         , 'properties'
         , 'prepare'
+        , 'getUnproxiedModelInstance'
     ]);
 
 
@@ -255,15 +256,33 @@
 
 
                     case 'reference':
-                        this.createStorageMap('$references');
 
+                        if (type.object(value)) {
+                            if (value instanceof this.database.getModelContructor(propertyName)) {
+                                this.createStorageMap('$referenceModels');
+                                this.$referenceModels.set(propertyName, value);
 
-                        if (type.object(value) && (value instanceof Model || value instanceof QueryBuilder)) {
+                            }
+                            else if (value instanceof QueryBuilder) {
+                                this.createStorageMap('$referenceQueries');
+                                this.$referenceQueries.set(propertyName, value);
+                                
+                            }
+                            else throw new Error(`Cannot set value for reference '${propertyName}' on model '${this.getName()}', only model instances of the '${propertyName}' entitiy or a querybuidler are acceptable!`);
+
+                            // is now dirty!
                             this.setDirty();
-
-                            this.$references.set(propertyName, value);
                         }
-                        else throw new Error(`Cannot set value for reference '${propertyName}' on model '${this.getName()}', only models or queries are accepted. Got type '${type(value)}'!`);
+                        else if (type.null(value)) {
+
+                            // make sure null will be set!
+                            this.set(this.getDefinition().references.get(propertyName).column.name, null);
+
+                            // remove models & queries for this reference
+                            if (this.$referenceModels && this.$referenceModels.has(propertyName)) this.$referenceModels.delete(propertyName);
+                            if (this.$referenceQueries && this.$referenceQueries.has(propertyName)) this.$referenceQueries.delete(propertyName);
+                        }
+                        else throw new Error(`Cannot set value for reference '${propertyName}' on model '${this.getName()}', only null, models or queries are accepted. Got type '${type(value)}'!`);
                         break;
 
 
@@ -336,10 +355,9 @@
 
 
                     case 'reference':
-                        this.createStorageMap('$references');
 
-                        // return
-                        return this.$references.has(propertyName) ? this.$references.get(propertyName) : null;
+                        // return onyl models, ignore thee queries
+                        return this.$referenceModels && this.$referenceModels.has(propertyName) ? this.$referenceModels.get(propertyName) : null;
 
 
 
@@ -430,7 +448,6 @@
 
                         // add to storage
                         this.mappingConstructors.set(propertyName, SetConstructor);
-
 
                         // return
                         return new Proxy(new SetConstructor(), ModelSetProxy);
@@ -691,6 +708,22 @@
 
 
 
+        /**
+         * returns the model withtout the proxy
+         * only used for testing!
+         *
+         * @returns {object} this
+         */
+        getUnproxiedModelInstance() {
+            return this;
+        }
+
+
+
+
+
+
+
 
         /**
          * retutns if a mapping has been initialized
@@ -702,11 +735,6 @@
         valueIsInitialized(propertyName) {
             return !!this.$values && this.$values.has(propertyName);
         }
-
-
-
-
-
 
 
 
@@ -723,10 +751,6 @@
 
 
 
-
-
-
-
         /**
          * retutns if a reference has been initialized
          *
@@ -735,12 +759,8 @@
          * @returns {boolean}
          */
         referenceIsInitialized(propertyName) {
-            return !!this.$references && this.$references.has(propertyName);
+            return !!this.$referenceModels && this.$referenceModels.has(propertyName);
         }
-
-
-
-
 
 
 
@@ -754,6 +774,7 @@
         belongsToIsInitialized(propertyName) {
             return !!this.$belongTos && this.$belongTos.has(propertyName);
         }
+
 
 
 

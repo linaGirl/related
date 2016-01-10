@@ -2,7 +2,6 @@
     'use strict';
 
 
-    let Class     = require('ee-class');
     let log       = require('ee-log');
 
     
@@ -17,10 +16,6 @@
 
 
 
-
-
-
-    
     
 
 
@@ -28,10 +23,10 @@
 
 
 
-    module.exports = new Class({
+    module.exports = class FakeDBDefinition {
 
 
-        describe: function() {
+        describe() {
             let databases = new Map();
 
             databases.set('testDB', this.getDatabase());
@@ -43,7 +38,7 @@
 
 
 
-        , getDatabase: function() {
+        getDatabase() {
             let db = new DatabaseDefinition({
                   name: 'testDB'
                 , exists: true
@@ -68,7 +63,7 @@
 
 
 
-        , getEventEntitiy: function(db) {
+        getEventEntitiy(db) {
             let entity = new EntityDefinition({
                 name: 'event'
             }, db);
@@ -136,7 +131,7 @@
 
 
 
-        , getVenueEntitiy: function(db) {
+        getVenueEntitiy(db) {
             let entity = new EntityDefinition({
                 name: 'venue'
             }, db);
@@ -195,7 +190,7 @@
 
 
 
-        , getImageEntitiy: function(db) {
+        getImageEntitiy(db) {
             let entity = new EntityDefinition({
                 name: 'image'
             }, db);
@@ -229,7 +224,7 @@
 
 
 
-        , getVenueImageEntitiy: function(db) {
+        getVenueImageEntitiy(db) {
             let entity = new EntityDefinition({
                 name: 'venue_image'
             }, db);
@@ -309,7 +304,7 @@
 
 
 
-        , getEventImageEntitiy: function(db) {
+        getEventImageEntitiy(db) {
             let entity = new EntityDefinition({
                 name: 'event_image'
             }, db);
@@ -384,5 +379,5 @@
 
             return entity;
         }
-    });
+    };
 })();

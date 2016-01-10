@@ -2,19 +2,18 @@
     'use strict';
 
 
-    let Class     = require('ee-class');
     let log       = require('ee-log');
 
 
 
 
-    module.exports = new Class({
+    module.exports = class FakeConnection{
 
 
 
 
-        createTransaction: function() {
+        createTransaction() {
             return Promise.resolve();
         }
-    });
+    };
 })();

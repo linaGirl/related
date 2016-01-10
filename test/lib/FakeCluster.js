@@ -2,7 +2,6 @@
     'use strict';
 
 
-    let Class     = require('ee-class');
     let log       = require('ee-log');
     let Events    = require('ee-event-emitter');
 
@@ -24,15 +23,14 @@
 
 
 
-    module.exports = new Class({
-        inherits: Events
+    module.exports = class FakeCluster extends Events {
 
 
 
         /**
          * fake the cluster load
          */
-        , load: function() {
+        load() {
             return Promise.resolve(this);
         }
 
@@ -44,7 +42,7 @@
         /**
          * returns the fake db definition
          */
-        , describe: function() {
+        describe() {
             return new FakeDBDefinition().describe();
         }
 
@@ -56,7 +54,7 @@
          * fake query method, emits the 
          * query event, solely used for testing
          */
-        , query: function(queryContext) {
+        query(queryContext) {
             return new Promise((resolve, reject) => {
                 this.emit('query', queryContext, resolve, reject);
             });
@@ -66,8 +64,8 @@
 
 
 
-        , getConnection: function() {
+        getConnection() {
             return Promise.resolve(new FakeConnection(this));
         }
-    });
+    };
 })();

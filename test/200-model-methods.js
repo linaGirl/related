@@ -8,6 +8,7 @@
 
 
     let getDB           = require('./lib/getDB');
+    let FakeQuery       = require('./lib/FakeQuery')
     let Related         = require('../');
 
 
@@ -30,11 +31,44 @@
             }).catch(done);
         });
 
+        it('new Model(null) Instantiating a Model with null as input', function(done) {
+            getDB().then((db) => {
+                new db.event(null);
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(invalid) Instantiating a Model with invalid input', function(done) {
+            getDB().then((db) => {
+
+                assert.throws(() => {
+                    new db.event(new Set());
+                });
+
+                done();
+            }).catch(done);
+        });
+
         it('new Model(values) Instantiating a Model with existing properites', function(done) {
             getDB().then((db) => {
                 let model = new db.event({
                     title: 'winning!'
                 });
+
+                assert.deepEqual(model, {
+                    title: "winning!"
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model with existing properites in form of a map', function(done) {
+            getDB().then((db) => {
+                let data = new Map();
+                data.set('title', 'winning!');
+
+                let model = new db.event(data);
 
                 assert.deepEqual(model, {
                     title: "winning!"
@@ -103,7 +137,7 @@
             }).catch(done);
         });
 
-        it('new Model(values) Instantiating a Model with existing properites and values for a reference', function(done) {
+        it('new Model(values) Instantiating a Model with models for a reference', function(done) {
             getDB().then((db) => {
                 let model = new db.event({
                       title: 'winning!'
@@ -112,12 +146,115 @@
                     })
                 });
 
+                
                 assert.deepEqual(model, {
                       title: "winning!"
                     , venue: {
                         name: "Jamie Jones"
                     }
                 });
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model with a queries for a reference', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                      title: 'winning!'
+                    , venue: new FakeQuery(null, [])
+                });
+
+                
+                assert.deepEqual(model, {
+                    title: "winning!"
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model with invalid values for a reference I', function(done) {
+            getDB().then((db) => {
+
+                assert.throws(() => {
+                   new db.event({
+                          title: 'winning!'
+                        , venue: {}
+                    });
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model with invalid values for a reference II', function(done) {
+            getDB().then((db) => {
+
+                assert.throws(() => {
+                   new db.event({
+                          title: 'winning!'
+                        , venue: 1
+                    });
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model with the null value for a reference', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                      title: 'winning!'
+                    , venue: null
+                });
+
+                assert.deepEqual(model, {
+                      id_venue: null
+                    , title: "winning!"
+                });
+
+                assert.equal(model.venue, null);
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model. Setting a model for a reference, overwriting it with null afterwards', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                    title: 'winning!'
+                });
+
+                model.venue = new db.venue();
+                model.venue = null;
+
+                assert.deepEqual(model, {
+                      id_venue: null
+                    , title: "winning!"
+                });
+
+                assert.equal(model.venue, null);
+
+                done();
+            }).catch(done);
+        });
+
+        it('new Model(values) Instantiating a Model. Setting a query for a reference, overwriting it with null afterwards', function(done) {
+            getDB().then((db) => {
+                let model = new db.event({
+                    title: 'winning!'
+                });
+
+                model.venue = new FakeQuery();
+                model.venue = null;
+
+                assert.deepEqual(model, {
+                      id_venue: null
+                    , title: "winning!"
+                });
+
+                assert.equal(model.venue, null);
 
                 done();
             }).catch(done);
@@ -402,6 +539,18 @@
             }).catch(done);
         });
 
+        it('Model.set() a belongs to using invalid input', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                assert.throws(() => {
+                    model.event_image = new Map();
+                });
+
+                done();
+            }).catch(done);
+        });
+
 
 
 
@@ -528,6 +677,42 @@
                 let model = new db.event();
                 
                 assert.equal('createBelongsToSet' in model, false);
+
+                done();
+            }).catch(done);
+        });
+
+
+
+
+
+        it('the mapping constructor cache works and is shared between instances', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                assert.equal(model.getUnproxiedModelInstance().mappingConstructors.has('image'), false);                
+                model.image.add(new db.image());
+                assert.equal(model.getUnproxiedModelInstance().mappingConstructors.has('image'), true);
+
+                let model2 = new db.event();
+                assert.equal(model2.getUnproxiedModelInstance().mappingConstructors.has('image'), true);
+                model2.image.add(new db.image());
+
+                done();
+            }).catch(done);
+        });
+
+        it('the belongs to constructor cache works and is shared between instances', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                assert.equal(model.getUnproxiedModelInstance().belongsToConstructors.has('event_image'), false);                
+                model.event_image.add(new db.event_image());
+                assert.equal(model.getUnproxiedModelInstance().belongsToConstructors.has('event_image'), true);
+
+                let model2 = new db.event();
+                assert.equal(model2.getUnproxiedModelInstance().belongsToConstructors.has('event_image'), true);
+                model2.event_image.add(new db.event_image());
 
                 done();
             }).catch(done);
