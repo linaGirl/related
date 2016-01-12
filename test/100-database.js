@@ -113,5 +113,44 @@
                 done();
             }).catch(done);
         });
+
+
+
+
+        it('x in Database with an existing property', function(done) {
+            getDB().then((db) => {
+
+                assert.equal('event' in db, true);
+
+                done();
+            }).catch(done);
+        });
+
+        it('x in Database with a non existing property', function(done) {
+            getDB().then((db) => {
+                
+                assert.equal('nope' in db, false);
+
+                done();
+            }).catch(done);
+        });
+
+        it('x in Database with a public method', function(done) {
+            getDB().then((db) => {
+                
+                assert.equal('get' in db, false);
+
+                done();
+            }).catch(done);
+        });
+
+        it('x in Database with a private method', function(done) {
+            getDB().then((db) => {
+                
+                assert.equal('getCluster' in db, false);
+
+                done();
+            }).catch(done);
+        });
     });
 })();
