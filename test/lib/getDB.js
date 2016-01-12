@@ -28,6 +28,6 @@
             clusterInstance: cluster
         });
 
-        return db.load(config);
+        return db.load();
     };
 })();

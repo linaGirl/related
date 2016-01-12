@@ -33,26 +33,24 @@
 
 
 
+
+        it('ModelSet.add() adding query builder items to a mapping', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+
+                assert.equal(type(mapping.add(new FakeQuery())), 'object');
+                assert(type(mapping[0]), 'undefined');
+                
+                done();
+            }).catch(done);
+        });
+
         it('ModelSet.add() adding model items to a mapping', function(done) {            
             getDB().then((db) => {
                 let mapping = new db.event({}).image;
 
                 assert.equal(type(mapping.add(new db.image())), 'object');
                 assert(type(mapping[0]), 'object');
-                
-                done();
-            }).catch(done);
-        });
-
-        it('ModelSet.delete() removing model items from a mapping using the items pointer', function(done) {            
-            getDB().then((db) => {
-                let mapping = new db.event({}).image;
-                let img = new db.image();
-
-                mapping.add(img);
-                assert.equal(mapping.size, 1);
-                mapping.delete(img);
-                assert.equal(mapping.size, 0);
                 
                 done();
             }).catch(done);
@@ -82,6 +80,23 @@
             }).catch(done);
         });
 
+
+
+
+        it('ModelSet.delete() removing model items from a mapping using the items pointer', function(done) {            
+            getDB().then((db) => {
+                let mapping = new db.event({}).image;
+                let img = new db.image();
+
+                mapping.add(img);
+                assert.equal(mapping.size, 1);
+                mapping.delete(img);
+                assert.equal(mapping.size, 0);
+                
+                done();
+            }).catch(done);
+        });
+
         it('ModelSet.delete() deleting model item from mapping that not exists', function(done) {            
             getDB().then((db) => {
                 assert.equal(new db.event({}).image.delete(new db.image()), false);                
@@ -102,34 +117,6 @@
                 assert.throws(() => {
                     new db.event({}).image.delete(1);
                 });
-                
-                done();
-            }).catch(done);
-        });
-
-
-
-
-        it('ModelSet.has() invalid item', function(done) {            
-            getDB().then((db) => {
-
-                assert.throws(() => {
-                    new db.event({}).image.has({});
-                });
-                
-                done();
-            }).catch(done);
-        });
-
-
-
-
-        it('ModelSet.add() adding query builder items to a mapping', function(done) {            
-            getDB().then((db) => {
-                let mapping = new db.event({}).image;
-
-                assert.equal(type(mapping.add(new FakeQuery())), 'object');
-                assert(type(mapping[0]), 'undefined');
                 
                 done();
             }).catch(done);
@@ -219,7 +206,7 @@
                 let mapping = new db.event({}).image;
                 let img = new db.image();
 
-                mapping.set(0, img);
+                mapping[0] = img;
                 assert.equal(mapping[0], img);
                 assert.equal(mapping.size, 1);
                 
@@ -232,7 +219,7 @@
                 let mapping = new db.event({}).image;
                 let img = new db.image();
 
-                mapping.set('0', img);
+                mapping['0'] = img;
                 assert.equal(mapping[0], img);
                 assert.equal(mapping.size, 1);
                 
@@ -256,6 +243,17 @@
 
 
 
+
+        it('ModelSet.has() invalid item', function(done) {            
+            getDB().then((db) => {
+
+                assert.throws(() => {
+                    new db.event({}).image.has({});
+                });
+                
+                done();
+            }).catch(done);
+        });
         
         it('ModelSet.has(index) checking for an item at a specific index', function(done) {            
             getDB().then((db) => {

@@ -17,42 +17,38 @@
      */
     module.exports = function(options) {
 
+        let classDefinition;
 
-        /**
-         * the actual model for the entitiy
-         */
-        class ModelInstance extends Model {
-
-
-            /**
-             * stets the class up
-             *
-             */
-            constructor(values) {
-                super(values);
-            }
+        
+        // the user may provide a custom class implementation
+        if (options.UserModel) {
+            classDefinition = class ModelInstance extends options.UserModel {};
         }
+        else {
+            classDefinition = class ModelInstance extends Model {};
+        }
+        
 
 
-
+        
 
 
         // information about the model public properties
         let properties = new Map();
         options.definition.usedNames.forEach((value, key) => properties.set(key, {kind:value}));
-        ModelInstance.prototype.$properties = properties;
+        classDefinition.prototype.$properties = properties;
 
 
 
 
         // add the definition to the model
-        ModelInstance.prototype.definition = options.definition;
+        classDefinition.prototype.definition = options.definition;
 
         // add the database to the models
-        ModelInstance.prototype.database = options.database;
+        classDefinition.prototype.database = options.database;
 
         // publish the models name
-        ModelInstance.prototype.name = options.definition.getAliasName();
+        classDefinition.prototype.name = options.definition.getAliasName();
 
 
 
@@ -63,13 +59,13 @@
         // be generated on first use. The generated
         // classes will be cached using the storage
         // defoned below
-        ModelInstance.prototype.mappingConstructors = new Map();
-        ModelInstance.prototype.belongsToConstructors = new Map();
+        classDefinition.prototype.mappingConstructors = new Map();
+        classDefinition.prototype.belongsToConstructors = new Map();
 
 
 
         // return the generated model
-        return ModelInstance;
+        return classDefinition;
     };
 
 

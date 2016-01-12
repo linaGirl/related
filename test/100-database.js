@@ -61,7 +61,10 @@
 
         it('should not return the fantasy entity using the get method', function(done) {
             getDB().then((db) => {
-                assert.equal(db.get('fantasy'), null);
+
+                assert.throws(() => {
+                    db.get('fantasy')
+                });
 
                 done();
             }).catch(done);

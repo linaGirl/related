@@ -9,6 +9,8 @@
     let QueryBuilder        = require('./QueryBuilder');
     let ModelSetInstance    = require('./ModelSetInstance');
     let ModelSetProxy       = require('./ModelSetProxy');
+    let Transaction         = require('./Transaction');
+    let ModelProxy          = require('./ModelProxy');
 
 
 
@@ -97,7 +99,17 @@
             else if (!type.undefined(values) && !type.null(values)) {
                 throw new Error(`When instantiating the '${this.name}' model, an object, a map, null or undefined can passed to the constructor, got '${type(values)}' instead!`);
             }
+
+
+            // we need acces to our own proxy
+            this.proxy = new Proxy(this, ModelProxy);
+
+            // let the public only know the proxy!
+            return this.proxy;
         }
+
+
+
 
 
 
@@ -116,13 +128,22 @@
          * the status. may be invoked by the user, but is
          * normally invoked by the save() method
          *
-         * @param {object*} transaction optional 
+         * @param {object} transaction 
          *
          * @returns {promise}
          */
         prepare(transaction) {
-
+            if (type.object(transaction) && transaction instanceof Transaction) {
+                if (transaction.isReady()) {
+                    
+                }
+                else throw new Error(`Cannot prepare the model, the transaction is not ready and has probably ended already!`);
+            }
+            else throw new Error(`Cannoot prepare the model, expected a transaction as parameter 0, got '${type(transaction)}'!`);
         }
+
+
+
 
 
 
@@ -326,10 +347,9 @@
                 switch (property.kind) {
 
                     case 'column':
-                        this.createStorageMap('$values');
 
                         // return
-                        return this.$values.get(propertyName);
+                        return this.$values && this.$values.has(propertyName) ? this.$values.get(propertyName) : undefined;
 
 
 
@@ -379,6 +399,79 @@
 
 
 
+        /** 
+         * the user must be able to set custom properties on 
+         * a model. for this, we have separate accessors, so
+         * the model can keep track of those properties
+         *
+         * @param {string} propertyName
+         *
+         * @returns {boolean}
+         */
+        hasCustomProperty(propertyName) {
+            return this.$customProperties && this.$customProperties.has(propertyName);
+        }
+
+
+
+
+
+
+
+
+
+
+
+        /** 
+         * the user must be able to set custom properties on 
+         * a model. for this, we have separate accessors, so
+         * the model can keep track of those properties
+         *
+         * @param {string} propertyName
+         *
+         * @returns {*}
+         */
+        getCustomProperty(propertyName) {
+            return this.$customProperties && this.$customProperties.has(propertyName) ? this.$customProperties.get(propertyName) : undefined;
+        }
+
+
+
+
+
+
+
+
+
+
+
+        /** 
+         * the user must be able to set custom properties on 
+         * a model. for this, we have separate accessors, so
+         * the model can keep track of those properties
+         *
+         * @param {string} propertyName
+         *
+         * @returns {boolean}
+         */
+        setCustomProperty(propertyName, value) {
+            this.createStorageMap('$customProperties');
+
+            return this.$customProperties.set(propertyName, value);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         /**
          * adds values the orm loaded from the database
@@ -397,7 +490,7 @@
                 this.setDirty(false);
                 this.setNew(false);
 
-                return this;
+                return this.proxy;
             }
             else if (!type.null(values) && !type.undefined(values)) throw new Error(`Cannot set values from the db on the '${this.getName()}' model, expected object, null or undefined, got '${type(values)}'!`);
         }

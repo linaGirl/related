@@ -319,7 +319,7 @@
                 let model = new db.event().populateFromDatabase({
                     title: 'testEvent'
                 });
-
+log(model);
                 assert.equal(model.isNew(), false);
                 assert.equal(model.title, 'testEvent');
                 assert.equal(model.get('title'), 'testEvent');

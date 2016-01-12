@@ -26,6 +26,18 @@
     module.exports = class FakeCluster extends Events {
 
 
+        constructor() {
+            super();
+
+            this.config = {
+                getSchemaName() {
+                    return 'testDB';
+                }
+            };
+        }
+
+
+
 
         /**
          * fake the cluster load

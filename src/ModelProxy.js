@@ -31,7 +31,8 @@
             // route model properties to the model value storage
             // and never to the model itself
             if (model.has(propertyName)) return model.set(propertyName, value);
-            else return Reflect.set(model, propertyName, value);
+            else if (!model.hasPublicMethod(propertyName)) return model.setCustomProperty(propertyName, value);
+            else throw new Error(`Cannot set the '${propertyName} property, its method of the model and cannot be replaced!`);
         }
 
 
@@ -55,8 +56,10 @@
             // check if the model has a property with the 
             // given name and the property is not a public 
             // method
-            if (model.has(propertyName) && !model.hasPublicMethod(propertyName)) return model.get(propertyName);
-            else return Reflect.get(model, propertyName);
+            if (model.hasPublicMethod(propertyName)) return model[propertyName].bind(model);
+            else if (model.has(propertyName)) return model.get(propertyName);
+            else if (model.hasCustomProperty(propertyName)) return model.getCustomProperty(propertyName);
+            else return undefined;
         }
 
 
@@ -125,7 +128,7 @@
          * @returns {object}
          */
         , getOwnPropertyDescriptor(model, propertyName) {
-            if (model.has(propertyName) && !model.hasPublicMethod(propertyName)) {
+            if (model.has(propertyName)) {
 
                 let value = (model.hasColumn(propertyName) ? model.get(propertyName) : (model.propertyIsInitialized(propertyName) ? model.get(propertyName) : undefined));
 
@@ -136,8 +139,17 @@
                     , enumerable: true
                 };
             }
-            else return Reflect.getOwnPropertyDescriptor(model, propertyName);
+            else if (model.hasCustomProperty(propertyName)) {
+                return {
+                      configurable: true
+                    , writable: true
+                    , value: model.getCustomProperty(propertyName)
+                    , enumerable: true
+                };
+            }
+            else return undefined;//Reflect.getOwnPropertyDescriptor(model, propertyName);
         }
+
 
 
 
@@ -157,8 +169,8 @@
          * @returns {array}
          */
         , ownKeys(model) {
-            return Array.from(model.$properties.keys()).filter(propertyName => {
-                return !model.hasPublicMethod(propertyName) && model.propertyIsInitialized(propertyName);
+            return Array.from(model.$properties.keys()).concat(model.$customProperties ? Array.from(model.$customProperties.keys()) : []).filter(propertyName => {
+                return !model.hasPublicMethod(propertyName) && (model.propertyIsInitialized(propertyName) || model.hasCustomProperty(propertyName));
             });
         }
     };
