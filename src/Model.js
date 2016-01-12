@@ -39,6 +39,9 @@
         , 'properties'
         , 'prepare'
         , 'getUnproxiedModelInstance'
+        , 'hasCustomProperty'
+        , 'getCustomProperty'
+        , 'setustomProperty'
     ]);
 
 

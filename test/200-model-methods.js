@@ -319,7 +319,7 @@
                 let model = new db.event().populateFromDatabase({
                     title: 'testEvent'
                 });
-log(model);
+
                 assert.equal(model.isNew(), false);
                 assert.equal(model.title, 'testEvent');
                 assert.equal(model.get('title'), 'testEvent');
@@ -713,6 +713,46 @@ log(model);
                 let model2 = new db.event();
                 assert.equal(model2.getUnproxiedModelInstance().belongsToConstructors.has('event_image'), true);
                 model2.event_image.add(new db.event_image());
+
+                done();
+            }).catch(done);
+        });
+
+
+
+
+
+        it('model[key] setting custom properties', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                model.nope = 4;
+                
+                assert.equal(model.nope, 4);
+
+                done();
+            }).catch(done);
+        });
+
+        it('model[key] getting custom properties', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                model.nope = 4;
+                
+                assert.equal(model.nope, 4);
+
+                done();
+            }).catch(done);
+        });
+
+        it('model[key] checking custom properties', function(done) {
+            getDB().then((db) => {
+                let model = new db.event();
+
+                model.nope = 4;
+                
+                assert.equal(model.hasCustomProperty('nope'), true);
 
                 done();
             }).catch(done);
