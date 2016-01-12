@@ -50,8 +50,18 @@
 
 
 
+        it('should enumerate all entities', function(done) {
+            getDB().then((db) => {
 
-        it('should return the event entity using the get method', function(done) {
+                assert.deepEqual(Object.keys(db), [ 'image', 'venue', 'venue_image', 'event', 'event_image' ]);
+
+                done();
+            }).catch(done);
+        });
+
+
+
+        it('db.get() should return the event entity using the get method', function(done) {
             getDB().then((db) => {
                 assert(db.get('event'));
 
@@ -59,11 +69,11 @@
             }).catch(done);
         });
 
-        it('should not return the fantasy entity using the get method', function(done) {
+        it('db.get() should not return the fantasy entity using the get method', function(done) {
             getDB().then((db) => {
 
                 assert.throws(() => {
-                    db.get('fantasy')
+                    db.get('fantasy');
                 });
 
                 done();
