@@ -74,7 +74,7 @@
 
 
 
-        it('getting the querybuilder constructor', function(done) {
+        it('db.getQueryBuilderContructor() getting the querybuilder constructor', function(done) {
             getDB().then((db) => {
 
                 assert.equal(type(db.getUnproxiedDatabaseInstance().getQueryBuilderContructor('event')), 'function');
@@ -83,10 +83,32 @@
             }).catch(done);
         });
 
-        it('getting the model constructor', function(done) {
+        it('db.getModelContructor() getting the model constructor', function(done) {
             getDB().then((db) => {
 
                 assert.equal(type(db.getUnproxiedDatabaseInstance().getModelContructor('event')), 'function');
+
+                done();
+            }).catch(done);
+        });
+
+        it('db.getQueryBuilderContructor() getting the querybuilder constructor of an invalid entitiy', function(done) {
+            getDB().then((db) => {
+
+                assert.throws(() => {
+                    db.getUnproxiedDatabaseInstance().getQueryBuilderContructor('event');
+                });
+
+                done();
+            }).catch(done);
+        });
+
+        it('db.getModelContructor() getting the model constructor of an invalid entitiy', function(done) {
+            getDB().then((db) => {
+
+                assert.throws(() => {
+                    db.getUnproxiedDatabaseInstance().getModelContructor('event');
+                });
 
                 done();
             }).catch(done);
