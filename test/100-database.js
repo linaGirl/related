@@ -2,7 +2,7 @@
     'use strict';
 
 
-    let Class           = require('ee-class');
+    let type            = require('ee-types');
     let log             = require('ee-log');
     let assert          = require('assert');
 
@@ -65,6 +65,28 @@
                 assert.throws(() => {
                     db.get('fantasy')
                 });
+
+                done();
+            }).catch(done);
+        });
+
+
+
+
+
+        it('getting the querybuilder constructor', function(done) {
+            getDB().then((db) => {
+
+                assert.equal(type(db.getUnproxiedDatabaseInstance().getQueryBuilderContructor('event')), 'function');
+
+                done();
+            }).catch(done);
+        });
+
+        it('getting the model constructor', function(done) {
+            getDB().then((db) => {
+
+                assert.equal(type(db.getUnproxiedDatabaseInstance().getModelContructor('event')), 'function');
 
                 done();
             }).catch(done);

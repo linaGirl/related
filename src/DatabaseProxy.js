@@ -15,7 +15,7 @@
         , 'get'
         , 'has'
         , 'set'
-        , '_this'
+        , 'getUnproxiedDatabaseInstance'
     ]);
 
 

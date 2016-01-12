@@ -382,6 +382,23 @@
                 });
             }
         }
+
+
+
+
+
+
+
+
+        /**
+         * returns the database withtout the proxy
+         * only used for testing!
+         *
+         * @returns {object} this
+         */
+        getUnproxiedDatabaseInstance() {
+            return this;
+        }
     }
 
 
