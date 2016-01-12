@@ -96,7 +96,7 @@
             getDB().then((db) => {
 
                 assert.throws(() => {
-                    db.getUnproxiedDatabaseInstance().getQueryBuilderContructor('event');
+                    db.getUnproxiedDatabaseInstance().getQueryBuilderContructor('naay');
                 });
 
                 done();
@@ -107,7 +107,7 @@
             getDB().then((db) => {
 
                 assert.throws(() => {
-                    db.getUnproxiedDatabaseInstance().getModelContructor('event');
+                    db.getUnproxiedDatabaseInstance().getModelContructor('naay');
                 });
 
                 done();

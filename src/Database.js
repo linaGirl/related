@@ -312,8 +312,7 @@
         getModelContructor (modelName) {
             let entity = this.get(modelName);
 
-            if (entity) return entity.getModelContructor();
-            else throw new Error(`Cannot return Model Constructor for the '${modelName}' entity. The entity does not exist!`);
+            return entity.getModelContructor();
         }
 
 
@@ -335,8 +334,7 @@
         getQueryBuilderContructor (queryBuilderName) {
             let entity = this.get(queryBuilderName);
 
-            if (entity) return entity.getQueryBuilderContructor();
-            else throw new Error(`Cannot return Query Builder Constructor for the '${queryBuilderName}' entity. The entity does not exist!`);
+            return entity.getQueryBuilderContructor();
         }
 
 
