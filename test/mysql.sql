@@ -3,8 +3,6 @@
 DROP DATABASE IF EXISTS related_test_mysql;
 CREATE DATABASE related_test_mysql;
 
-SET storage_engine=INNODB;
-
 
 
 CREATE TABLE related_test_mysql.language (
@@ -166,7 +164,7 @@ CREATE TABLE related_test_mysql.typeTest (
     , t_timestamp               timestamp
     , t_time                    time
     , t_year                    year
-    , t_year_len                year (2)
+    , t_year_len                year (4)
     , t_char                    char
     , t_char_len                char (69)
     , t_varchar_len             varchar (69)
