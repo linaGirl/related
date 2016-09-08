@@ -634,6 +634,17 @@
 
 
 
+			describe('[Select functions]', function(){
+				it('should work', function(done){
+					db.event(['id', ORM.function('sum', ['id'], 'idSum')]).group('id').find().then((rows) => {
+						for (const row in rows) if (row.idSum != row.id) return done(new Error('idSum != id!'));
+						done();
+					}).catch(done);
+				});
+			});
+
+
+
 			describe('[Chunked Loading]', function() {
 				it('should work with classic callbacks', function(done) {
 					var counter = 0;
