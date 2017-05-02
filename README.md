@@ -1,5 +1,7 @@
 # Related ORM
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/eventEmitter/related.svg)](https://greenkeeper.io/)
+
 Unopinionated ORM for relational databases.
 
 
