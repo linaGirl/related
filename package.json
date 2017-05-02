@@ -20,16 +20,16 @@
         , "ee-types"                    : "2.x"
         , "related-db-cluster"          : "2.x"
         , "related-query-context"       : "^2.1"
-        , "ee-event-emitter"            : "0.3.x"
-        , "ee-log"                      : "0.3.x"
-        , "ee-async"                    : "0.2.x"
-        , "ee-argv"                     : "0.1.x"
+        , "ee-event-emitter"            : "~1.0.1"
+        , "ee-log"                      : "~2.0.2"
+        , "ee-async"                    : "~0.3.1"
+        , "ee-argv"                     : "~1.0.2"
         , "ee-arguments"                : "1.0.x"
         , "test-config"                 : "0.1.x"
         , "async-method"                : "0.1.x"
     }
     , "devDependencies": {
-          "mocha"                       : "2.x"
+          "mocha"                       : "^3.3.0"
         , "related-timestamps"          : "2.x"
 	    , "ee-project" 		            : "0.2.x"
     }
