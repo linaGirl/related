@@ -16,6 +16,13 @@
         }
 
 
+
+
+        getORM() {
+            
+        }
+
+
         leftJoin(entity) {
             return new QueryBuilder(entity, ++this.id);
         }
