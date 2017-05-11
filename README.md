@@ -5,7 +5,11 @@ Unopinionated ORM for relational databases.
 
 [![npm](https://img.shields.io/npm/dm/related.svg?style=flat-square)](https://www.npmjs.com/package/related)
 [![Travis](https://img.shields.io/travis/eventEmitter/related.svg?style=flat-square)](https://travis-ci.org/eventEmitter/related)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/eventEmitter/related/master/LICENSE)
+[![Maintenance](https://img.shields.io/maintenance/yes/2017.svg?style=flat-square)](https://github.com/eventEmitter/related)
+[![npm](https://img.shields.io/npm/dy/localeval.svg?style=flat-square)](https://github.com/eventEmitter/related)
 [![node](https://img.shields.io/node/v/related.svg?style=flat-square)](https://nodejs.org/)
+
 
 
 On the fly builds an extensive API representing your database and its tables including their relations and columns. No need to write javascript models.
