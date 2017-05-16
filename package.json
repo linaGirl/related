@@ -1,7 +1,7 @@
 {
       "name"                            : "related"
     , "description"                     : "Unopinionated ORM for relational databases"
-    , "version"                         : "2.9.2"
+    , "version"                         : "2.9.3"
     , "homepage"                        : "https://github.com/eventEmitter/related"
     , "author"                          : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
     , "license"                         : "MIT"
@@ -20,7 +20,7 @@
         , "ee-types"                    : "2.x"
         , "related-db-cluster"          : "2.x"
         , "related-query-context"       : "^2.1"
-        , "ee-event-emitter"            : "1.x"
+        , "ee-event-emitter"            : "0.x"
         , "ee-log"                      : "2.x"
         , "ee-async"                    : "0.2.x"
         , "ee-argv"                     : "0.1.x"
