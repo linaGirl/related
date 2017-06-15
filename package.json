@@ -1,44 +1,52 @@
 {
-      "name"                            : "related"
-    , "description"                     : "Unopinionated ORM for relational databases"
-    , "version"                         : "2.10.1"
-    , "homepage"                        : "https://github.com/eventEmitter/related"
-    , "author"                          : "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)"
-    , "license"                         : "MIT"
-    , "repository": {
-          "url"                         : "https://github.com/eventEmitter/related.git"
-        , "type"                        : "git"
-    }
-    , "engines": {
-        "node"                          : ">=6"
-    }
-    , "bugs": {
-        "url"                           : "https://github.com/eventEmitter/related/issues"
-    }
-    , "dependencies": {
-          "ee-class"                    : "1.x"
-        , "ee-types"                    : "2.x"
-        , "related-db-cluster"          : "2.x"
-        , "related-query-context"       : "^2.1"
-        , "ee-event-emitter"            : "0.x"
-        , "ee-log"                      : "2.x"
-        , "ee-async"                    : "0.2.x"
-        , "ee-argv"                     : "0.1.x"
-        , "ee-arguments"                : "1.0.x"
-        , "test-config"                 : "0.1.x"
-        , "async-method"                : "0.1.x"
-    }
-    , "devDependencies": {
-          "mocha"                       : "2.x"
-        , "related-timestamps"          : "2.x"
-	    , "ee-project" 		            : "0.2.x"
-    }
-    , "bin": {
-        "related"                       : "./bin/related.js"
-    }
-    , "optionalDependencies": {}
-    , "keywords"                        : ["orm", "mysql", "postgres", "object relational mapper", "eager loading", "connection pooling", "cluster"]
-    , "scripts": {
-        "test"                          : "./node_modules/mocha/bin/mocha --reporter spec --bail"
+    "name": "related",
+    "description": "Unopinionated ORM for relational databases",
+    "version": "2.10.2",
+    "homepage": "https://github.com/eventEmitter/related",
+    "author": "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)",
+    "license": "MIT",
+    "repository": {
+        "url": "https://github.com/eventEmitter/related.git",
+        "type": "git"
+    },
+    "engines": {
+        "node": ">=6"
+    },
+    "bugs": {
+        "url": "https://github.com/eventEmitter/related/issues"
+    },
+    "dependencies": {
+        "ee-class": "1.x",
+        "ee-types": "2.x",
+        "related-db-cluster": "2.x",
+        "related-query-context": "^2.1",
+        "ee-event-emitter": "0.x",
+        "ee-log": "2.x",
+        "ee-async": "0.2.x",
+        "ee-argv": "0.1.x",
+        "ee-arguments": "1.0.x",
+        "test-config": "0.1.x",
+        "async-method": "0.1.x"
+    },
+    "devDependencies": {
+        "mocha": "2.x",
+        "related-timestamps": "2.x",
+        "ee-project": "0.2.x"
+    },
+    "bin": {
+        "related": "./bin/related.js"
+    },
+    "optionalDependencies": {},
+    "keywords": [
+        "orm",
+        "mysql",
+        "postgres",
+        "object relational mapper",
+        "eager loading",
+        "connection pooling",
+        "cluster"
+    ],
+    "scripts": {
+        "test": "./node_modules/mocha/bin/mocha --reporter spec --bail"
     }
 }
