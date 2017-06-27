@@ -22,16 +22,14 @@
         "related-query-context": "^2.1",
         "ee-event-emitter": "0.x",
         "ee-log": "2.x",
-        "ee-async": "0.2.x",
         "ee-argv": "0.1.x",
         "ee-arguments": "1.0.x",
         "test-config": "0.1.x",
         "async-method": "0.1.x"
     },
     "devDependencies": {
-        "mocha": "2.x",
-        "related-timestamps": "2.x",
-        "ee-project": "0.2.x"
+        "mocha": "3.x",
+        "related-timestamps": "2.x"
     },
     "bin": {
         "related": "./bin/related.js"
