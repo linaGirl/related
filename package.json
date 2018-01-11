@@ -1,7 +1,7 @@
 {
     "name": "related",
     "description": "Unopinionated ORM for relational databases",
-    "version": "2.13.3",
+    "version": "2.13.4",
     "homepage": "https://github.com/eventEmitter/related",
     "author": "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)",
     "license": "MIT",
@@ -16,16 +16,16 @@
         "url": "https://github.com/eventEmitter/related/issues"
     },
     "dependencies": {
-        "ee-class": "1.x",
-        "ee-types": "2.x",
-        "related-db-cluster": "2.x",
-        "related-query-context": "^2.1",
-        "ee-event-emitter": "0.x",
-        "ee-log": "2.x",
-        "ee-argv": "0.1.x",
-        "ee-arguments": "1.0.x",
-        "test-config": "0.1.x",
-        "async-method": "0.1.x"
+        "async-method": "^0.1.1",
+        "ee-arguments": "^1.0.4",
+        "ee-argv": "^0.1.4",
+        "ee-class": "^1.4.0",
+        "ee-event-emitter": "^0.3.1",
+        "ee-log": "^3.0.5",
+        "ee-types": "^2.1.4",
+        "related-db-cluster": "^2.2.9",
+        "related-query-context": "^2.1.1",
+        "test-config": "^0.1.1"
     },
     "devDependencies": {
         "mocha": "3.x",
