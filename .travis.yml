@@ -1,11 +1,11 @@
 language: node_js
 
 node_js :
-    - "v6"
-    - "v7"
+    - "v8"
+    - "v9"
 
 addons:
-    postgresql: "9.4"
+    postgresql: "9.6"
 
 before_script:
   - psql -f test/createdb.sql -U postgres
