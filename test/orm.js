@@ -64,11 +64,11 @@
 			, hosts: [{
 				  host 		: 'localhost'
 				, username 	: 'postgres'
-				, password 	: ''
+				, password 	: ' '
 				, maxConnections: 20
 				, pools     : ['write', 'read', 'master']
 			}]
-		}, {
+		}/*, {
 			  schema 		: 'related_test_mysql'
 			, type 			: 'mysql'
 			, hosts: [{
@@ -78,8 +78,7 @@
 				, maxConnections: 20
 				, pools     : ['write', 'read', 'master']
 			}]
-		}]}).db.filter(function(config) {return config.schema === databaseName});
-
+		}*/]}).db.filter(function(config) {return config.schema === databaseName});
 
 
 
@@ -805,7 +804,7 @@
 							evt.image[0].delete(function(err){
 								if (err) done(err);
 								else {
-									assert.equal(JSON.stringify(evt), '{"image":[],"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}');
+									assert.equal(JSON.stringify(evt), '{"image":[],"id":2,"id_venue":2,"startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null,"title":"Mapping Test"}');
 									done();
 								}
 							});
@@ -821,12 +820,12 @@
 					}).save().then(function() {
 						return db.event({id:2}, ['*']).getEvent_image('*').fetchImage(['*']).findOne();
 					}).then(function(evt) {
-						assert.equal(JSON.stringify(evt), '{"event_image":[{"id_event":2,"image":{"id":8,"url":"mapping deletion test"},"id_image":8}],"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}');
+						assert.equal(JSON.stringify(evt), '{"event_image":[{"id_event":2,"image":{"id":8,"url":"mapping deletion test"},"id_image":8}],"id":2,"id_venue":2,"startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null,"title":"Mapping Test"}');
 						return evt.event_image[0].delete();
 					}).then(function() {
 						return db.event({id:2}, ['*']).getEvent_image('*').fetchImage(['*']).findOne();
 					}).then(function(evt) {
-						assert.equal(JSON.stringify(evt), '{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}');
+						assert.equal(JSON.stringify(evt), '{"id":2,"id_venue":2,"startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null,"title":"Mapping Test"}');
 						done();
 					}).catch(done);
 				});
@@ -1067,7 +1066,7 @@
 					db.event('*').order('id').find().then(function(list) {
 						list = list.toArray();
 						list.length = 1;
-						assert.equal(JSON.stringify(list), '[{"id":2,"id_venue":2,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null}]');
+						assert.equal(JSON.stringify(list), '[{"id":2,"id_venue":2,"startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":null,"created":null,"updated":null,"deleted":null,"title":"Mapping Test"}]');
 						done();
 					}).catch(done);
 				});
@@ -1133,17 +1132,17 @@
 
 				it ('should work when saving models', function(done) {
 					db.event(['*'], {id: 3}).findOne().then(function(event){
-						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"Mapping Test","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null,"title":"Mapping Test"}');
 
 						event.title = 'a changed one!';
 
 						return event.save();
 					}).then(function(event) {
-						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null,"title":"a changed one!"}');
 
 						return db.event(['*'], {id: 3}).findOne();
 					}).then(function(evt) {
-						assert.equal(JSON.stringify(evt), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+						assert.equal(JSON.stringify(evt), '{"id":3,"id_venue":1,"startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null,"title":"a changed one!"}');
 
 						done();
 					}).catch(function(err){
@@ -1155,11 +1154,11 @@
 
 				it ('should work when deleting models', function(done) {
 					db.event(['*'], {id: 3}).findOne().then(function(event){
-						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null,"title":"a changed one!"}');
 
 						return event.delete();
 					}).then(function(event) {
-						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"title":"a changed one!","startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null}');
+						assert.equal(JSON.stringify(event), '{"id":3,"id_venue":1,"startdate":"1970-01-01T00:00:00.000Z","enddate":null,"canceled":true,"created":null,"updated":null,"deleted":null,"title":"a changed one!"}');
 
 						return db.event(['*'], {id: 3}).findOne();
 					}).then(function(evt) {
