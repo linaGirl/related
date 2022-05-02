@@ -2,18 +2,18 @@
     "name": "related",
     "description": "Unopinionated ORM for relational databases",
     "version": "2.16.3",
-    "homepage": "https://github.com/eventEmitter/related",
-    "author": "Michael van der Weg <michael@eventemitter.com> (http://eventemitter.com/)",
+    "homepage": "https://github.com/linaGirl/related",
+    "author": "Lina van der Weg <lina@vanderweg.ch>",
     "license": "MIT",
     "repository": {
-        "url": "https://github.com/eventEmitter/related.git",
+        "url": "https://github.com/linaGirl/related.git",
         "type": "git"
     },
     "engines": {
         "node": ">=6"
     },
     "bugs": {
-        "url": "https://github.com/eventEmitter/related/issues"
+        "url": "https://github.com/linaGirl/related/issues"
     },
     "dependencies": {
         "async-method": "^0.1.1",
@@ -23,8 +23,7 @@
         "ee-event-emitter": "^0.3.1",
         "ee-log": "^3.0.5",
         "ee-types": "^2.1.4",
-        "related-db-cluster": "^2.2.11",
-        "related-db-connection": "^2.2.5",
+        "related-db-cluster": "^2.2.15",
         "related-query-context": "^2.1.1",
         "test-config": "^0.1.1"
     },
