@@ -1,7 +1,7 @@
 {
     "name": "related",
     "description": "Unopinionated ORM for relational databases",
-    "version": "2.16.4",
+    "version": "2.16.5",
     "homepage": "https://github.com/linaGirl/related",
     "author": "Lina van der Weg <lina@vanderweg.ch>",
     "license": "MIT",
