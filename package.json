@@ -23,7 +23,7 @@
         "ee-event-emitter": "^0.3.1",
         "ee-log": "^3.0.5",
         "ee-types": "^2.1.4",
-        "related-db-cluster": "^2.2.15",
+        "related-db-cluster": "^2.2.16",
         "related-query-context": "^2.1.1",
         "test-config": "^0.1.1"
     },
